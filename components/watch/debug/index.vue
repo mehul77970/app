@@ -28,7 +28,7 @@ const toggleHLSDebug = () => {
       <CardTitle>Player Debug</CardTitle>
       <CardDescription>Provides details for debugging player issues.</CardDescription>
     </CardHeader>
-    <CardContent class="inline-flex flex-col text-muted-foreground select-text overflow-y-auto h-[500px]">
+    <CardContent class="inline-flex flex-col text-muted-foreground select-text overflow-y-auto h-[500px] w-full">
       <h3 class="w-full font-semibold text-lg text-foreground">
         Store
       </h3>
@@ -113,7 +113,7 @@ const toggleHLSDebug = () => {
         {{ item.Name }} (ID: {{ item.Id }})
       </div>
 
-      <Alert class="mt-3">
+      <Alert class="mt-3 w-full">
         <AlertTitle class="inline-flex flex-wrap gap-2 items-center justify-between w-full">
           <span class="inline-flex items-center gap-2">
             <PhInfo

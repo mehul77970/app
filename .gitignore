@@ -23,5 +23,8 @@ logs
 .env.*
 !.env.example
 
+# Linter
+.eslintcache
 
+# Misc WebOS
 webos/*

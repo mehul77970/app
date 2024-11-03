@@ -7,7 +7,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel'
 import Radial from '@/components/ui/radial/Radial.vue'
-import { getDefaultMediaStreams, getMediaSources } from '~/lib/player';
+import { getDefaultMediaStreams, getMediaSources } from '~/lib/player'
 
 const { id, parentId } = defineProps<{ id: string, parentId: string }>()
 

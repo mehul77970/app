@@ -1,68 +1,71 @@
 <script lang="ts" setup>
-import { truncate } from "~/lib/utils";
+import { truncate } from '~/lib/utils'
 
-const playerStore = usePlayerStore();
+const playerStore = usePlayerStore()
 
-const info = computed(() => playerStore.item);
-const showControls = ref(false);
-const paused = computed(() => playerStore.paused);
+const info = computed(() => playerStore.item)
+const showControls = ref(false)
+const paused = computed(() => playerStore.paused)
 
-let controlsHideTimer = null as null | NodeJS.Timeout;
+let controlsHideTimer = null as null | NodeJS.Timeout
 
 const controlsMouseMove = () => {
   if (controlsHideTimer) {
-    clearTimeout(controlsHideTimer);
+    clearTimeout(controlsHideTimer)
   }
 
-  controlsHideTimer = null;
+  controlsHideTimer = null
 
-  showControls.value = true;
-  document.body!.style.cursor = "default";
+  showControls.value = true
+  document.body!.style.cursor = 'default'
 
-  console.log("Show controls");
+  console.log('Show controls')
 
   controlsHideTimer = setTimeout(() => {
-    console.log("First timeout should run");
-    hideMouseControls();
-  }, 3000);
-};
+    console.log('First timeout should run')
+    hideMouseControls()
+  }, 3000)
+}
 
 const hideMouseControls = () => {
   if (!playerStore.hideControls || paused.value) {
-    console.log("Shouldnt hide controls");
+    console.log('Shouldnt hide controls')
 
     if (controlsHideTimer) {
-      clearTimeout(controlsHideTimer);
+      clearTimeout(controlsHideTimer)
     }
 
-    controlsHideTimer = setTimeout(hideMouseControls, 3000);
-    return;
+    controlsHideTimer = setTimeout(hideMouseControls, 3000)
+    return
   }
 
-  document.body!.style.cursor = "none";
-  showControls.value = false;
-};
+  document.body!.style.cursor = 'none'
+  showControls.value = false
+}
 
 const togglePause = () => {
-  playerStore.paused = !playerStore.paused;
+  playerStore.paused = !playerStore.paused
 
   if (!playerStore.paused) {
-    playerStore.hideControls = true;
+    playerStore.hideControls = true
   }
-};
+}
 
 onBeforeUnmount(() => {
-  document.body!.style.cursor = "default";
+  document.body!.style.cursor = 'default'
 
   if (controlsHideTimer) {
-    clearTimeout(controlsHideTimer);
+    clearTimeout(controlsHideTimer)
   }
-});
+})
 </script>
 
 <template>
   <LazyWatchSubtitles v-if="info" />
-  <WatchControlsPlayerPause v-if="info" :info="info" />
+  <WatchControlsPlayerPause
+    v-if="info"
+    :info="info"
+  />
   <div
     id="controls-detection-area"
     class="min-h-full mt-auto justify-start w-full inline-flex z-[50]"
@@ -70,7 +73,10 @@ onBeforeUnmount(() => {
     @click="togglePause"
   >
     <Transition name="fade-short-slide">
-      <div v-show="showControls || paused" class="w-full h-full flex relative">
+      <div
+        v-show="showControls || paused"
+        class="w-full h-full flex relative"
+      >
         <div
           class="inline-flex flex-col justify-end w-full mt-auto gap-2 p-6 overflow-hidden fade-bg"
         >
@@ -93,25 +99,41 @@ onBeforeUnmount(() => {
             class="inline-flex gap-2 items-center justify-between w-full"
           >
             <div class="inline-flex flex-col">
-              <h1 v-if="info" class="lg:text-2xl font-semibold text-white">
+              <h1
+                v-if="info"
+                class="lg:text-2xl font-semibold text-white"
+              >
                 {{ info.Name }}
               </h1>
-              <p v-if="info?.Overview" class="text-gray-400 max-w-full">
+              <p
+                v-if="info?.Overview"
+                class="text-gray-400 max-w-full"
+              >
                 {{
                   truncate(info?.Overview!!, { length: 120, position: "end" })
                 }}
               </p>
             </div>
 
-            <div id="top-controls" class="inline-flex justify-end" @click.stop>
+            <div
+              id="top-controls"
+              class="inline-flex justify-end"
+              @click.stop
+            >
               <WatchControlsVolume />
-              <WatchControlsSettings v-if="info" :item="info" />
+              <WatchControlsSettings
+                v-if="info"
+                :item="info"
+              />
               <WatchControlsPictureInPicture />
               <WatchControlsFullscreen />
             </div>
           </div>
 
-          <WatchControlsTimeline v-if="info" :info="info" />
+          <WatchControlsTimeline
+            v-if="info"
+            :info="info"
+          />
         </div>
       </div>
     </Transition>

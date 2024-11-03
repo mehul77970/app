@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
-import type { SliderRootEmits, SliderRootProps } from "radix-vue";
+import { type HTMLAttributes, computed } from 'vue'
+import type { SliderRootEmits, SliderRootProps } from 'radix-vue'
 import {
   SliderRange,
   SliderRoot,
   SliderThumb,
   SliderTrack,
   useForwardPropsEmits,
-} from "radix-vue";
-import { cn } from "@/lib/utils";
+} from 'radix-vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps<
-  SliderRootProps & { class?: HTMLAttributes["class"] } & { time: number }
->();
-const emits = defineEmits<SliderRootEmits>();
+  SliderRootProps & { class?: HTMLAttributes['class'] } & { time: number }
+>()
+const emits = defineEmits<SliderRootEmits>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
-const popoverPosition = ref(0);
-const open = ref(false);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
+const popoverPosition = ref(0)
+const open = ref(false)
 const onDrag = () => {
-  open.value = true;
-};
+  open.value = true
+}
 
 const onMouseOver = (e: MouseEvent) => {
-  popoverPosition.value = e.pageX;
-};
+  popoverPosition.value = e.pageX
+}
 </script>
 
 <template>
@@ -48,7 +48,10 @@ const onMouseOver = (e: MouseEvent) => {
     <SliderTrack
       class="relative h-2 w-full grow overflow-hidden rounded-full bg-transparent"
     >
-      <SliderRange class="absolute h-full bg-primary" @mousemove.stop />
+      <SliderRange
+        class="absolute h-full bg-primary"
+        @mousemove.stop
+      />
     </SliderTrack>
     <SliderThumb
       v-for="(_, key) in modelValue"
@@ -57,7 +60,10 @@ const onMouseOver = (e: MouseEvent) => {
     />
   </SliderRoot>
 
-  <Popover :open="true" z="99">
+  <Popover
+    :open="true"
+    z="99"
+  >
     <PopoverTrigger>
       <div
         class="w-5 h-5 bg-gray-500 absolute"

@@ -19,8 +19,14 @@
         x2="457.68"
         y2="410.73"
       >
-        <stop offset="0%" stop-color="#aa5cc3" />
-        <stop offset="100%" stop-color="#00a4dc" />
+        <stop
+          offset="0%"
+          stop-color="#aa5cc3"
+        />
+        <stop
+          offset="100%"
+          stop-color="#00a4dc"
+        />
       </linearGradient>
       <path
         id="C"
@@ -28,9 +34,25 @@
         path-length="1"
       />
     </defs>
-    <use xlink:href="#A" fill="url(#B)" />
-    <use xlink:href="#A" fill-opacity="0" stroke="#000000" stroke-opacity="0" />
-    <use xlink:href="#C" fill="url(#B)" />
-    <use xlink:href="#C" fill-opacity="0" stroke="#000000" stroke-opacity="0" />
+    <use
+      xlink:href="#A"
+      fill="url(#B)"
+    />
+    <use
+      xlink:href="#A"
+      fill-opacity="0"
+      stroke="#000000"
+      stroke-opacity="0"
+    />
+    <use
+      xlink:href="#C"
+      fill="url(#B)"
+    />
+    <use
+      xlink:href="#C"
+      fill-opacity="0"
+      stroke="#000000"
+      stroke-opacity="0"
+    />
   </svg>
 </template>

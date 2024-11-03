@@ -3,22 +3,22 @@ import {
   TagsInputItem,
   type TagsInputItemProps,
   useForwardProps,
-} from "radix-vue";
+} from 'radix-vue'
 
-import { computed, type HTMLAttributes } from "vue";
-import { cn } from "@/lib/utils";
+import { computed, type HTMLAttributes } from 'vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps<
-  TagsInputItemProps & { class?: HTMLAttributes["class"] }
->();
+  TagsInputItemProps & { class?: HTMLAttributes['class'] }
+>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwardedProps = useForwardProps(delegatedProps);
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>

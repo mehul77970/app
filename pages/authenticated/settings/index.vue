@@ -1,14 +1,16 @@
 <script setup lang="ts">
-const serverStore = useServerStore();
+const serverStore = useServerStore()
 
-const info = computed(() => serverStore.info);
+const info = computed(() => serverStore.info)
 
-await serverStore.testServerURL(serverStore.url);
+await serverStore.testServerURL(serverStore.url)
 </script>
 
 <template>
   <div class="grid gap-6">
-    <h2 class="text-2xl font-semibold">General</h2>
+    <h2 class="text-2xl font-semibold">
+      General
+    </h2>
 
     <Card>
       <CardHeader>
@@ -36,7 +38,12 @@ await serverStore.testServerURL(serverStore.url);
 
             <SettingsServerRestart />
 
-            <Button variant="destructive" class="flex-grow"> Shutdown </Button>
+            <Button
+              variant="destructive"
+              class="flex-grow"
+            >
+              Shutdown
+            </Button>
           </div>
         </div>
       </CardContent>

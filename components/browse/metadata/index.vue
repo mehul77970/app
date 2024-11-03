@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import {
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog'
 
 const { item } = defineProps<{
-  item: BaseItemDto;
-}>();
+  item: BaseItemDto
+}>()
 
-const open = defineModel<boolean>();
+const open = defineModel<boolean>()
 
-const mediaStore = useMediaBrowserStore();
+const mediaStore = useMediaBrowserStore()
 // All metadata inputs
-const title = ref(item.Name as string | undefined);
-const sortTitle = ref(item.SortName as string | undefined);
-const dateCreated = ref(item.DateCreated as string | undefined);
-const communityRating = ref(item.CommunityRating as number | undefined);
-const year = ref(item.ProductionYear as number | undefined);
-const description = ref(item.Overview as string | undefined);
+const title = ref(item.Name as string | undefined)
+const sortTitle = ref(item.SortName as string | undefined)
+const dateCreated = ref(item.DateCreated as string | undefined)
+const communityRating = ref(item.CommunityRating as number | undefined)
+const year = ref(item.ProductionYear as number | undefined)
+const description = ref(item.Overview as string | undefined)
 
 // All parental inputs
-const rating = ref(item.OfficialRating as string | undefined);
-const customRating = ref(item.CustomRating as string | undefined);
+const rating = ref(item.OfficialRating as string | undefined)
+const customRating = ref(item.CustomRating as string | undefined)
 
 // All attribute inputs
-const genres = ref(item.GenreItems?.map((gItem) => gItem.Name) as string[]);
-const studios = ref(item.Studios?.map((sItem) => sItem.Name) as string[]);
-const tags = ref(item.Tags as string[]);
+const genres = ref(item.GenreItems?.map(gItem => gItem.Name) as string[])
+const studios = ref(item.Studios?.map(sItem => sItem.Name) as string[])
+const tags = ref(item.Tags as string[])
 
 const saveChanges = async () => {
   const mutatedItem = Object.assign(item, {
@@ -45,14 +45,14 @@ const saveChanges = async () => {
     Tags: tags.value,
     Genres: genres.value,
     Studios: studios.value!.flatMap((s) => {
-      return { Name: s };
+      return { Name: s }
     }),
-  });
+  })
 
-  await mediaStore.updateItem(mutatedItem);
+  await mediaStore.updateItem(mutatedItem)
 
-  open.value = false;
-};
+  open.value = false
+}
 </script>
 
 <template>
@@ -88,7 +88,12 @@ const saveChanges = async () => {
     </div>
 
     <DialogFooter>
-      <Button type="submit" @click="saveChanges"> Save changes </Button>
+      <Button
+        type="submit"
+        @click="saveChanges"
+      >
+        Save changes
+      </Button>
     </DialogFooter>
   </DialogContent>
 </template>

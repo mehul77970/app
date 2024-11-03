@@ -1,10 +1,10 @@
 <script setup lang="ts">
-definePageMeta({ layout: "authenticated" });
+definePageMeta({ layout: 'authenticated' })
 
-const route = useRoute();
-const mediaBrowser = useMediaBrowserStore();
-const folder = await mediaBrowser.getItem(route.params.id! as string);
-const items = await mediaBrowser.getItemsOfView(folder.Id!, 99999);
+const route = useRoute()
+const mediaBrowser = useMediaBrowserStore()
+const folder = await mediaBrowser.getItem(route.params.id! as string)
+const items = await mediaBrowser.getItemsOfView(folder.Id!, 99999)
 </script>
 
 <template>
@@ -13,8 +13,13 @@ const items = await mediaBrowser.getItemsOfView(folder.Id!, 99999);
 
     <template #preview>
       <div class="flex flex-col gap-8 justify-center">
-        <div v-if="folder.Overview" class="flex flex-col gap-2">
-          <h2 class="text-xl font-semibold">Overview</h2>
+        <div
+          v-if="folder.Overview"
+          class="flex flex-col gap-2"
+        >
+          <h2 class="text-xl font-semibold">
+            Overview
+          </h2>
           <p class="max-w-[750px] break-words">
             {{ folder.Overview }}
           </p>
@@ -22,7 +27,9 @@ const items = await mediaBrowser.getItemsOfView(folder.Id!, 99999);
       </div>
     </template>
     <template #items>
-      <h2 class="text-xl font-semibold">Items</h2>
+      <h2 class="text-xl font-semibold">
+        Items
+      </h2>
       <div
         class="seasons flex flex-wrap gap-8 items-center justify-center lg:justify-start max-w-full shadow-lg"
       >
@@ -42,7 +49,7 @@ const items = await mediaBrowser.getItemsOfView(folder.Id!, 99999);
             <img
               :src="mediaBrowser.generateImageURL(season.Id!!)"
               class="h-full w-full rounded-lg transition-all duration-250 group-hover:opacity-75 object-cover"
-            />
+            >
           </div>
         </NuxtLink>
       </div>

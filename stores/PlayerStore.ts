@@ -1,35 +1,35 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 import type {
   MediaStream,
   BaseItemDto,
   PlaybackInfoResponse,
-} from "@jellyfin/sdk/lib/generated-client";
+} from '@jellyfin/sdk/lib/generated-client'
 import {
   createAudioSource,
   createSubtitleSource,
   createVideoSource,
-} from "~/lib/player";
+} from '~/lib/player'
 
 export interface VideoSource {
-  source: MediaStream;
-  hdr: boolean;
-  dolbyDigital: boolean;
-  title: string;
+  source: MediaStream
+  hdr: boolean
+  dolbyDigital: boolean
+  title: string
 }
 
 export interface AudioSource {
-  source: MediaStream;
-  dolbyAudio: boolean;
-  dtsAudio: boolean;
-  title: string;
+  source: MediaStream
+  dolbyAudio: boolean
+  dtsAudio: boolean
+  title: string
 }
 
 export interface SubtitleSource {
-  source?: MediaStream;
-  title: string;
+  source?: MediaStream
+  title: string
 }
 
-export const usePlayerStore = defineStore("player", {
+export const usePlayerStore = defineStore('player', {
   state: () => ({
     hideControls: true,
     loaded: false,
@@ -68,16 +68,16 @@ export const usePlayerStore = defineStore("player", {
 
     settings: {
       subtitle: {
-        global: "video_width",
+        global: 'video_width',
       },
 
       video: {
         global: {
           height: 480,
-          bitrate: "auto",
+          bitrate: 'auto',
         },
         local: {
-          bitrate: "auto",
+          bitrate: 'auto',
           height: 480,
         },
       },
@@ -89,69 +89,69 @@ export const usePlayerStore = defineStore("player", {
   actions: {
     getDefaultMediaStreams(playback: PlaybackInfoResponse | BaseItemDto) {
       if (!playback.MediaSources || !playback.MediaSources[0])
-        throw new PlaybackInfoError("No MediaSource found", playback);
-      const mediaSource = playback.MediaSources[0];
-      const mediaStreams = mediaSource.MediaStreams!;
+        throw new PlaybackInfoError('No MediaSource found', playback)
+      const mediaSource = playback.MediaSources[0]
+      const mediaStreams = mediaSource.MediaStreams!
 
       const defaultVideo = mediaStreams.find(
-        (src) => src.Type === "Video" && src.IsDefault,
-      );
+        src => src.Type === 'Video' && src.IsDefault,
+      )
       const defaultAudio = mediaStreams.find(
-        (src) => src.Type === "Audio" && src.IsDefault,
-      );
+        src => src.Type === 'Audio' && src.IsDefault,
+      )
       const defaultSubtitle = mediaStreams.find(
-        (src) => src.Type === "Subtitle" && src.IsDefault,
-      );
+        src => src.Type === 'Subtitle' && src.IsDefault,
+      )
 
-      this.video = createVideoSource(defaultVideo);
-      this.audio = createAudioSource(defaultAudio);
-      this.subtitle = createSubtitleSource(defaultSubtitle);
+      this.video = createVideoSource(defaultVideo)
+      this.audio = createAudioSource(defaultAudio)
+      this.subtitle = createSubtitleSource(defaultSubtitle)
     },
 
     async getPlayerItem(id: string) {
-      const browserStore = useMediaBrowserStore();
+      const browserStore = useMediaBrowserStore()
 
-      this.item = await browserStore.getItem(id);
+      this.item = await browserStore.getItem(id)
 
-      return this.item;
+      return this.item
     },
 
     resetPlayer() {
-      this.hideControls = true;
-      this.loaded = false;
-      this.seeking = { value: false, position: 0 };
-      this.loading = true;
-      this.paused = true;
-      this.volume = 100;
-      this.muted = false;
-      this.pictureInPicture = false;
-      this.fullscreen = false;
-      this.position = { value: 0, percent: 0 };
-      this.positionTimeline = 0;
-      this.buffer = { percent: 0 };
-      this.video = null;
-      this.audio = null;
-      this.subtitle = null;
-      this.subtitleSyncCallback = null;
-      this.subtitleLoading = null;
-      this.subtitleTimeSyncOffset = 0;
-      this.item = null;
-      this.settings.video.local = this.settings.video.global;
+      this.hideControls = true
+      this.loaded = false
+      this.seeking = { value: false, position: 0 }
+      this.loading = true
+      this.paused = true
+      this.volume = 100
+      this.muted = false
+      this.pictureInPicture = false
+      this.fullscreen = false
+      this.position = { value: 0, percent: 0 }
+      this.positionTimeline = 0
+      this.buffer = { percent: 0 }
+      this.video = null
+      this.audio = null
+      this.subtitle = null
+      this.subtitleSyncCallback = null
+      this.subtitleLoading = null
+      this.subtitleTimeSyncOffset = 0
+      this.item = null
+      this.settings.video.local = this.settings.video.global
     },
   },
 
   persist: {
-    pick: ["settings.video.global"],
+    pick: ['settings.video.global'],
   },
-});
+})
 
 export class PlaybackInfoError extends Error {
-  info?: PlaybackInfoError | unknown;
+  info?: PlaybackInfoError | unknown
 
   constructor(msg: string, info?: PlaybackInfoResponse | unknown) {
-    super(msg);
-    this.info = info;
+    super(msg)
+    this.info = info
 
-    Object.setPrototypeOf(this, PlaybackInfoError.prototype);
+    Object.setPrototypeOf(this, PlaybackInfoError.prototype)
   }
 }

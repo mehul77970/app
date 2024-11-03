@@ -1,66 +1,72 @@
 <script setup lang="ts">
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
-import type { EmblaCarouselType } from "embla-carousel";
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
+import type { EmblaCarouselType } from 'embla-carousel'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
-import Radial from "@/components/ui/radial/Radial.vue";
+} from '@/components/ui/carousel'
+import Radial from '@/components/ui/radial/Radial.vue'
 
-const { id, parentId } = defineProps<{ id: string; parentId: string }>();
+const { id, parentId } = defineProps<{ id: string, parentId: string }>()
 
-const episodesCarousel = ref(null as { carouselApi: EmblaCarouselType } | null);
-const mediaStore = useMediaBrowserStore();
+const episodesCarousel = ref(null as { carouselApi: EmblaCarouselType } | null)
+const mediaStore = useMediaBrowserStore()
 
-const season = await mediaStore.getItem(id);
-const episodes = await mediaStore.getEpisodesOfSeason(parentId, id, 99999);
+const season = await mediaStore.getItem(id)
+const episodes = await mediaStore.getEpisodesOfSeason(parentId, id, 99999)
 
 const staticBackground = mediaStore.generateImageURL(
   parentId,
   undefined,
   1200,
   1200,
-);
-const logo = mediaStore.generateImageURL(parentId, "Logo/0", 600);
-const currentWatch = await mediaStore.getNextUp(season.Id!, 1);
+)
+const logo = mediaStore.generateImageURL(parentId, 'Logo/0', 600)
+const currentWatch = await mediaStore.getNextUp(season.Id!, 1)
 
 const getEpisodeImage = (episode: string) =>
-  mediaStore.generateImageURL(episode, undefined, 720, 480);
+  mediaStore.generateImageURL(episode, undefined, 720, 480)
 
 const background = () => {
-  if (!currentWatch[0]) return staticBackground;
+  if (!currentWatch[0]) return staticBackground
 
   return mediaStore.generateImageURL(
     currentWatch[0].Id!,
     undefined,
     1200,
     1200,
-  );
-};
+  )
+}
 
 onMounted(() => {
-  if (!episodesCarousel.value) return;
+  if (!episodesCarousel.value) return
 
-  const carouselAPI = episodesCarousel.value.carouselApi;
+  const carouselAPI = episodesCarousel.value.carouselApi
 
   // Automatically scroll to currently playing episode
   const currentEpisodeIndex = currentWatch[0]
-    ? episodes.findIndex((ep) => ep.Id == currentWatch[0].Id!)
-    : 0;
+    ? episodes.findIndex(ep => ep.Id == currentWatch[0].Id!)
+    : 0
 
-  console.log("Should scroll to ep index", currentEpisodeIndex);
-  carouselAPI.scrollTo(currentEpisodeIndex);
-});
+  console.log('Should scroll to ep index', currentEpisodeIndex)
+  carouselAPI.scrollTo(currentEpisodeIndex)
+})
 </script>
 
 <template>
-  <BrowseLayoutNew :item="season" :background="background()" :logo>
+  <BrowseLayoutNew
+    :item="season"
+    :background="background()"
+    :logo
+  >
     <template #sections>
       <section
         class="inline-flex flex-col justify-start items-start max-w-full gap-4 p-4 mt-[72px]"
       >
-        <h1 class="text-gray-400 tracking-wider">EPISODES</h1>
+        <h1 class="text-gray-400 tracking-wider">
+          EPISODES
+        </h1>
 
         <Carousel
           ref="episodesCarousel"
@@ -71,7 +77,10 @@ onMounted(() => {
           }"
           :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'y' })]"
         >
-          <CarouselContent v-focus-section class="items-end">
+          <CarouselContent
+            v-focus-section
+            class="items-end"
+          >
             <CarouselItem
               v-for="(episode, index) in episodes"
               :key="index"
@@ -105,8 +114,8 @@ onMounted(() => {
                       <!-- TODO: Add short stats -->
                       <div
                         v-if="
-                          episode.UserData?.PlaybackPositionTicks != 0 ||
-                          episode.UserData?.Played
+                          episode.UserData?.PlaybackPositionTicks != 0
+                            || episode.UserData?.Played
                         "
                         class="absolute h-full rounded-lg max-w-full z-[5] top-0 p-4 w-full inline-flex justify-end text-slate-300"
                       >

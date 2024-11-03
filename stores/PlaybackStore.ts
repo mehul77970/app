@@ -1,9 +1,9 @@
-import { defineStore } from "pinia";
-import type { PlaybackInfoResponse } from "@jellyfin/sdk/lib/generated-client";
-import type HLS from "hls.js";
-import { useApiFetch } from "#imports";
+import { defineStore } from 'pinia'
+import type { PlaybackInfoResponse } from '@jellyfin/sdk/lib/generated-client'
+import type HLS from 'hls.js'
+import { useApiFetch } from '#imports'
 
-export const usePlaybackStore = defineStore("playback", {
+export const usePlaybackStore = defineStore('playback', {
   state: () => ({
     info: null as null | PlaybackInfoResponse,
     lastPlaybackInfo: undefined as undefined | string,
@@ -12,30 +12,30 @@ export const usePlaybackStore = defineStore("playback", {
 
   getters: {
     transcodingUrl(): string {
-      if (!this._transcodingUrl) return "NA";
+      if (!this._transcodingUrl) return 'NA'
 
-      return this._transcodingUrl?.href;
+      return this._transcodingUrl?.href
     },
 
     player(): HLS | undefined {
-      if (import.meta.server) return;
+      if (import.meta.server) return
 
-      return window.SECRET_PLAYER_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      return window.SECRET_PLAYER_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
     },
   },
 
   actions: {
     setPlayer(player: HLS) {
-      if (import.meta.server) return;
+      if (import.meta.server) return
 
-      window.SECRET_PLAYER_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = player;
+      window.SECRET_PLAYER_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = player
     },
 
     clearPlayer() {
-      if (import.meta.server) return;
+      if (import.meta.server) return
 
-      window.SECRET_PLAYER_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED =
-        undefined;
+      window.SECRET_PLAYER_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
+        = undefined
     },
 
     // TODO: Improve this function and calling
@@ -49,150 +49,150 @@ export const usePlaybackStore = defineStore("playback", {
       subtitleIndex?: number,
       last?: string,
     ): Promise<PlaybackInfoResponse> {
-      const server = useServerStore();
-      const authentication = useAuthenticationStore();
-      const device = useDeviceStore();
+      const server = useServerStore()
+      const authentication = useAuthenticationStore()
+      const device = useDeviceStore()
 
       const url = new URL(
         last ? last : `${server.url}/Items/${id}/PlaybackInfo`,
-      );
+      )
 
       if (isPlayback) {
-        url.searchParams.set("isPlayback", "true");
+        url.searchParams.set('isPlayback', 'true')
       }
 
       if (autoOpenLivestream) {
-        url.searchParams.set("autoOpenLivestream", "true");
+        url.searchParams.set('autoOpenLivestream', 'true')
       }
 
       if (maxStreamingBitrate) {
-        url.searchParams.set("VideoBitrate", maxStreamingBitrate.toString());
+        url.searchParams.set('VideoBitrate', maxStreamingBitrate.toString())
       }
 
       if (audioIndex) {
-        url.searchParams.set("AudioStreamIndex", audioIndex.toString());
+        url.searchParams.set('AudioStreamIndex', audioIndex.toString())
       }
 
       if (subtitleIndex) {
-        url.searchParams.set("SubtitleStreamIndex", subtitleIndex.toString());
+        url.searchParams.set('SubtitleStreamIndex', subtitleIndex.toString())
       }
 
       if (videoIndex) {
-        url.searchParams.set("VideoStreamIndex", videoIndex.toString());
+        url.searchParams.set('VideoStreamIndex', videoIndex.toString())
       }
 
       const data = await useApiFetch<PlaybackInfoResponse>(
         url.href,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
             Authorization: authentication.header,
           },
-          body: device.profile,
+          body: { DeviceProfile: device.profile },
         },
         true,
-      );
+      )
 
-      this.lastPlaybackInfo = url.href;
+      this.lastPlaybackInfo = url.href
 
-      const playback = data!;
+      const playback = data!
 
       if (playback.MediaSources![0].TranscodingUrl) {
         this._transcodingUrl = new URL(
           `${server.url}${playback.MediaSources![0].TranscodingUrl}`,
-        );
+        )
       }
 
-      return playback;
+      return playback
     },
 
     setPlaybackInfo(info: PlaybackInfoResponse) {
       if (!info) {
         // TODO: How is it going null?
-        throw Error("I was asked to nullify playback info!");
+        throw Error('I was asked to nullify playback info!')
       }
 
-      this.info = info;
+      this.info = info
     },
 
     setPlaybackHeightAndWidth(width?: number, height?: number) {
-      if (!this._transcodingUrl) return;
+      if (!this._transcodingUrl) return
 
       if (width) {
-        this._transcodingUrl?.searchParams.set("maxWidth", width.toString());
+        this._transcodingUrl?.searchParams.set('maxWidth', width.toString())
       }
 
       if (height) {
-        this._transcodingUrl?.searchParams.set("maxHeight", height.toString());
+        this._transcodingUrl?.searchParams.set('maxHeight', height.toString())
       }
     },
 
     setPlaybackAudioIndex(index: string | number) {
-      if (!this._transcodingUrl || !index) return;
+      if (!this._transcodingUrl || !index) return
 
-      const _index = typeof index === "number" ? index.toString() : index;
+      const _index = typeof index === 'number' ? index.toString() : index
 
-      this._transcodingUrl.searchParams.set("AudioStreamIndex", _index);
+      this._transcodingUrl.searchParams.set('AudioStreamIndex', _index)
     },
 
     setPlaybackVideoIndex(index: string | number) {
-      if (!this._transcodingUrl || !index) return;
+      if (!this._transcodingUrl || !index) return
 
-      const _index = typeof index === "number" ? index.toString() : index;
+      const _index = typeof index === 'number' ? index.toString() : index
 
-      this._transcodingUrl.searchParams.set("VideoStreamIndex", _index);
+      this._transcodingUrl.searchParams.set('VideoStreamIndex', _index)
     },
 
     setPlaybackSubtitleIndex(index: string | number) {
-      if (!this._transcodingUrl || !index) return;
+      if (!this._transcodingUrl || !index) return
 
-      const _index = typeof index === "number" ? index.toString() : index;
+      const _index = typeof index === 'number' ? index.toString() : index
 
-      this._transcodingUrl.searchParams.set("SubtitleStreamIndex", _index);
+      this._transcodingUrl.searchParams.set('SubtitleStreamIndex', _index)
     },
 
     setPlaybackVideoBitrate(bitrate: number) {
-      if (!this._transcodingUrl) return;
+      if (!this._transcodingUrl) return
 
       this._transcodingUrl?.searchParams.set(
-        "VideoBitrate",
+        'VideoBitrate',
         bitrate.toFixed(0),
-      );
+      )
     },
 
     setPlaybackStart(start_ticks: number) {
-      if (!this._transcodingUrl) return;
+      if (!this._transcodingUrl) return
 
       this._transcodingUrl?.searchParams.set(
-        "startTimeTicks",
+        'startTimeTicks',
         start_ticks.toString(),
-      );
+      )
     },
 
     setPlaybackSegmentLength(segment_length: number) {
-      if (!this._transcodingUrl) return;
+      if (!this._transcodingUrl) return
 
       this._transcodingUrl?.searchParams.set(
-        "actualSegmentLengthTicks",
+        'actualSegmentLengthTicks',
         segment_length.toString(),
-      );
+      )
     },
 
     setPlaybackRuntimeTicks(runtime_ticks: number) {
-      if (!this._transcodingUrl) return;
+      if (!this._transcodingUrl) return
 
       this._transcodingUrl?.searchParams.set(
-        "runtimeTicks",
+        'runtimeTicks',
         runtime_ticks.toString(),
-      );
+      )
     },
 
     async stopPlaybackTranscode(session?: string) {
-      if (!session && !this.info?.PlaySessionId) return;
+      if (!session && !this.info?.PlaySessionId) return
 
-      const id = session || this.info?.PlaySessionId;
+      const id = session || this.info?.PlaySessionId
 
-      const auth = useAuthenticationStore();
+      const auth = useAuthenticationStore()
 
       await useApiFetch(
         `Videos/ActiveEncodings?deviceId=${auth._header.deviceID}&playSessionId=${id}`,
@@ -200,23 +200,23 @@ export const usePlaybackStore = defineStore("playback", {
           headers: {
             Authorization: auth.header,
           },
-          method: "DELETE",
+          method: 'DELETE',
         },
-      );
+      )
 
-      this._transcodingUrl = null;
+      this._transcodingUrl = null
     },
 
     async savePlaybackProgress(item: string, seconds: number) {
-      if (!this.info?.PlaySessionId) return;
+      if (!this.info?.PlaySessionId) return
 
-      const playSession = this.info.PlaySessionId;
+      const playSession = this.info.PlaySessionId
 
-      const auth = useAuthenticationStore();
+      const auth = useAuthenticationStore()
 
-      const secondsToTicks = (seconds * 10000000).toLocaleString("fullwide", {
+      const secondsToTicks = (seconds * 10000000).toLocaleString('fullwide', {
         useGrouping: false,
-      });
+      })
 
       await useApiFetch(
         `PlayingItems/${item}/Progress?deviceId=${auth._header.deviceID}&playSessionId=${playSession}&positionTicks=${secondsToTicks}`,
@@ -224,21 +224,21 @@ export const usePlaybackStore = defineStore("playback", {
           headers: {
             Authorization: auth.header,
           },
-          method: "POST",
+          method: 'POST',
         },
-      );
+      )
     },
 
     async stopPlaybackProgress(item: string, seconds: number) {
-      if (!this.info?.PlaySessionId) return;
+      if (!this.info?.PlaySessionId) return
 
-      const playSession = this.info.PlaySessionId;
+      const playSession = this.info.PlaySessionId
 
-      const auth = useAuthenticationStore();
+      const auth = useAuthenticationStore()
 
-      const secondsToTicks = (seconds * 10000000).toLocaleString("fullwide", {
+      const secondsToTicks = (seconds * 10000000).toLocaleString('fullwide', {
         useGrouping: false,
-      });
+      })
 
       await useApiFetch(
         `PlayingItems/${item}?playSessionId=${playSession}&positionTicks=${secondsToTicks}`,
@@ -246,9 +246,9 @@ export const usePlaybackStore = defineStore("playback", {
           headers: {
             Authorization: auth.header,
           },
-          method: "DELETE",
+          method: 'DELETE',
         },
-      );
+      )
     },
   },
-});
+})

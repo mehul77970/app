@@ -1,37 +1,43 @@
 <script setup lang="ts">
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
+} from '@/components/ui/carousel'
 
-const { id } = defineProps<{ id: string }>();
+const { id } = defineProps<{ id: string }>()
 
-const mediaStore = useMediaBrowserStore();
+const mediaStore = useMediaBrowserStore()
 
-const series = await mediaStore.getItem(id);
-const seasons = await mediaStore.getSeasons(id);
+const series = await mediaStore.getItem(id)
+const seasons = await mediaStore.getSeasons(id)
 
 const background = mediaStore.generateImageURL(
   series.Id!,
   undefined,
   1200,
   1200,
-);
-const logo = mediaStore.generateImageURL(series.Id!, "Logo/0", 600);
+)
+const logo = mediaStore.generateImageURL(series.Id!, 'Logo/0', 600)
 
 const getSeasonImage = (season: string) =>
-  mediaStore.generateImageURL(season, undefined, 300, 430);
+  mediaStore.generateImageURL(season, undefined, 300, 430)
 </script>
 
 <template>
-  <BrowseLayoutNew :item="series" :background :logo>
+  <BrowseLayoutNew
+    :item="series"
+    :background
+    :logo
+  >
     <template #sections>
       <section
         class="inline-flex flex-col justify-start items-start max-w-full gap-4 p-4 mt-[72px]"
       >
-        <h1 class="text-gray-400 tracking-wider">SEASONS</h1>
+        <h1 class="text-gray-400 tracking-wider">
+          SEASONS
+        </h1>
 
         <Carousel
           class="relative flex max-w-[100%] justify-center z-[2]"
@@ -41,7 +47,10 @@ const getSeasonImage = (season: string) =>
           }"
           :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'y' })]"
         >
-          <CarouselContent v-focus-section class="items-end">
+          <CarouselContent
+            v-focus-section
+            class="items-end"
+          >
             <CarouselItem
               v-for="(season, index) in seasons"
               :key="index"

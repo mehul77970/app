@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import Card1 from "~/assets/images/login/card-1.jpg";
-import Card2 from "~/assets/images/login/card-2.jpg";
-import Card3 from "~/assets/images/login/card-3.jpg";
-import Card4 from "~/assets/images/login/card-4.jpg";
-import Card5 from "~/assets/images/login/card-5.jpg";
+import Card1 from '~/assets/images/login/card-1.jpg'
+import Card2 from '~/assets/images/login/card-2.jpg'
+import Card3 from '~/assets/images/login/card-3.jpg'
+import Card4 from '~/assets/images/login/card-4.jpg'
+import Card5 from '~/assets/images/login/card-5.jpg'
 
 const carousel = [
   {
     src: Card1,
-    copyright: "Amazon Studios - Reacher",
+    copyright: 'Amazon Studios - Reacher',
   },
 
   {
     src: Card2,
-    copyright: "CoMix Wave Flims - Your Name (君の名は)",
+    copyright: 'CoMix Wave Flims - Your Name (君の名は)',
   },
 
   {
     src: Card3,
-    copyright: "Stephen King - The Shining",
+    copyright: 'Stephen King - The Shining',
   },
 
   {
     src: Card4,
-    copyright: "Amazon Studios - The Grand Tour",
+    copyright: 'Amazon Studios - The Grand Tour',
   },
 
   {
     src: Card5,
-    copyright: "Netflix - Dark",
+    copyright: 'Netflix - Dark',
   },
-];
+]
 
-const currentItem = ref(0);
+const currentItem = ref(0)
 
 onMounted(() => {
-  window.addEventListener("carousel-update", () => {
+  window.addEventListener('carousel-update', () => {
     if (currentItem.value == carousel.length - 1) {
-      currentItem.value = 0;
-      return;
+      currentItem.value = 0
+      return
     }
 
-    currentItem.value += 1;
-  });
-});
+    currentItem.value += 1
+  })
+})
 </script>
 
 <template>
@@ -55,11 +55,17 @@ onMounted(() => {
       rel="prefetch"
       as="image"
       :href="item.src"
-    />
+    >
 
     <TransitionGroup name="fade-long">
-      <template v-for="(item, index) in carousel" :key="index">
-        <LoginCarosuelItem v-if="currentItem == index" :src="item.src" />
+      <template
+        v-for="(item, index) in carousel"
+        :key="index"
+      >
+        <LoginCarosuelItem
+          v-if="currentItem == index"
+          :src="item.src"
+        />
 
         <div
           v-if="currentItem == index"

@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import {
   PhStar,
   PhPlay,
   PhHeart,
   PhDotsThreeVertical,
-} from "@phosphor-icons/vue";
-import { Button } from "@/components/ui/button";
+} from '@phosphor-icons/vue'
+import { Button } from '@/components/ui/button'
 
-import Radial from "@/components/ui/radial/Radial.vue";
+import Radial from '@/components/ui/radial/Radial.vue'
 
 const { item, background, logo, video, audio, subtitle } = defineProps<{
-  item: BaseItemDto;
-  background: string;
-  logo: string;
-  video?: VideoSource;
-  audio?: AudioSource;
-  subtitle?: SubtitleSource;
-}>();
+  item: BaseItemDto
+  background: string
+  logo: string
+  video?: VideoSource
+  audio?: AudioSource
+  subtitle?: SubtitleSource
+}>()
 </script>
 
 <template>
@@ -35,7 +35,10 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
         <div
           class="inline-flex flex-col justify-center items-center gap-2 lg:w-[600px] w-[85%] max-w-full"
         >
-          <ImageWithPlaceholder :src="logo" class-name="w-full" />
+          <ImageWithPlaceholder
+            :src="logo"
+            class-name="w-full"
+          />
         </div>
 
         <div
@@ -49,24 +52,46 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               <span
                 v-if="item.OriginalTitle && item.OriginalTitle != item.Name"
                 class="text-white/75 font-normal"
-                >{{ item.OriginalTitle }}</span
-              >
+              >{{ item.OriginalTitle }}</span>
             </h1>
 
             <div class="inline-flex gap-2 items-center justify-center">
-              <Button variant="outline" size="icon" disabled>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled
+              >
                 <PhPlay size="24" />
               </Button>
-              <Button v-if="false" variant="ghost"> Movie Reel </Button>
-              <Button variant="outline" size="icon" disabled>
+              <Button
+                v-if="false"
+                variant="ghost"
+              >
+                Movie Reel
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled
+              >
                 <PhHeart :size="24" />
               </Button>
-              <Button variant="outline" size="icon" disabled>
-                <PhDotsThreeVertical :size="24" weight="bold" />
+              <Button
+                variant="outline"
+                size="icon"
+                disabled
+              >
+                <PhDotsThreeVertical
+                  :size="24"
+                  weight="bold"
+                />
               </Button>
             </div>
           </div>
-          <div v-if="item.ProductionYear" class="inline-flex gap-4 w-full">
+          <div
+            v-if="item.ProductionYear"
+            class="inline-flex gap-4 w-full"
+          >
             <span>
               {{ item.ProductionYear }}
             </span>
@@ -75,7 +100,10 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               v-if="item.CommunityRating"
               class="stars inline-flex items-center justify-center gap-2"
             >
-              <PhStar weight="fill" class="text-orange-400 lg:h-[1.25rem]" />
+              <PhStar
+                weight="fill"
+                class="text-orange-400 lg:h-[1.25rem]"
+              />
               <span>{{ item.CommunityRating?.toFixed(1) }}</span>
             </div>
           </div>
@@ -87,7 +115,9 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               id="video"
               class="inline-flex gap-4 items-center justify-center w-full"
             >
-              <h3 class="text-white/75 w-[120px]">Video</h3>
+              <h3 class="text-white/75 w-[120px]">
+                Video
+              </h3>
 
               <Select>
                 <SelectTrigger class="flex-grow-1">
@@ -105,7 +135,9 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               id="video"
               class="inline-flex gap-4 items-center justify-center w-full"
             >
-              <h3 class="text-white/75 w-[120px]">Audio</h3>
+              <h3 class="text-white/75 w-[120px]">
+                Audio
+              </h3>
 
               <Select>
                 <SelectTrigger class="flex-grow-1">
@@ -123,7 +155,9 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               id="video"
               class="inline-flex gap-4 items-center justify-center w-full"
             >
-              <h3 class="text-white/75 w-[120px]">Subtitle</h3>
+              <h3 class="text-white/75 w-[120px]">
+                Subtitle
+              </h3>
 
               <Select>
                 <SelectTrigger class="flex-grow-1">
@@ -137,11 +171,17 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               </Select>
             </div>
           </div>
-          <p v-if="item.Overview" class="max-w-full w-[700px] overview">
+          <p
+            v-if="item.Overview"
+            class="max-w-full w-[700px] overview"
+          >
             {{ item.Overview }}
           </p>
 
-          <p v-else class="max-w-full w-[700px] overview">
+          <p
+            v-else
+            class="max-w-full w-[700px] overview"
+          >
             No overview provided
           </p>
           <div
@@ -163,9 +203,14 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               id="genres"
               class="inline-flex justify-center items-center gap-4 text-white/75 max-w-full"
             >
-              <h2 class="text-lg">Genres</h2>
+              <h2 class="text-lg">
+                Genres
+              </h2>
 
-              <div v-focus-section class="inline-flex gap-1 flex-wrap">
+              <div
+                v-focus-section
+                class="inline-flex gap-1 flex-wrap"
+              >
                 <BrowseInternalLinkedContent
                   v-for="(genre, index) in item.GenreItems"
                   :key="index"
@@ -181,9 +226,14 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               v-if="item.Studios && item.Studios.length > 0"
               class="inline-flex justify-center items-start max-w-full gap-2"
             >
-              <h2 class="text-lg text-white/75">Studios</h2>
+              <h2 class="text-lg text-white/75">
+                Studios
+              </h2>
 
-              <div v-focus-section class="inline-flex gap-1 flex-wrap">
+              <div
+                v-focus-section
+                class="inline-flex gap-1 flex-wrap"
+              >
                 <BrowseInternalLinkedContent
                   v-for="(studio, index) in item.Studios"
                   :key="index"
@@ -207,7 +257,9 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
               v-if="item.OfficialRating"
               class="inline-flex justify-center items-center max-w-full gap-4"
             >
-              <h2 class="text-lg text-white/75">Audience</h2>
+              <h2 class="text-lg text-white/75">
+                Audience
+              </h2>
 
               <div class="inline-flex flex-">
                 <span>{{ item.OfficialRating }}</span>
@@ -231,9 +283,7 @@ const { item, background, logo, video, audio, subtitle } = defineProps<{
                 :show-complete="true"
               />
 
-              <span v-if="!item.UserData?.Played"
-                >{{ item.UserData?.UnplayedItemCount }} episodes left</span
-              >
+              <span v-if="!item.UserData?.Played">{{ item.UserData?.UnplayedItemCount }} episodes left</span>
               <span v-else>Completed</span>
             </div>
           </div>

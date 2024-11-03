@@ -1,24 +1,24 @@
 <script setup lang="ts">
 const { src, className } = defineProps<{
-  src: string;
-  className: string | [];
-}>();
+  src: string
+  className: string | []
+}>()
 
-const img = ref(null as HTMLImageElement | null);
-const display = ref(false);
+const img = ref(null as HTMLImageElement | null)
+const display = ref(false)
 
 const onPrimaryImageLoaded = () => {
-  display.value = true;
-};
+  display.value = true
+}
 
 onMounted(() => {
-  if (!img.value) return;
+  if (!img.value) return
 
   // Image was loaded from browser cache
-  if (!img.value.complete) return;
+  if (!img.value.complete) return
 
-  display.value = true;
-});
+  display.value = true
+})
 </script>
 
 <template>
@@ -29,8 +29,12 @@ onMounted(() => {
       :src
       :class="className"
       @load="onPrimaryImageLoaded"
-    />
+    >
   </Transition>
 
-  <img v-show="!display" src="/placeholder.svg" :class="className" />
+  <img
+    v-show="!display"
+    src="/placeholder.svg"
+    :class="className"
+  >
 </template>

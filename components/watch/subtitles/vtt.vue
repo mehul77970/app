@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { CaptionsRenderer, parseResponse } from "media-captions";
-import { getSubtitleStream } from "@/lib/player";
+import { CaptionsRenderer, parseResponse } from 'media-captions'
+import { getSubtitleStream } from '@/lib/player'
 
-const vttCaptionElement = ref(null as null | HTMLElement);
+const vttCaptionElement = ref(null as null | HTMLElement)
 
-const playerStore = usePlayerStore();
-const serverStore = useServerStore();
+const playerStore = usePlayerStore()
+const serverStore = useServerStore()
 
 const vttSubsRaw = await fetch(
   `${serverStore.url}${getSubtitleStream(playerStore.subtitle!, playerStore.item!.Id!)}`,
-);
-const vttSubsData = await parseResponse(vttSubsRaw);
+)
+const vttSubsData = await parseResponse(vttSubsRaw)
 
-let vttPlayer: undefined | CaptionsRenderer;
+let vttPlayer: undefined | CaptionsRenderer
 
 onMounted(async () => {
-  if (!vttCaptionElement.value) return;
+  if (!vttCaptionElement.value) return
 
-  vttPlayer = new CaptionsRenderer(vttCaptionElement.value!);
+  vttPlayer = new CaptionsRenderer(vttCaptionElement.value!)
 
-  vttPlayer.changeTrack(vttSubsData);
+  vttPlayer.changeTrack(vttSubsData)
 
   playerStore.subtitleSyncCallback = (time: number) => {
-    if (!vttPlayer) return;
+    if (!vttPlayer) return
 
-    vttPlayer.currentTime = time;
-  };
+    vttPlayer.currentTime = time
+  }
 
-  playerStore.subtitleLoading = null;
-});
+  playerStore.subtitleLoading = null
+})
 
 onUnmounted(() => {
-  if (!vttPlayer) return;
+  if (!vttPlayer) return
 
-  vttPlayer.destroy();
+  vttPlayer.destroy()
 
-  vttPlayer = undefined;
-});
+  vttPlayer = undefined
+})
 </script>
 
 <template>

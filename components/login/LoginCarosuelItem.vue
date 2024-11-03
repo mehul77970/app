@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const { src = "" } = defineProps<{
-  src?: string;
-}>();
+const { src = '' } = defineProps<{
+  src?: string
+}>()
 </script>
 
 <template>
-  <img :src="src" class="w-full h-full absolute fade-gradient" />
+  <img
+    :src="src"
+    class="w-full h-full absolute fade-gradient"
+  >
 </template>
 
 <style scoped>

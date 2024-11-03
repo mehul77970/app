@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import {
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import type { RefreshType } from "~/stores/MediaBrowserStore";
+} from '@/components/ui/dialog'
+import type { RefreshType } from '~/stores/MediaBrowserStore'
 
 const { item } = defineProps<{
-  item: BaseItemDto;
-}>();
+  item: BaseItemDto
+}>()
 
-const open = defineModel<boolean>();
+const open = defineModel<boolean>()
 
-const mediaStore = useMediaBrowserStore();
+const mediaStore = useMediaBrowserStore()
 
-const refreshMode = ref("Default" as RefreshType);
+const refreshMode = ref('Default' as RefreshType)
 const refreshSwitches = ref({
   replace: false,
   replace_images: false,
   recursive: true,
-});
+})
 
 const refreshContent = async () => {
-  const refreshSwitch = refreshSwitches.value;
+  const refreshSwitch = refreshSwitches.value
 
   await mediaStore.refreshItem(item.Id!, refreshMode.value, {
     recursive: refreshSwitch.recursive,
     replace_all: refreshSwitch.replace,
     replace_images: refreshSwitch.replace_images,
-  });
+  })
 
-  open.value = false;
-};
+  open.value = false
+}
 </script>
 
 <template>
@@ -47,7 +47,10 @@ const refreshContent = async () => {
     </DialogHeader>
     <div class="grid gap-2 py-4">
       <div class="grid grid-cols-4 items-center gap-4">
-        <Label for="path" class="text-left"> Refresh Mode </Label>
+        <Label
+          for="path"
+          class="text-left"
+        > Refresh Mode </Label>
         <Select v-model="refreshMode">
           <SelectTrigger class="col-span-3">
             <SelectValue :placeholder="refreshMode" />
@@ -59,29 +62,45 @@ const refreshContent = async () => {
             <SelectItem value="ValidationOnly">
               Search for missing metadata
             </SelectItem>
-            <SelectItem value="FullRefresh"> Replace all metadata </SelectItem>
+            <SelectItem value="FullRefresh">
+              Replace all metadata
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div class="inline-flex justify-between w-full">
         <div class="inline-flex items-center gap-4">
-          <Label for="path" class="text-left"> Recursive </Label>
+          <Label
+            for="path"
+            class="text-left"
+          > Recursive </Label>
           <Checkbox v-model:checked="refreshSwitches.recursive" />
         </div>
         <div class="inline-flex items-center gap-4">
-          <Label for="path" class="text-left"> Replace All Metadata </Label>
+          <Label
+            for="path"
+            class="text-left"
+          > Replace All Metadata </Label>
           <Checkbox v-model:checked="refreshSwitches.replace" />
         </div>
 
         <div class="inline-flex items-center gap-4">
-          <Label for="path" class="text-left"> Replace All Images </Label>
+          <Label
+            for="path"
+            class="text-left"
+          > Replace All Images </Label>
           <Checkbox v-model:checked="refreshSwitches.replace_images" />
         </div>
       </div>
     </div>
 
     <DialogFooter>
-      <Button type="submit" @click="refreshContent"> Refresh Content </Button>
+      <Button
+        type="submit"
+        @click="refreshContent"
+      >
+        Refresh Content
+      </Button>
     </DialogFooter>
   </DialogContent>
 </template>

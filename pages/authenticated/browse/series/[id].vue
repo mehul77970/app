@@ -1,9 +1,9 @@
 <script setup lang="ts">
-definePageMeta({ layout: "authenticated" });
+definePageMeta({ layout: 'authenticated' })
 
-const route = useRoute();
+const route = useRoute()
 
-const seriesID = route.params.id! as string;
+const seriesID = route.params.id! as string
 </script>
 
 <template>

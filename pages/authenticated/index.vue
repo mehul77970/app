@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
-import { formatTime } from "@/lib/utils";
-import { ticksToSeconds } from "@/composables/ticksToSeconds";
+} from '@/components/ui/carousel'
+import { formatTime } from '@/lib/utils'
+import { ticksToSeconds } from '@/composables/ticksToSeconds'
 
-const mediaBrowserStore = useMediaBrowserStore();
+const mediaBrowserStore = useMediaBrowserStore()
 
-const views = computed(() => mediaBrowserStore.views);
-const resumed = computed(() => mediaBrowserStore.resumed);
-const firstResumed = computed(() => resumed.value[0]!);
+const views = computed(() => mediaBrowserStore.views)
+const resumed = computed(() => mediaBrowserStore.resumed)
+const firstResumed = computed(() => resumed.value[0]!)
 
-await mediaBrowserStore.getResumedContent();
+await mediaBrowserStore.getResumedContent()
 </script>
 
 <template>
@@ -34,7 +34,7 @@ await mediaBrowserStore.getResumedContent();
           )
         "
         class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0 fade-gradient"
-      />
+      >
       <div class="inline-flex flex-col gap-8 show-content z-[2]">
         <div class="inline-flex flex-col gap-2">
           <img
@@ -49,7 +49,7 @@ await mediaBrowserStore.getResumedContent();
               )
             "
             width="700"
-          />
+          >
 
           <div class="h-1 w-full rounded-lg bg-white/50" />
         </div>
@@ -75,7 +75,9 @@ await mediaBrowserStore.getResumedContent();
           id="continue-watching"
           class="inline-flex flex-col justify-start items-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider">CONTINUE WATCHING</h1>
+          <h1 class="text-gray-400 tracking-wider">
+            CONTINUE WATCHING
+          </h1>
 
           <Carousel
             class="relative flex max-w-[100%] justify-center items-center gap-4"
@@ -88,7 +90,11 @@ await mediaBrowserStore.getResumedContent();
                 :key="index"
                 class="basis-1/1 max-w-full"
               >
-                <VideoPreview v-focus :item="item!!" class="w-[800px]" />
+                <VideoPreview
+                  v-focus
+                  :item="item!!"
+                  class="w-[800px]"
+                />
               </CarouselItem>
             </CarouselContent>
           </Carousel>
@@ -101,7 +107,9 @@ await mediaBrowserStore.getResumedContent();
           id="continue-watching"
           class="inline-flex flex-col justify-start items-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider">MEDIA</h1>
+          <h1 class="text-gray-400 tracking-wider">
+            MEDIA
+          </h1>
 
           <Carousel
             class="relative flex max-w-[100%] justify-center"
@@ -139,7 +147,7 @@ await mediaBrowserStore.getResumedContent();
           <img
             src="~/assets/svg/waves.svg"
             class="absolute w-full h-full rounded-lg overflow-hidden object-cover"
-          />
+          >
 
           <div
             class="flex justify-center items-center absolute w-full h-full font-bold text-6xl backdrop backdrop-blur-[8px] rounded-lg"

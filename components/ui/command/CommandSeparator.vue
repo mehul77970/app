@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { ComboboxSeparatorProps } from "radix-vue";
-import { ComboboxSeparator } from "radix-vue";
-import { computed, type HTMLAttributes } from "vue";
-import { cn } from "@/lib/utils";
+import type { ComboboxSeparatorProps } from 'radix-vue'
+import { ComboboxSeparator } from 'radix-vue'
+import { computed, type HTMLAttributes } from 'vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps<
-  ComboboxSeparatorProps & { class?: HTMLAttributes["class"] }
->();
+  ComboboxSeparatorProps & { class?: HTMLAttributes['class'] }
+>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 </script>
 
 <template>

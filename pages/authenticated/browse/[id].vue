@@ -1,13 +1,13 @@
 <script setup lang="ts">
-definePageMeta({ layout: "authenticated" });
+definePageMeta({ layout: 'authenticated' })
 
-const route = useRoute();
-const mediaBrowser = useMediaBrowserStore();
+const route = useRoute()
+const mediaBrowser = useMediaBrowserStore()
 
-const name = ref(route.query.name);
+const name = ref(route.query.name)
 const items = ref(
   await mediaBrowser.getItemsOfView(route.params.id as string, 50),
-);
+)
 </script>
 
 <template>

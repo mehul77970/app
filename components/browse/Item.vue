@@ -3,63 +3,72 @@ import {
   PhArrowsCounterClockwise,
   PhInfo,
   PhTreeStructure,
-} from "@phosphor-icons/vue";
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
-import { truncate } from "@/lib/utils";
-import GlobalImageWithPlaceholder from "@/components/global/ImageWithPlaceholder.vue";
+} from '@phosphor-icons/vue'
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
+import { truncate } from '@/lib/utils'
+import GlobalImageWithPlaceholder from '@/components/global/ImageWithPlaceholder.vue'
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+} from '@/components/ui/context-menu'
 
 const {
-  name = "N/A",
-  id = "???",
-  type = "All",
+  name = 'N/A',
+  id = '???',
+  type = 'All',
   count = 1,
   item,
 } = defineProps<{
-  name?: string;
-  id?: string;
-  type?: string;
-  count?: number;
-  item: BaseItemDto;
-}>();
+  name?: string
+  id?: string
+  type?: string
+  count?: number
+  item: BaseItemDto
+}>()
 
-const mediaBrowserStore = useMediaBrowserStore();
+const mediaBrowserStore = useMediaBrowserStore()
 
-const image = mediaBrowserStore.generateImageURL(id, undefined, 430, 300, 50);
+const image = mediaBrowserStore.generateImageURL(id, undefined, 430, 300, 50)
 
-const metadataDialogOpen = ref(false);
-const aboutDialogOpen = ref(false);
-const refreshDialogOpen = ref(false);
+const metadataDialogOpen = ref(false)
+const aboutDialogOpen = ref(false)
+const refreshDialogOpen = ref(false)
 
 const openMetadataEditor = () => {
-  metadataDialogOpen.value = true;
-};
+  metadataDialogOpen.value = true
+}
 
 const openAboutDialog = () => {
-  aboutDialogOpen.value = true;
-};
+  aboutDialogOpen.value = true
+}
 
 const openRefreshDialog = () => {
-  refreshDialogOpen.value = true;
-};
+  refreshDialogOpen.value = true
+}
 </script>
 
 <template>
   <Dialog v-model:open="metadataDialogOpen">
-    <BrowseMetadata v-model="metadataDialogOpen" :item />
+    <BrowseMetadata
+      v-model="metadataDialogOpen"
+      :item
+    />
   </Dialog>
 
   <Dialog v-model:open="aboutDialogOpen">
-    <BrowseAbout v-if="aboutDialogOpen" :item />
+    <BrowseAbout
+      v-if="aboutDialogOpen"
+      :item
+    />
   </Dialog>
 
   <Dialog v-model:open="refreshDialogOpen">
-    <BrowseRefresh v-model="refreshDialogOpen" :item />
+    <BrowseRefresh
+      v-model="refreshDialogOpen"
+      :item
+    />
   </Dialog>
   <ContextMenu>
     <ContextMenuTrigger>
@@ -74,13 +83,12 @@ const openRefreshDialog = () => {
         <div class="inline-flex justify-center items-center">
           <span
             class="text-center text-sm lg:text-[15px] font-semibold transition-all duration-250 ease-in-out group-hover:text-white/50 group-focus-visible:text-white/50 name-transition"
-            >{{
-              truncate(name, {
-                length: 18,
-                position: "end",
-              })
-            }}</span
-          >
+          >{{
+            truncate(name, {
+              length: 18,
+              position: "end",
+            })
+          }}</span>
         </div>
         <div
           class="flex flex-col flex-grow-1 justify-start items-center relative rounded-md group"
@@ -95,7 +103,7 @@ const openRefreshDialog = () => {
             v-else
             src="/placeholder.svg"
             class="object-cover h-[430px] w-[300px] rounded-md transition-all duration-250 ease-in-out hover:scale-[102%] selectable"
-          />
+          >
           <div
             class="w-[20%] h-1 bg-transparent absolute top-2 z-5 transition-all duration-250 rounded-lg group-hover:bg-white/50"
           />
@@ -108,15 +116,30 @@ const openRefreshDialog = () => {
       </NuxtLink>
     </ContextMenuTrigger>
     <ContextMenuContent>
-      <ContextMenuItem class="gap-2" @click="openAboutDialog">
-        <PhInfo weight="fill" class="size-5" />
+      <ContextMenuItem
+        class="gap-2"
+        @click="openAboutDialog"
+      >
+        <PhInfo
+          weight="fill"
+          class="size-5"
+        />
         About
       </ContextMenuItem>
-      <ContextMenuItem class="gap-2" @click="openMetadataEditor">
-        <PhTreeStructure weight="fill" class="size-5 text-blue-400" />
+      <ContextMenuItem
+        class="gap-2"
+        @click="openMetadataEditor"
+      >
+        <PhTreeStructure
+          weight="fill"
+          class="size-5 text-blue-400"
+        />
         Metadata
       </ContextMenuItem>
-      <ContextMenuItem class="gap-2" @click="openRefreshDialog">
+      <ContextMenuItem
+        class="gap-2"
+        @click="openRefreshDialog"
+      >
         <PhArrowsCounterClockwise
           weight="fill"
           class="size-5 text-orange-400"

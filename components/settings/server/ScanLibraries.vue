@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import type { ScheduledTasksInfoMessage } from "@jellyfin/sdk/lib/generated-client";
-import Radial from "~/components/ui/radial/Radial.vue";
+import type { ScheduledTasksInfoMessage } from '@jellyfin/sdk/lib/generated-client'
+import Radial from '~/components/ui/radial/Radial.vue'
 
-const socket = useSocketStore();
-const server = useServerStore();
-const progress = ref(undefined as number | undefined);
+const socket = useSocketStore()
+const server = useServerStore()
+const progress = ref(undefined as number | undefined)
 
 const scanAllLibraries = async () => {
-  console.log("Attempting to connect to socket");
-  socket.connectToSocket();
+  console.log('Attempting to connect to socket')
+  socket.connectToSocket()
 
-  socket.bus.on("ScheduledTasksInfo", (data: ScheduledTasksInfoMessage) => {
+  socket.bus.on('ScheduledTasksInfo', (data: ScheduledTasksInfoMessage) => {
     const scan = data.Data?.find(
-      (task) => task.Id == ScheduledTasks.GLOBAL_SCAN,
-    );
-    const percent = scan?.CurrentProgressPercentage;
+      task => task.Id == ScheduledTasks.GLOBAL_SCAN,
+    )
+    const percent = scan?.CurrentProgressPercentage
 
     if (percent == undefined) {
-      socket.disconnectSocket();
+      socket.disconnectSocket()
     }
-    progress.value = percent || 0;
-  });
+    progress.value = percent || 0
+  })
 
-  await server.scanAllLibraries();
-  progress.value = 1;
-};
+  await server.scanAllLibraries()
+  progress.value = 1
+}
 </script>
 
 <template>

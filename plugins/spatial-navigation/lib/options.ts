@@ -1,4 +1,4 @@
-type Selector = string;
+type Selector = string
 
 export interface vjsnOptions {
   /**
@@ -9,7 +9,7 @@ export interface vjsnOptions {
 
   Elements matching `selector` are regarded as navigable elements in SpatialNavigation. However, hidden or disabled elements are ignored as they can not be focused in any way.
    */
-  selector?: Selector;
+  selector?: Selector
 
   /**
    * #### `straightOnly`
@@ -19,7 +19,7 @@ export interface vjsnOptions {
 
     When it is `true`, only elements in the straight (vertical or horizontal) direction will be navigated. i.e. SpatialNavigation ignores elements in the oblique directions.
    */
-  straightOnly?: boolean;
+  straightOnly?: boolean
 
   /**
    * #### `straightOverlapThreshold`
@@ -32,7 +32,7 @@ This threshold is used to determine whether an element is considered in the stra
 Setting it to 0.3 means that an element is counted in the straight directions only if it overlaps the straight area at least 0.3x of its total area.
 
    */
-  straightOverlapThreshold?: number;
+  straightOverlapThreshold?: number
 
   /**
    * #### `rememberSource`
@@ -42,7 +42,7 @@ Setting it to 0.3 means that an element is counted in the straight directions on
 
 When it is `true`, the previously focused element will have higher priority to be chosen as the next candidate.
    */
-  rememberSource?: boolean;
+  rememberSource?: boolean
 
   /**
    * #### `disabled`
@@ -52,7 +52,7 @@ When it is `true`, the previously focused element will have higher priority to b
 
 When it is `true`, elements defined in this section are unnavigable. This property is modified by [`disable()`](#spatialnavigationdisablesectionid) and [`enable()`](#spatialnavigationenablesectionid) as well.
    */
-  disabled?: boolean;
+  disabled?: boolean
 
   /**
    * #### `defaultElement`
@@ -62,7 +62,7 @@ When it is `true`, elements defined in this section are unnavigable. This proper
 
 When a section is specified to be the next focused target, e.g. [`focus('some-section-id')`](#spatialnavigationfocussectionidselector-silent) is called, the first navigable element matching `defaultElement` within this section will be chosen first.
    */
-  defaultElement?: Selector;
+  defaultElement?: Selector
 
   /**
    * #### `enterTo`
@@ -78,7 +78,7 @@ If the focus comes from another section, you can define which element in this se
 
 `''` (empty string) implies following the original rule without any change.
    */
-  enterTo?: Selector | "" | "last-focused" | "default-element";
+  enterTo?: Selector | '' | 'last-focused' | 'default-element'
 
   /**
    * #### `leaveFor`
@@ -94,11 +94,11 @@ It should be a PlainObject consists of four properties: `'left'`, `'right'`, `'u
 
    */
   leaveFor?: {
-    left?: Selector | false | null;
-    right?: Selector | false | null;
-    up?: Selector | false | null;
-    down?: Selector | false | null;
-  };
+    left?: Selector | false | null
+    right?: Selector | false | null
+    up?: Selector | false | null
+    down?: Selector | false | null
+  }
 
   /**
    * #### `restrict`
@@ -112,7 +112,7 @@ It should be a PlainObject consists of four properties: `'left'`, `'right'`, `'u
 
 `'none'` implies no restriction.
    */
-  restrict?: "self-first" | "self-only" | "none";
+  restrict?: 'self-first' | 'self-only' | 'none'
 
   /**
    * #### `tabIndexIgnoreList`
@@ -122,7 +122,7 @@ It should be a PlainObject consists of four properties: `'left'`, `'right'`, `'u
 
 Elements matching `tabIndexIgnoreList` will never be affected by [`makeFocusable()`](#spatialnavigationmakefocusablesectionid). It is usually used to ignore elements that are already focusable.
    */
-  tabIndexIgnoreList?: string;
+  tabIndexIgnoreList?: string
 
   /**
    * #### `navigableFilter`
@@ -135,10 +135,10 @@ A callback function that accepts a DOM element as the first argument.
 SpatialNavigation calls this function every time when it tries to traverse every single candidate. You can ignore arbitrary elements by returning `false`.
 
    */
-  navigableFilter?: (elem: HTMLElement, sectionId?: string) => boolean;
+  navigableFilter?: (elem: HTMLElement, sectionId?: string) => boolean
 
   /**
    * scrollIntoViewOptions https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
    */
-  scrollOptions?: ScrollIntoViewOptions; // scrollIntoViewOptions https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+  scrollOptions?: ScrollIntoViewOptions // scrollIntoViewOptions https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
 }

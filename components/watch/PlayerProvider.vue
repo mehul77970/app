@@ -4,26 +4,26 @@ import {
   getPlayerType,
   getSubtitleStreams,
   type PlayerType,
-} from "@/lib/player";
+} from '@/lib/player'
 
 const { id, startPosition, audioIndex, subtitleIndex } = defineProps<{
-  id: string;
-  audioIndex?: string;
-  subtitleIndex?: string;
-  startPosition?: number;
-}>();
+  id: string
+  audioIndex?: string
+  subtitleIndex?: string
+  startPosition?: number
+}>()
 
-const playbackStore = usePlaybackStore();
-const playerStore = usePlayerStore();
+const playbackStore = usePlaybackStore()
+const playerStore = usePlayerStore()
 
-const startAt =
-  startPosition ||
-  (await playerStore.getPlayerItem(id)).UserData?.PlaybackPositionTicks ||
-  0;
+const startAt
+  = startPosition
+  || (await playerStore.getPlayerItem(id)).UserData?.PlaybackPositionTicks
+  || 0
 
-const playerType = ref(null as PlayerType | null);
+const playerType = ref(null as PlayerType | null)
 
-console.log("loading playback info with id", id);
+console.log('loading playback info with id', id)
 
 const info = await playbackStore.getPlaybackInfo(
   id,
@@ -35,50 +35,50 @@ const info = await playbackStore.getPlaybackInfo(
   undefined,
   Number(subtitleIndex),
   undefined,
-);
+)
 
-playbackStore.setPlaybackInfo(info);
+playbackStore.setPlaybackInfo(info)
 
-playerType.value = getPlayerType(info);
+playerType.value = getPlayerType(info)
 
-await playerStore.getPlayerItem(id);
+await playerStore.getPlayerItem(id)
 
-playerStore.getDefaultMediaStreams(info);
+playerStore.getDefaultMediaStreams(info)
 
 onMounted(async () => {
-  console.log("Audio", audioIndex, "Subtitle", subtitleIndex);
+  console.log('Audio', audioIndex, 'Subtitle', subtitleIndex)
 
-  console.log("PlayerProvider: Got Playback info", info);
+  console.log('PlayerProvider: Got Playback info', info)
 
   if (audioIndex) {
     const audio = getAudioStreams(info).find(
-      (a) => a.source?.Index === Number(audioIndex),
-    );
+      a => a.source?.Index === Number(audioIndex),
+    )
 
-    if (!audio) return;
+    if (!audio) return
 
-    playerStore.audio = audio;
+    playerStore.audio = audio
   }
 
   if (subtitleIndex) {
     const subtitle = getSubtitleStreams(info).find(
-      (s) => s.source?.Index === Number(subtitleIndex),
-    );
+      s => s.source?.Index === Number(subtitleIndex),
+    )
 
-    if (!subtitle) return;
+    if (!subtitle) return
 
-    playerStore.subtitle = subtitle;
+    playerStore.subtitle = subtitle
   }
-});
+})
 
 onUnmounted(() => {
-  playerStore.subtitle = null;
-  playerStore.audio = null;
-  playerStore.video = null;
+  playerStore.subtitle = null
+  playerStore.audio = null
+  playerStore.video = null
 
-  playbackStore.info = null;
-  playbackStore._transcodingUrl = null;
-});
+  playbackStore.info = null
+  playbackStore._transcodingUrl = null
+})
 </script>
 
 <template>

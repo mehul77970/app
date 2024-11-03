@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NotificationGroup, Notification } from "notiwind";
+import { NotificationGroup, Notification } from 'notiwind'
 import {
   PhXCircle,
   PhCheckCircle,
   PhExclamationMark,
-} from "@phosphor-icons/vue";
+} from '@phosphor-icons/vue'
 </script>
 
 <template>
@@ -71,7 +71,10 @@ import {
       </div>
     </NotificationGroup>
 
-    <NotificationGroup group="bottom" position="bottom">
+    <NotificationGroup
+      group="bottom"
+      position="bottom"
+    >
       <div
         class="fixed inset-x-0 bottom-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none"
       >
@@ -94,7 +97,10 @@ import {
             >
               <template v-if="notification.type == 'error'">
                 <div class="flex items-center justify-center w-12 bg-red-500">
-                  <PhXCircle type="fill" :size="24" />
+                  <PhXCircle
+                    type="fill"
+                    :size="24"
+                  />
                 </div>
 
                 <div class="px-4 py-2 -mx-3">
@@ -111,7 +117,10 @@ import {
 
               <template v-if="notification.type == 'info'">
                 <div class="flex items-center justify-center w-12 bg-blue-500">
-                  <PhExclamationMark type="bold" :size="24" />
+                  <PhExclamationMark
+                    type="bold"
+                    :size="24"
+                  />
                 </div>
 
                 <div class="px-4 py-2 -mx-3">
@@ -128,7 +137,10 @@ import {
 
               <template v-if="notification.type == 'success'">
                 <div class="flex items-center justify-center w-12 bg-green-500">
-                  <PhCheckCircle type="fill" :size="24" />
+                  <PhCheckCircle
+                    type="fill"
+                    :size="24"
+                  />
                 </div>
 
                 <div class="px-4 py-2 -mx-3">

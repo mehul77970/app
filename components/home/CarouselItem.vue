@@ -1,35 +1,35 @@
 <script setup lang="ts">
-const { name = "N/A", id = "???" } = defineProps<{
-  name?: string;
-  id?: string;
-  type?: string;
-}>();
+const { name = 'N/A', id = '???' } = defineProps<{
+  name?: string
+  id?: string
+  type?: string
+}>()
 
-const mediaBrowserStore = useMediaBrowserStore();
-const imagePreviewsOfView = ref([] as string[]);
+const mediaBrowserStore = useMediaBrowserStore()
+const imagePreviewsOfView = ref([] as string[])
 
-const currentItem = ref(0);
+const currentItem = ref(0)
 
-const items = await mediaBrowserStore.getItemsOfView(id);
+const items = await mediaBrowserStore.getItemsOfView(id)
 
 for (let itm = 0; items.length > itm; itm++) {
-  const item = items[itm];
+  const item = items[itm]
 
-  if (item!.ImageTags!["Primary"]) {
-    imagePreviewsOfView.value.push(item.Id!);
+  if (item!.ImageTags!['Primary']) {
+    imagePreviewsOfView.value.push(item.Id!)
   }
 }
 
 onMounted(() => {
-  window.addEventListener("carousel-update", () => {
+  window.addEventListener('carousel-update', () => {
     if (currentItem.value == imagePreviewsOfView.value.length - 1) {
-      currentItem.value = 0;
-      return;
+      currentItem.value = 0
+      return
     }
 
-    currentItem.value += 1;
-  });
-});
+    currentItem.value += 1
+  })
+})
 </script>
 
 <template>
@@ -45,7 +45,10 @@ onMounted(() => {
         class="flex flex-col flex-grow-1 justify-start items-center w-full h-full relative rounded-md"
       >
         <TransitionGroup name="fade-long">
-          <template v-for="(item, index) in imagePreviewsOfView" :key="index">
+          <template
+            v-for="(item, index) in imagePreviewsOfView"
+            :key="index"
+          >
             <img
               v-if="currentItem == index"
               :src="
@@ -58,7 +61,7 @@ onMounted(() => {
                 )
               "
               class="absolute object-cover w-full h-full rounded-md"
-            />
+            >
           </template>
         </TransitionGroup>
 

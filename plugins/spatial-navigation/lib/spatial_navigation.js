@@ -17,76 +17,76 @@
 // - a string "@<sectionId>" to indicate the specified section
 // - a string "@" to indicate the default section
 var GlobalConfig = {
-  selector: "", // can be a valid <extSelector> except "@" syntax.
+  selector: '', // can be a valid <extSelector> except "@" syntax.
   straightOnly: false,
   straightOverlapThreshold: 0.5,
   rememberSource: false,
   disabled: false,
-  defaultElement: "", // <extSelector> except "@" syntax.
-  enterTo: "", // '', 'last-focused', 'default-element'
+  defaultElement: '', // <extSelector> except "@" syntax.
+  enterTo: '', // '', 'last-focused', 'default-element'
   leaveFor: null, // {left: <extSelector>, right: <extSelector>,
   //  up: <extSelector>, down: <extSelector>}
-  restrict: "self-first", // 'self-first', 'self-only', 'none'
+  restrict: 'self-first', // 'self-first', 'self-only', 'none'
   tabIndexIgnoreList:
-    "a, input, select, textarea, button, iframe, [contentEditable=true]",
+    'a, input, select, textarea, button, iframe, [contentEditable=true]',
   navigableFilter: null,
   scrollOptions: null, // scrollIntoViewOptions https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-};
+}
 
 /*********************/
 /* Constant Variable */
 /*********************/
 var KEYMAPPING = {
-  37: "left",
-  38: "up",
-  39: "right",
-  40: "down",
-};
+  37: 'left',
+  38: 'up',
+  39: 'right',
+  40: 'down',
+}
 
 var REVERSE = {
-  left: "right",
-  up: "down",
-  right: "left",
-  down: "up",
-};
+  left: 'right',
+  up: 'down',
+  right: 'left',
+  down: 'up',
+}
 
-export const EVENT_PREFIX = "sn:";
-var ID_POOL_PREFIX = "section-";
+export const EVENT_PREFIX = 'sn:'
+var ID_POOL_PREFIX = 'section-'
 
 /********************/
 /* Private Variable */
 /********************/
-var _idPool = 0;
-var _ready = false;
-var _pause = false;
-var _sections = {};
-var _sectionCount = 0;
-var _defaultSectionId = "";
-var _lastSectionId = "";
-var _duringFocusChange = false;
+var _idPool = 0
+var _ready = false
+var _pause = false
+var _sections = {}
+var _sectionCount = 0
+var _defaultSectionId = ''
+var _lastSectionId = ''
+var _duringFocusChange = false
 
 /************/
 /* Polyfill */
 /************/
-var elementMatchesSelector =
-  Element.prototype.matches ||
-  Element.prototype.matchesSelector ||
-  Element.prototype.mozMatchesSelector ||
-  Element.prototype.webkitMatchesSelector ||
-  Element.prototype.msMatchesSelector ||
-  Element.prototype.oMatchesSelector ||
-  function (selector) {
+var elementMatchesSelector
+  = Element.prototype.matches
+  || Element.prototype.matchesSelector
+  || Element.prototype.mozMatchesSelector
+  || Element.prototype.webkitMatchesSelector
+  || Element.prototype.msMatchesSelector
+  || Element.prototype.oMatchesSelector
+  || function (selector) {
     var matchedNodes = (this.parentNode || this.document).querySelectorAll(
       selector,
-    );
-    return [].slice.call(matchedNodes).indexOf(this) >= 0;
-  };
+    )
+    return [].slice.call(matchedNodes).indexOf(this) >= 0
+  }
 
 /*****************/
 /* Core Function */
 /*****************/
 function getRect(elem) {
-  var cr = elem.getBoundingClientRect();
+  var cr = elem.getBoundingClientRect()
   var rect = {
     left: cr.left,
     top: cr.top,
@@ -94,201 +94,213 @@ function getRect(elem) {
     bottom: cr.bottom,
     width: cr.width,
     height: cr.height,
-  };
-  rect.element = elem;
+  }
+  rect.element = elem
   rect.center = {
     x: rect.left + Math.floor(rect.width / 2),
     y: rect.top + Math.floor(rect.height / 2),
-  };
-  rect.center.left = rect.center.right = rect.center.x;
-  rect.center.top = rect.center.bottom = rect.center.y;
-  return rect;
+  }
+  rect.center.left = rect.center.right = rect.center.x
+  rect.center.top = rect.center.bottom = rect.center.y
+  return rect
 }
 
 function partition(rects, targetRect, straightOverlapThreshold) {
-  var groups = [[], [], [], [], [], [], [], [], []];
+  var groups = [[], [], [], [], [], [], [], [], []]
 
   for (var i = 0; i < rects.length; i++) {
-    var rect = rects[i];
-    var center = rect.center;
-    var x, y, groupId;
+    var rect = rects[i]
+    var center = rect.center
+    var x, y, groupId
 
     if (center.x < targetRect.left) {
-      x = 0;
-    } else if (center.x <= targetRect.right) {
-      x = 1;
-    } else {
-      x = 2;
+      x = 0
+    }
+    else if (center.x <= targetRect.right) {
+      x = 1
+    }
+    else {
+      x = 2
     }
 
     if (center.y < targetRect.top) {
-      y = 0;
-    } else if (center.y <= targetRect.bottom) {
-      y = 1;
-    } else {
-      y = 2;
+      y = 0
+    }
+    else if (center.y <= targetRect.bottom) {
+      y = 1
+    }
+    else {
+      y = 2
     }
 
-    groupId = y * 3 + x;
-    groups[groupId].push(rect);
+    groupId = y * 3 + x
+    groups[groupId].push(rect)
 
     if ([0, 2, 6, 8].indexOf(groupId) !== -1) {
-      var threshold = straightOverlapThreshold;
+      var threshold = straightOverlapThreshold
 
       if (rect.left <= targetRect.right - targetRect.width * threshold) {
         if (groupId === 2) {
-          groups[1].push(rect);
-        } else if (groupId === 8) {
-          groups[7].push(rect);
+          groups[1].push(rect)
+        }
+        else if (groupId === 8) {
+          groups[7].push(rect)
         }
       }
 
       if (rect.right >= targetRect.left + targetRect.width * threshold) {
         if (groupId === 0) {
-          groups[1].push(rect);
-        } else if (groupId === 6) {
-          groups[7].push(rect);
+          groups[1].push(rect)
+        }
+        else if (groupId === 6) {
+          groups[7].push(rect)
         }
       }
 
       if (rect.top <= targetRect.bottom - targetRect.height * threshold) {
         if (groupId === 6) {
-          groups[3].push(rect);
-        } else if (groupId === 8) {
-          groups[5].push(rect);
+          groups[3].push(rect)
+        }
+        else if (groupId === 8) {
+          groups[5].push(rect)
         }
       }
 
       if (rect.bottom >= targetRect.top + targetRect.height * threshold) {
         if (groupId === 0) {
-          groups[3].push(rect);
-        } else if (groupId === 2) {
-          groups[5].push(rect);
+          groups[3].push(rect)
+        }
+        else if (groupId === 2) {
+          groups[5].push(rect)
         }
       }
     }
   }
 
-  return groups;
+  return groups
 }
 
 function generateDistanceFunction(targetRect) {
   return {
     nearPlumbLineIsBetter: function (rect) {
-      var d;
+      var d
       if (rect.center.x < targetRect.center.x) {
-        d = targetRect.center.x - rect.right;
-      } else {
-        d = rect.left - targetRect.center.x;
+        d = targetRect.center.x - rect.right
       }
-      return d < 0 ? 0 : d;
+      else {
+        d = rect.left - targetRect.center.x
+      }
+      return d < 0 ? 0 : d
     },
     nearHorizonIsBetter: function (rect) {
-      var d;
+      var d
       if (rect.center.y < targetRect.center.y) {
-        d = targetRect.center.y - rect.bottom;
-      } else {
-        d = rect.top - targetRect.center.y;
+        d = targetRect.center.y - rect.bottom
       }
-      return d < 0 ? 0 : d;
+      else {
+        d = rect.top - targetRect.center.y
+      }
+      return d < 0 ? 0 : d
     },
     nearTargetLeftIsBetter: function (rect) {
-      var d;
+      var d
       if (rect.center.x < targetRect.center.x) {
-        d = targetRect.left - rect.right;
-      } else {
-        d = rect.left - targetRect.left;
+        d = targetRect.left - rect.right
       }
-      return d < 0 ? 0 : d;
+      else {
+        d = rect.left - targetRect.left
+      }
+      return d < 0 ? 0 : d
     },
     nearTargetTopIsBetter: function (rect) {
-      var d;
+      var d
       if (rect.center.y < targetRect.center.y) {
-        d = targetRect.top - rect.bottom;
-      } else {
-        d = rect.top - targetRect.top;
+        d = targetRect.top - rect.bottom
       }
-      return d < 0 ? 0 : d;
+      else {
+        d = rect.top - targetRect.top
+      }
+      return d < 0 ? 0 : d
     },
     topIsBetter: function (rect) {
-      return rect.top;
+      return rect.top
     },
     bottomIsBetter: function (rect) {
-      return -1 * rect.bottom;
+      return -1 * rect.bottom
     },
     leftIsBetter: function (rect) {
-      return rect.left;
+      return rect.left
     },
     rightIsBetter: function (rect) {
-      return -1 * rect.right;
+      return -1 * rect.right
     },
-  };
+  }
 }
 
 function prioritize(priorities) {
-  var destPriority = null;
+  var destPriority = null
   for (var i = 0; i < priorities.length; i++) {
     if (priorities[i].group.length) {
-      destPriority = priorities[i];
-      break;
+      destPriority = priorities[i]
+      break
     }
   }
 
   if (!destPriority) {
-    return null;
+    return null
   }
 
-  var destDistance = destPriority.distance;
+  var destDistance = destPriority.distance
 
   destPriority.group.sort(function (a, b) {
     for (var i = 0; i < destDistance.length; i++) {
-      var distance = destDistance[i];
-      var delta = distance(a) - distance(b);
+      var distance = destDistance[i]
+      var delta = distance(a) - distance(b)
       if (delta) {
-        return delta;
+        return delta
       }
     }
-    return 0;
-  });
+    return 0
+  })
 
-  return destPriority.group;
+  return destPriority.group
 }
 
 function navigate(target, direction, candidates, config) {
   if (!target || !direction || !candidates || !candidates.length) {
-    return null;
+    return null
   }
 
-  var rects = [];
+  var rects = []
   for (var i = 0; i < candidates.length; i++) {
-    var rect = getRect(candidates[i]);
+    var rect = getRect(candidates[i])
     if (rect) {
-      rects.push(rect);
+      rects.push(rect)
     }
   }
   if (!rects.length) {
-    return null;
+    return null
   }
 
-  var targetRect = getRect(target);
+  var targetRect = getRect(target)
   if (!targetRect) {
-    return null;
+    return null
   }
 
-  var distanceFunction = generateDistanceFunction(targetRect);
+  var distanceFunction = generateDistanceFunction(targetRect)
 
-  var groups = partition(rects, targetRect, config.straightOverlapThreshold);
+  var groups = partition(rects, targetRect, config.straightOverlapThreshold)
 
   var internalGroups = partition(
     groups[4],
     targetRect.center,
     config.straightOverlapThreshold,
-  );
+  )
 
-  var priorities;
+  var priorities
 
   switch (direction) {
-    case "left":
+    case 'left':
       priorities = [
         {
           group: internalGroups[0]
@@ -314,9 +326,9 @@ function navigate(target, direction, candidates, config) {
             distanceFunction.nearTargetTopIsBetter,
           ],
         },
-      ];
-      break;
-    case "right":
+      ]
+      break
+    case 'right':
       priorities = [
         {
           group: internalGroups[2]
@@ -342,9 +354,9 @@ function navigate(target, direction, candidates, config) {
             distanceFunction.nearTargetTopIsBetter,
           ],
         },
-      ];
-      break;
-    case "up":
+      ]
+      break
+    case 'up':
       priorities = [
         {
           group: internalGroups[0]
@@ -370,9 +382,9 @@ function navigate(target, direction, candidates, config) {
             distanceFunction.nearTargetLeftIsBetter,
           ],
         },
-      ];
-      break;
-    case "down":
+      ]
+      break
+    case 'down':
       priorities = [
         {
           group: internalGroups[6]
@@ -398,241 +410,248 @@ function navigate(target, direction, candidates, config) {
             distanceFunction.nearTargetLeftIsBetter,
           ],
         },
-      ];
-      break;
+      ]
+      break
     default:
-      return null;
+      return null
   }
 
   if (config.straightOnly) {
-    priorities.pop();
+    priorities.pop()
   }
 
-  var destGroup = prioritize(priorities);
+  var destGroup = prioritize(priorities)
   if (!destGroup) {
-    return null;
+    return null
   }
 
-  var dest = null;
+  var dest = null
   if (
-    config.rememberSource &&
-    config.previous &&
-    config.previous.destination === target &&
-    config.previous.reverse === direction
+    config.rememberSource
+    && config.previous
+    && config.previous.destination === target
+    && config.previous.reverse === direction
   ) {
     for (var j = 0; j < destGroup.length; j++) {
       if (destGroup[j].element === config.previous.target) {
-        dest = destGroup[j].element;
-        break;
+        dest = destGroup[j].element
+        break
       }
     }
   }
 
   if (!dest) {
-    dest = destGroup[0].element;
+    dest = destGroup[0].element
   }
 
-  return dest;
+  return dest
 }
 
 /********************/
 /* Private Function */
 /********************/
 function generateId() {
-  var id;
+  var id
   /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
   while (true) {
-    id = ID_POOL_PREFIX + String(++_idPool);
+    id = ID_POOL_PREFIX + String(++_idPool)
     if (!_sections[id]) {
-      break;
+      break
     }
   }
-  return id;
+  return id
 }
 
 function parseSelector(selector) {
-  var result = [];
+  var result = []
   try {
     if (selector) {
-      if (typeof selector === "string") {
-        result = [].slice.call(document.querySelectorAll(selector));
-      } else if (typeof selector === "object" && selector.length) {
-        result = [].slice.call(selector);
-      } else if (typeof selector === "object" && selector.nodeType === 1) {
-        result = [selector];
+      if (typeof selector === 'string') {
+        result = [].slice.call(document.querySelectorAll(selector))
+      }
+      else if (typeof selector === 'object' && selector.length) {
+        result = [].slice.call(selector)
+      }
+      else if (typeof selector === 'object' && selector.nodeType === 1) {
+        result = [selector]
       }
     }
-  } catch (err) {
-    console.error(err);
   }
-  return result;
+  catch (err) {
+    console.error(err)
+  }
+  return result
 }
 
 function matchSelector(elem, selector) {
-  if (typeof selector === "string") {
-    return elementMatchesSelector.call(elem, selector);
-  } else if (typeof selector === "object" && selector.length) {
-    return selector.indexOf(elem) >= 0;
-  } else if (typeof selector === "object" && selector.nodeType === 1) {
-    return elem === selector;
+  if (typeof selector === 'string') {
+    return elementMatchesSelector.call(elem, selector)
   }
-  return false;
+  else if (typeof selector === 'object' && selector.length) {
+    return selector.indexOf(elem) >= 0
+  }
+  else if (typeof selector === 'object' && selector.nodeType === 1) {
+    return elem === selector
+  }
+  return false
 }
 
 function getCurrentFocusedElement() {
-  var activeElement = document.activeElement;
+  var activeElement = document.activeElement
   if (activeElement && activeElement !== document.body) {
-    return activeElement;
+    return activeElement
   }
 }
 
 function extend(out) {
-  out = out || {};
+  out = out || {}
   for (var i = 1; i < arguments.length; i++) {
     if (!arguments[i]) {
-      continue;
+      continue
     }
     for (var key in arguments[i]) {
       if (
         /* eslint no-prototype-builtins: "off" */
-        arguments[i].hasOwnProperty(key) &&
-        arguments[i][key] !== undefined
+        arguments[i].hasOwnProperty(key)
+        && arguments[i][key] !== undefined
       ) {
-        out[key] = arguments[i][key];
+        out[key] = arguments[i][key]
       }
     }
   }
-  return out;
+  return out
 }
 
 function exclude(elemList, excludedElem) {
   if (!Array.isArray(excludedElem)) {
-    excludedElem = [excludedElem];
+    excludedElem = [excludedElem]
   }
   for (var i = 0, index; i < excludedElem.length; i++) {
-    index = elemList.indexOf(excludedElem[i]);
+    index = elemList.indexOf(excludedElem[i])
     if (index >= 0) {
-      elemList.splice(index, 1);
+      elemList.splice(index, 1)
     }
   }
-  return elemList;
+  return elemList
 }
 
 function isNavigable(elem, sectionId, verifySectionSelector) {
   if (
-    !elem ||
-    !sectionId ||
-    !_sections[sectionId] ||
-    _sections[sectionId].disabled
+    !elem
+    || !sectionId
+    || !_sections[sectionId]
+    || _sections[sectionId].disabled
   ) {
-    return false;
+    return false
   }
   if (
-    (elem.offsetWidth <= 0 && elem.offsetHeight <= 0) ||
-    elem.hasAttribute("disabled")
+    (elem.offsetWidth <= 0 && elem.offsetHeight <= 0)
+    || elem.hasAttribute('disabled')
   ) {
-    return false;
+    return false
   }
   if (
-    verifySectionSelector &&
-    !matchSelector(elem, _sections[sectionId].selector)
+    verifySectionSelector
+    && !matchSelector(elem, _sections[sectionId].selector)
   ) {
-    return false;
+    return false
   }
-  if (typeof _sections[sectionId].navigableFilter === "function") {
+  if (typeof _sections[sectionId].navigableFilter === 'function') {
     if (_sections[sectionId].navigableFilter(elem, sectionId) === false) {
-      return false;
-    }
-  } else if (typeof GlobalConfig.navigableFilter === "function") {
-    if (GlobalConfig.navigableFilter(elem, sectionId) === false) {
-      return false;
+      return false
     }
   }
-  return true;
+  else if (typeof GlobalConfig.navigableFilter === 'function') {
+    if (GlobalConfig.navigableFilter(elem, sectionId) === false) {
+      return false
+    }
+  }
+  return true
 }
 
 function getSectionId(elem) {
   for (var id in _sections) {
     if (
-      !_sections[id].disabled &&
-      matchSelector(elem, _sections[id].selector)
+      !_sections[id].disabled
+      && matchSelector(elem, _sections[id].selector)
     ) {
-      return id;
+      return id
     }
   }
 }
 
 function getSectionNavigableElements(sectionId) {
   return parseSelector(_sections[sectionId].selector).filter(function (elem) {
-    return isNavigable(elem, sectionId);
-  });
+    return isNavigable(elem, sectionId)
+  })
 }
 
 function getSectionDefaultElement(sectionId) {
   var defaultElement = parseSelector(_sections[sectionId].defaultElement).find(
     function (elem) {
-      return isNavigable(elem, sectionId, true);
+      return isNavigable(elem, sectionId, true)
     },
-  );
+  )
   if (!defaultElement) {
-    return null;
+    return null
   }
-  return defaultElement;
+  return defaultElement
 }
 
 function getSectionLastFocusedElement(sectionId) {
-  var lastFocusedElement = _sections[sectionId].lastFocusedElement;
+  var lastFocusedElement = _sections[sectionId].lastFocusedElement
   if (!isNavigable(lastFocusedElement, sectionId, true)) {
-    return null;
+    return null
   }
-  return lastFocusedElement;
+  return lastFocusedElement
 }
 
 function fireEvent(elem, type, details, cancelable) {
   if (arguments.length < 4) {
-    cancelable = true;
+    cancelable = true
   }
-  var evt = document.createEvent("CustomEvent");
-  evt.initCustomEvent(EVENT_PREFIX + type, true, cancelable, details);
-  return elem.dispatchEvent(evt);
+  var evt = document.createEvent('CustomEvent')
+  evt.initCustomEvent(EVENT_PREFIX + type, true, cancelable, details)
+  return elem.dispatchEvent(evt)
 }
 
 function focusElement(elem, sectionId, direction) {
   if (!elem) {
-    return false;
+    return false
   }
 
-  var currentFocusedElement = getCurrentFocusedElement();
+  var currentFocusedElement = getCurrentFocusedElement()
 
   var focusNscroll = function () {
     if (_sections[sectionId].scrollOptions) {
-      elem.scrollIntoView(_sections[sectionId].scrollOptions);
-    } else if (GlobalConfig.scrollOptions) {
-      elem.scrollIntoView(GlobalConfig.scrollOptions);
+      elem.scrollIntoView(_sections[sectionId].scrollOptions)
     }
-    elem.focus({ preventScroll: true });
-  };
+    else if (GlobalConfig.scrollOptions) {
+      elem.scrollIntoView(GlobalConfig.scrollOptions)
+    }
+    elem.focus({ preventScroll: true })
+  }
 
   var silentFocus = function () {
     if (currentFocusedElement) {
-      currentFocusedElement.blur();
+      currentFocusedElement.blur()
     }
 
-    focusNscroll(elem);
-    focusChanged(elem, sectionId);
-  };
-
-  if (_duringFocusChange) {
-    silentFocus();
-    return true;
+    focusNscroll(elem)
+    focusChanged(elem, sectionId)
   }
 
-  _duringFocusChange = true;
+  if (_duringFocusChange) {
+    silentFocus()
+    return true
+  }
+
+  _duringFocusChange = true
 
   if (_pause) {
-    silentFocus();
-    _duringFocusChange = false;
-    return true;
+    silentFocus()
+    _duringFocusChange = false
+    return true
   }
 
   if (currentFocusedElement) {
@@ -641,13 +660,13 @@ function focusElement(elem, sectionId, direction) {
       nextSectionId: sectionId,
       direction: direction,
       native: false,
-    };
-    if (!fireEvent(currentFocusedElement, "willunfocus", unfocusProperties)) {
-      _duringFocusChange = false;
-      return false;
     }
-    currentFocusedElement.blur();
-    fireEvent(currentFocusedElement, "unfocused", unfocusProperties, false);
+    if (!fireEvent(currentFocusedElement, 'willunfocus', unfocusProperties)) {
+      _duringFocusChange = false
+      return false
+    }
+    currentFocusedElement.blur()
+    fireEvent(currentFocusedElement, 'unfocused', unfocusProperties, false)
   }
 
   var focusProperties = {
@@ -655,169 +674,174 @@ function focusElement(elem, sectionId, direction) {
     sectionId: sectionId,
     direction: direction,
     native: false,
-  };
-  if (!fireEvent(elem, "willfocus", focusProperties)) {
-    _duringFocusChange = false;
-    return false;
   }
-  focusNscroll(elem);
-  fireEvent(elem, "focused", focusProperties, false);
+  if (!fireEvent(elem, 'willfocus', focusProperties)) {
+    _duringFocusChange = false
+    return false
+  }
+  focusNscroll(elem)
+  fireEvent(elem, 'focused', focusProperties, false)
 
-  _duringFocusChange = false;
+  _duringFocusChange = false
 
-  focusChanged(elem, sectionId);
-  return true;
+  focusChanged(elem, sectionId)
+  return true
 }
 
 function focusChanged(elem, sectionId) {
   if (!sectionId) {
-    sectionId = getSectionId(elem);
+    sectionId = getSectionId(elem)
   }
   if (sectionId) {
-    _sections[sectionId].lastFocusedElement = elem;
-    _lastSectionId = sectionId;
+    _sections[sectionId].lastFocusedElement = elem
+    _lastSectionId = sectionId
   }
 }
 
 function focusExtendedSelector(selector, direction) {
-  if (selector.charAt(0) == "@") {
+  if (selector.charAt(0) == '@') {
     if (selector.length == 1) {
-      return focusSection();
-    } else {
-      var sectionId = selector.substr(1);
-      return focusSection(sectionId);
+      return focusSection()
     }
-  } else {
-    var next = parseSelector(selector)[0];
+    else {
+      var sectionId = selector.substr(1)
+      return focusSection(sectionId)
+    }
+  }
+  else {
+    var next = parseSelector(selector)[0]
     if (next) {
-      var nextSectionId = getSectionId(next);
+      var nextSectionId = getSectionId(next)
       if (isNavigable(next, nextSectionId)) {
-        return focusElement(next, nextSectionId, direction);
+        return focusElement(next, nextSectionId, direction)
       }
     }
   }
-  return false;
+  return false
 }
 
 function focusSection(sectionId) {
-  var range = [];
+  var range = []
   var addRange = function (id) {
     if (
-      id &&
-      range.indexOf(id) < 0 &&
-      _sections[id] &&
-      !_sections[id].disabled
+      id
+      && range.indexOf(id) < 0
+      && _sections[id]
+      && !_sections[id].disabled
     ) {
-      range.push(id);
+      range.push(id)
     }
-  };
+  }
 
   if (sectionId) {
-    addRange(sectionId);
-  } else {
-    addRange(_defaultSectionId);
-    addRange(_lastSectionId);
-    Object.keys(_sections).map(addRange);
+    addRange(sectionId)
+  }
+  else {
+    addRange(_defaultSectionId)
+    addRange(_lastSectionId)
+    Object.keys(_sections).map(addRange)
   }
 
   for (var i = 0; i < range.length; i++) {
-    var id = range[i];
-    var next;
+    var id = range[i]
+    var next
 
-    if (_sections[id].enterTo == "last-focused") {
-      next =
-        getSectionLastFocusedElement(id) ||
-        getSectionDefaultElement(id) ||
-        getSectionNavigableElements(id)[0];
-    } else {
-      next =
-        getSectionDefaultElement(id) ||
-        getSectionLastFocusedElement(id) ||
-        getSectionNavigableElements(id)[0];
+    if (_sections[id].enterTo == 'last-focused') {
+      next
+        = getSectionLastFocusedElement(id)
+        || getSectionDefaultElement(id)
+        || getSectionNavigableElements(id)[0]
+    }
+    else {
+      next
+        = getSectionDefaultElement(id)
+        || getSectionLastFocusedElement(id)
+        || getSectionNavigableElements(id)[0]
     }
 
     if (next) {
-      return focusElement(next, id);
+      return focusElement(next, id)
     }
   }
 
-  return false;
+  return false
 }
 
 function fireNavigatefailed(elem, direction) {
   fireEvent(
     elem,
-    "navigatefailed",
+    'navigatefailed',
     {
       direction: direction,
     },
     false,
-  );
+  )
 }
 
 function gotoLeaveFor(sectionId, direction) {
   if (
-    _sections[sectionId].leaveFor &&
-    _sections[sectionId].leaveFor[direction] !== undefined
+    _sections[sectionId].leaveFor
+    && _sections[sectionId].leaveFor[direction] !== undefined
   ) {
-    var next = _sections[sectionId].leaveFor[direction];
+    var next = _sections[sectionId].leaveFor[direction]
 
     if (!next) {
-      return null;
+      return null
     }
 
-    return focusExtendedSelector(next, direction);
+    return focusExtendedSelector(next, direction)
   }
 }
 
 function focusNext(direction, currentFocusedElement, currentSectionId) {
-  var extSelector = currentFocusedElement.getAttribute("data-sn-" + direction);
-  if (typeof extSelector === "string") {
-    if (extSelector === "" || !focusExtendedSelector(extSelector, direction)) {
-      fireNavigatefailed(currentFocusedElement, direction);
-      return false;
+  var extSelector = currentFocusedElement.getAttribute('data-sn-' + direction)
+  if (typeof extSelector === 'string') {
+    if (extSelector === '' || !focusExtendedSelector(extSelector, direction)) {
+      fireNavigatefailed(currentFocusedElement, direction)
+      return false
     }
-    return true;
+    return true
   }
 
-  var sectionNavigableElements = {};
-  var allNavigableElements = [];
+  var sectionNavigableElements = {}
+  var allNavigableElements = []
   for (var id in _sections) {
-    sectionNavigableElements[id] = getSectionNavigableElements(id);
+    sectionNavigableElements[id] = getSectionNavigableElements(id)
     allNavigableElements = allNavigableElements.concat(
       sectionNavigableElements[id],
-    );
+    )
   }
 
-  var config = extend({}, GlobalConfig, _sections[currentSectionId]);
-  var next;
+  var config = extend({}, GlobalConfig, _sections[currentSectionId])
+  var next
 
-  if (config.restrict == "self-only" || config.restrict == "self-first") {
-    var currentSectionNavigableElements =
-      sectionNavigableElements[currentSectionId];
+  if (config.restrict == 'self-only' || config.restrict == 'self-first') {
+    var currentSectionNavigableElements
+      = sectionNavigableElements[currentSectionId]
 
     next = navigate(
       currentFocusedElement,
       direction,
       exclude(currentSectionNavigableElements, currentFocusedElement),
       config,
-    );
+    )
 
-    if (!next && config.restrict == "self-first") {
+    if (!next && config.restrict == 'self-first') {
       next = navigate(
         currentFocusedElement,
         direction,
         exclude(allNavigableElements, currentSectionNavigableElements),
         config,
-      );
+      )
     }
-  } else {
+  }
+  else {
     next = navigate(
       currentFocusedElement,
       direction,
       exclude(allNavigableElements, currentFocusedElement),
       config,
-    );
+    )
   }
 
   if (next) {
@@ -825,187 +849,192 @@ function focusNext(direction, currentFocusedElement, currentSectionId) {
       target: currentFocusedElement,
       destination: next,
       reverse: REVERSE[direction],
-    };
+    }
 
-    var nextSectionId = getSectionId(next);
+    var nextSectionId = getSectionId(next)
 
     if (currentSectionId != nextSectionId) {
-      var result = gotoLeaveFor(currentSectionId, direction);
+      var result = gotoLeaveFor(currentSectionId, direction)
       if (result) {
-        return true;
-      } else if (result === null) {
-        fireNavigatefailed(currentFocusedElement, direction);
-        return false;
+        return true
+      }
+      else if (result === null) {
+        fireNavigatefailed(currentFocusedElement, direction)
+        return false
       }
 
-      var enterToElement;
+      var enterToElement
       switch (_sections[nextSectionId].enterTo) {
-        case "last-focused":
-          enterToElement =
-            getSectionLastFocusedElement(nextSectionId) ||
-            getSectionDefaultElement(nextSectionId);
-          break;
-        case "default-element":
-          enterToElement = getSectionDefaultElement(nextSectionId);
-          break;
+        case 'last-focused':
+          enterToElement
+            = getSectionLastFocusedElement(nextSectionId)
+            || getSectionDefaultElement(nextSectionId)
+          break
+        case 'default-element':
+          enterToElement = getSectionDefaultElement(nextSectionId)
+          break
       }
       if (enterToElement) {
-        next = enterToElement;
+        next = enterToElement
       }
     }
 
-    return focusElement(next, nextSectionId, direction);
-  } else if (gotoLeaveFor(currentSectionId, direction)) {
-    return true;
+    return focusElement(next, nextSectionId, direction)
+  }
+  else if (gotoLeaveFor(currentSectionId, direction)) {
+    return true
   }
 
-  fireNavigatefailed(currentFocusedElement, direction);
-  return false;
+  fireNavigatefailed(currentFocusedElement, direction)
+  return false
 }
 
 function onKeyDown(evt) {
   if (
-    !_sectionCount ||
-    _pause ||
-    evt.altKey ||
-    evt.ctrlKey ||
-    evt.metaKey ||
-    evt.shiftKey
+    !_sectionCount
+    || _pause
+    || evt.altKey
+    || evt.ctrlKey
+    || evt.metaKey
+    || evt.shiftKey
   ) {
-    return;
+    return
   }
 
-  var currentFocusedElement;
+  var currentFocusedElement
 
   var preventDefault = function () {
-    return false;
-  };
+    return false
+  }
 
-  var direction = KEYMAPPING[evt.keyCode];
+  var direction = KEYMAPPING[evt.keyCode]
   if (!direction) {
     if (evt.keyCode == 13) {
-      currentFocusedElement = getCurrentFocusedElement();
+      currentFocusedElement = getCurrentFocusedElement()
       if (currentFocusedElement && getSectionId(currentFocusedElement)) {
-        if (!fireEvent(currentFocusedElement, "enter-down")) {
-          return preventDefault();
+        if (!fireEvent(currentFocusedElement, 'enter-down')) {
+          return preventDefault()
         }
       }
     }
-    return;
+    return
   }
 
-  currentFocusedElement = getCurrentFocusedElement();
+  currentFocusedElement = getCurrentFocusedElement()
 
   if (!currentFocusedElement) {
     if (_lastSectionId) {
-      currentFocusedElement = getSectionLastFocusedElement(_lastSectionId);
+      currentFocusedElement = getSectionLastFocusedElement(_lastSectionId)
     }
     if (!currentFocusedElement) {
-      focusSection();
-      return preventDefault();
+      focusSection()
+      return preventDefault()
     }
   }
 
-  var currentSectionId = getSectionId(currentFocusedElement);
+  var currentSectionId = getSectionId(currentFocusedElement)
   if (!currentSectionId) {
-    return;
+    return
   }
 
   var willmoveProperties = {
     direction: direction,
     sectionId: currentSectionId,
-    cause: "keydown",
-  };
-
-  if (fireEvent(currentFocusedElement, "willmove", willmoveProperties)) {
-    focusNext(direction, currentFocusedElement, currentSectionId);
+    cause: 'keydown',
   }
 
-  return preventDefault();
+  if (fireEvent(currentFocusedElement, 'willmove', willmoveProperties)) {
+    focusNext(direction, currentFocusedElement, currentSectionId)
+  }
+
+  return preventDefault()
 }
 
 function onKeyUp(evt) {
   if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) {
-    return;
+    return
   }
   if (!_pause && _sectionCount && evt.keyCode == 13) {
-    var currentFocusedElement = getCurrentFocusedElement();
+    var currentFocusedElement = getCurrentFocusedElement()
     if (currentFocusedElement && getSectionId(currentFocusedElement)) {
       if (currentFocusedElement.click()) {
-        evt.preventDefault();
-        evt.stopPropagation();
-      } else if (!fireEvent(currentFocusedElement, "enter-up")) {
-        evt.preventDefault();
-        evt.stopPropagation();
+        evt.preventDefault()
+        evt.stopPropagation()
+      }
+      else if (!fireEvent(currentFocusedElement, 'enter-up')) {
+        evt.preventDefault()
+        evt.stopPropagation()
       }
     }
   }
 }
 
 function onFocus(evt) {
-  var target = evt.target;
+  var target = evt.target
   if (
-    target !== window &&
-    target !== document &&
-    _sectionCount &&
-    !_duringFocusChange
+    target !== window
+    && target !== document
+    && _sectionCount
+    && !_duringFocusChange
   ) {
-    var sectionId = getSectionId(target);
+    var sectionId = getSectionId(target)
     if (sectionId) {
       if (_pause) {
-        focusChanged(target, sectionId);
-        return;
+        focusChanged(target, sectionId)
+        return
       }
 
       var focusProperties = {
         sectionId: sectionId,
         native: true,
-      };
+      }
 
-      if (!fireEvent(target, "willfocus", focusProperties)) {
-        _duringFocusChange = true;
-        target.blur();
-        _duringFocusChange = false;
-      } else {
-        fireEvent(target, "focused", focusProperties, false);
-        focusChanged(target, sectionId);
+      if (!fireEvent(target, 'willfocus', focusProperties)) {
+        _duringFocusChange = true
+        target.blur()
+        _duringFocusChange = false
+      }
+      else {
+        fireEvent(target, 'focused', focusProperties, false)
+        focusChanged(target, sectionId)
       }
     }
   }
 }
 
 function onBlur(evt) {
-  var target = evt.target;
+  var target = evt.target
   if (
-    target !== window &&
-    target !== document &&
-    !_pause &&
-    _sectionCount &&
-    !_duringFocusChange &&
-    getSectionId(target)
+    target !== window
+    && target !== document
+    && !_pause
+    && _sectionCount
+    && !_duringFocusChange
+    && getSectionId(target)
   ) {
     var unfocusProperties = {
       native: true,
-    };
-    if (!fireEvent(target, "willunfocus", unfocusProperties)) {
-      _duringFocusChange = true;
+    }
+    if (!fireEvent(target, 'willunfocus', unfocusProperties)) {
+      _duringFocusChange = true
       setTimeout(function () {
-        target.focus();
-        _duringFocusChange = false;
-      });
-    } else {
-      fireEvent(target, "unfocused", unfocusProperties, false);
+        target.focus()
+        _duringFocusChange = false
+      })
+    }
+    else {
+      fireEvent(target, 'unfocused', unfocusProperties, false)
     }
   }
 }
 
 function onBodyClick() {
   if (
-    document.activeElement === document.body &&
-    _lastSectionId &&
-    _sections[_lastSectionId].lastFocusedElement
+    document.activeElement === document.body
+    && _lastSectionId
+    && _sections[_lastSectionId].lastFocusedElement
   ) {
-    focusElement(_sections[_lastSectionId].lastFocusedElement, _lastSectionId);
+    focusElement(_sections[_lastSectionId].lastFocusedElement, _lastSectionId)
   }
 }
 
@@ -1028,45 +1057,46 @@ function onBodyClick() {
 const SpatialNavigation = {
   init: function () {
     if (!_ready) {
-      document.body.addEventListener("click", onBodyClick);
+      document.body.addEventListener('click', onBodyClick)
       // window.addEventListener("click", onClick);
-      window.addEventListener("keydown", onKeyDown);
-      window.addEventListener("keyup", onKeyUp);
-      window.addEventListener("focus", onFocus, true);
-      window.addEventListener("blur", onBlur, true);
-      _ready = true;
+      window.addEventListener('keydown', onKeyDown)
+      window.addEventListener('keyup', onKeyUp)
+      window.addEventListener('focus', onFocus, true)
+      window.addEventListener('blur', onBlur, true)
+      _ready = true
     }
   },
 
   uninit: function () {
-    window.removeEventListener("blur", onBlur, true);
-    window.removeEventListener("focus", onFocus, true);
-    window.removeEventListener("keyup", onKeyUp);
-    window.removeEventListener("keydown", onKeyDown);
+    window.removeEventListener('blur', onBlur, true)
+    window.removeEventListener('focus', onFocus, true)
+    window.removeEventListener('keyup', onKeyUp)
+    window.removeEventListener('keydown', onKeyDown)
     // window.removeEventListener("click", onClick);
-    document.body.removeEventListener("click", onBodyClick);
-    SpatialNavigation.clear();
-    _idPool = 0;
-    _ready = false;
+    document.body.removeEventListener('click', onBodyClick)
+    SpatialNavigation.clear()
+    _idPool = 0
+    _ready = false
   },
 
   clear: function () {
-    _sections = {};
-    _sectionCount = 0;
-    _defaultSectionId = "";
-    _lastSectionId = "";
-    _duringFocusChange = false;
+    _sections = {}
+    _sectionCount = 0
+    _defaultSectionId = ''
+    _lastSectionId = ''
+    _duringFocusChange = false
   },
 
   reset: function (sectionId) {
     if (sectionId) {
-      _sections[sectionId].lastFocusedElement = null;
-      _sections[sectionId].previous = null;
-    } else {
+      _sections[sectionId].lastFocusedElement = null
+      _sections[sectionId].previous = null
+    }
+    else {
       for (const id in _sections) {
-        const section = _sections[id];
-        section.lastFocusedElement = null;
-        section.previous = null;
+        const section = _sections[id]
+        section.lastFocusedElement = null
+        section.previous = null
       }
     }
   },
@@ -1074,109 +1104,113 @@ const SpatialNavigation = {
   // set(<config>);
   // set(<sectionId>, <config>);
   set: function () {
-    var sectionId, config;
+    var sectionId, config
 
-    if (typeof arguments[0] === "object") {
-      config = arguments[0];
-    } else if (
-      typeof arguments[0] === "string" &&
-      typeof arguments[1] === "object"
+    if (typeof arguments[0] === 'object') {
+      config = arguments[0]
+    }
+    else if (
+      typeof arguments[0] === 'string'
+      && typeof arguments[1] === 'object'
     ) {
-      sectionId = arguments[0];
-      config = arguments[1];
+      sectionId = arguments[0]
+      config = arguments[1]
       if (!_sections[sectionId]) {
-        throw new Error('Section "' + sectionId + "\" doesn't exist!");
+        throw new Error('Section "' + sectionId + '" doesn\'t exist!')
       }
-    } else {
-      return;
+    }
+    else {
+      return
     }
 
     for (var key in config) {
       if (GlobalConfig[key] !== undefined) {
         if (sectionId) {
-          _sections[sectionId][key] = config[key];
-        } else if (config[key] !== undefined) {
-          GlobalConfig[key] = config[key];
+          _sections[sectionId][key] = config[key]
+        }
+        else if (config[key] !== undefined) {
+          GlobalConfig[key] = config[key]
         }
       }
     }
 
     if (sectionId) {
       // remove "undefined" items
-      _sections[sectionId] = extend({}, _sections[sectionId]);
+      _sections[sectionId] = extend({}, _sections[sectionId])
     }
   },
 
   // add(<config>);
   // add(<sectionId>, <config>);
   add: function () {
-    var sectionId;
-    var config = {};
+    var sectionId
+    var config = {}
 
-    if (typeof arguments[0] === "object") {
-      config = arguments[0];
-    } else if (
-      typeof arguments[0] === "string" &&
-      typeof arguments[1] === "object"
+    if (typeof arguments[0] === 'object') {
+      config = arguments[0]
+    }
+    else if (
+      typeof arguments[0] === 'string'
+      && typeof arguments[1] === 'object'
     ) {
-      sectionId = arguments[0];
-      config = arguments[1];
+      sectionId = arguments[0]
+      config = arguments[1]
     }
 
     if (!sectionId) {
-      sectionId = typeof config.id === "string" ? config.id : generateId();
+      sectionId = typeof config.id === 'string' ? config.id : generateId()
     }
 
     if (_sections[sectionId]) {
-      throw new Error('Section "' + sectionId + '" has already existed!');
+      throw new Error('Section "' + sectionId + '" has already existed!')
     }
 
-    _sections[sectionId] = {};
-    _sectionCount++;
+    _sections[sectionId] = {}
+    _sectionCount++
 
-    SpatialNavigation.set(sectionId, config);
+    SpatialNavigation.set(sectionId, config)
 
-    return sectionId;
+    return sectionId
   },
 
   remove: function (sectionId) {
-    if (!sectionId || typeof sectionId !== "string") {
-      throw new Error('Please assign the "sectionId"!');
+    if (!sectionId || typeof sectionId !== 'string') {
+      throw new Error('Please assign the "sectionId"!')
     }
     if (_sections[sectionId]) {
-      _sections[sectionId] = undefined;
-      _sections = extend({}, _sections);
-      _sectionCount--;
+      _sections[sectionId] = undefined
+      _sections = extend({}, _sections)
+      _sectionCount--
       if (_lastSectionId === sectionId) {
-        _lastSectionId = "";
+        _lastSectionId = ''
       }
-      return true;
+      return true
     }
-    return false;
+    return false
   },
 
   disable: function (sectionId) {
     if (_sections[sectionId]) {
-      _sections[sectionId].disabled = true;
-      return true;
+      _sections[sectionId].disabled = true
+      return true
     }
-    return false;
+    return false
   },
 
   enable: function (sectionId) {
     if (_sections[sectionId]) {
-      _sections[sectionId].disabled = false;
-      return true;
+      _sections[sectionId].disabled = false
+      return true
     }
-    return false;
+    return false
   },
 
   pause: function () {
-    _pause = true;
+    _pause = true
   },
 
   resume: function () {
-    _pause = false;
+    _pause = false
   },
 
   // focus([silent])
@@ -1184,123 +1218,130 @@ const SpatialNavigation = {
   // focus(<extSelector>, [silent])
   // Note: "silent" is optional and default to false
   focus: function (elem, silent) {
-    var result = false;
+    var result = false
 
-    if (silent === undefined && typeof elem === "boolean") {
-      silent = elem;
-      elem = undefined;
+    if (silent === undefined && typeof elem === 'boolean') {
+      silent = elem
+      elem = undefined
     }
 
-    var autoPause = !_pause && silent;
+    var autoPause = !_pause && silent
 
     if (autoPause) {
-      SpatialNavigation.pause();
+      SpatialNavigation.pause()
     }
 
     if (!elem) {
-      result = focusSection();
-    } else {
-      if (typeof elem === "string") {
+      result = focusSection()
+    }
+    else {
+      if (typeof elem === 'string') {
         if (_sections[elem]) {
-          result = focusSection(elem);
-        } else {
-          result = focusExtendedSelector(elem);
+          result = focusSection(elem)
         }
-      } else {
-        var nextSectionId = getSectionId(elem);
+        else {
+          result = focusExtendedSelector(elem)
+        }
+      }
+      else {
+        var nextSectionId = getSectionId(elem)
         if (isNavigable(elem, nextSectionId)) {
-          result = focusElement(elem, nextSectionId);
+          result = focusElement(elem, nextSectionId)
         }
       }
     }
 
     if (autoPause) {
-      SpatialNavigation.resume();
+      SpatialNavigation.resume()
     }
 
-    return result;
+    return result
   },
 
   // move(<direction>)
   // move(<direction>, <selector>)
   move: function (direction, selector) {
-    direction = direction.toLowerCase();
+    direction = direction.toLowerCase()
     if (!REVERSE[direction]) {
-      return false;
+      return false
     }
 
     var elem = selector
       ? parseSelector(selector)[0]
-      : getCurrentFocusedElement();
+      : getCurrentFocusedElement()
     if (!elem) {
-      return false;
+      return false
     }
 
-    var sectionId = getSectionId(elem);
+    var sectionId = getSectionId(elem)
     if (!sectionId) {
-      return false;
+      return false
     }
 
     var willmoveProperties = {
       direction: direction,
       sectionId: sectionId,
-      cause: "api",
-    };
-
-    if (!fireEvent(elem, "willmove", willmoveProperties)) {
-      return false;
+      cause: 'api',
     }
 
-    return focusNext(direction, elem, sectionId);
+    if (!fireEvent(elem, 'willmove', willmoveProperties)) {
+      return false
+    }
+
+    return focusNext(direction, elem, sectionId)
   },
 
   // makeFocusable()
   // makeFocusable(<sectionId>)
   makeFocusable: function (sectionId) {
     var doMakeFocusable = function (section) {
-      var tabIndexIgnoreList =
-        section.tabIndexIgnoreList !== undefined
+      var tabIndexIgnoreList
+        = section.tabIndexIgnoreList !== undefined
           ? section.tabIndexIgnoreList
-          : GlobalConfig.tabIndexIgnoreList;
+          : GlobalConfig.tabIndexIgnoreList
       parseSelector(section.selector).forEach(function (elem) {
         if (!matchSelector(elem, tabIndexIgnoreList)) {
-          if (!elem.getAttribute("tabindex")) {
-            elem.setAttribute("tabindex", "-1");
+          if (!elem.getAttribute('tabindex')) {
+            elem.setAttribute('tabindex', '-1')
           }
         }
-      });
-    };
+      })
+    }
 
     if (sectionId) {
       if (_sections[sectionId]) {
-        doMakeFocusable(_sections[sectionId]);
-      } else {
-        throw new Error('Section "' + sectionId + "\" doesn't exist!");
+        doMakeFocusable(_sections[sectionId])
       }
-    } else {
+      else {
+        throw new Error('Section "' + sectionId + '" doesn\'t exist!')
+      }
+    }
+    else {
       for (var id in _sections) {
-        doMakeFocusable(_sections[id]);
+        doMakeFocusable(_sections[id])
       }
     }
   },
 
   setDefaultSection: function (sectionId) {
     if (!sectionId) {
-      _defaultSectionId = "";
-    } else if (!_sections[sectionId]) {
-      throw new Error('Section "' + sectionId + "\" doesn't exist!");
-    } else {
-      _defaultSectionId = sectionId;
+      _defaultSectionId = ''
+    }
+    else if (!_sections[sectionId]) {
+      throw new Error('Section "' + sectionId + '" doesn\'t exist!')
+    }
+    else {
+      _defaultSectionId = sectionId
     }
   },
 
   getCurrentFocusedElement: function () {
-    return getCurrentFocusedElement();
+    return getCurrentFocusedElement()
   },
-};
+}
 
-window.SpatialNavigation = SpatialNavigation;
+window.SpatialNavigation = SpatialNavigation
 
-window.SpatialNavigation.init();
+window.SpatialNavigation.init()
 
-export default SpatialNavigation;
+export default SpatialNavigation

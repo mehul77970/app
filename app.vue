@@ -1,21 +1,21 @@
 <script setup lang="ts">
-const deviceStore = useDeviceStore();
+const deviceStore = useDeviceStore()
 
-let carouselRotate: NodeJS.Timeout | undefined;
+let carouselRotate: NodeJS.Timeout | undefined
 
 onMounted(() => {
-  const event = new Event("carousel-update");
+  const event = new Event('carousel-update')
 
   carouselRotate = setInterval(() => {
-    window.dispatchEvent(event);
-  }, 5000);
-});
+    window.dispatchEvent(event)
+  }, 5000)
+})
 
 onUnmounted(() => {
-  clearInterval(carouselRotate);
-});
+  clearInterval(carouselRotate)
+})
 
-deviceStore.testSetDeviceProfile();
+deviceStore.testSetDeviceProfile()
 </script>
 
 <template>

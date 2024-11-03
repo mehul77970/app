@@ -1,51 +1,51 @@
 <script setup lang="ts">
-import { PhPlay } from "@phosphor-icons/vue";
-import { timeline, spring } from "motion";
+import { PhPlay } from '@phosphor-icons/vue'
+import { timeline, spring } from 'motion'
 
-const model = defineModel<boolean>();
+const model = defineModel<boolean>()
 
 onMounted(() => {
-  const audio = new Audio("/flix.mp3");
+  const audio = new Audio('/flix.mp3')
 
-  audio.play();
+  audio.play()
   const loader = timeline(
     [
       [
-        "#icon",
-        { opacity: 1, x: ["100%", "0%"] },
+        '#icon',
+        { opacity: 1, x: ['100%', '0%'] },
         { duration: 0.5, delay: 0.17, easing: spring() },
       ],
       [
-        "#message",
-        { opacity: 1, x: ["-30%", "0%"] },
+        '#message',
+        { opacity: 1, x: ['-30%', '0%'] },
         { duration: 0.5, delay: -0.6, easing: spring() },
       ],
       [
-        "#icon",
-        { filter: ["hue-rotate(80deg)", "hue-rotate(360deg)"] },
-        { duration: 3, delay: -1, easing: "linear" },
+        '#icon',
+        { filter: ['hue-rotate(80deg)', 'hue-rotate(360deg)'] },
+        { duration: 3, delay: -1, easing: 'linear' },
       ],
-      ["#prompt", { opacity: 1, y: 50 }, { duration: 2, delay: -3 }],
+      ['#prompt', { opacity: 1, y: 50 }, { duration: 2, delay: -3 }],
     ],
     { repeat: 0 },
-  );
+  )
 
   loader.finished.then(() => {
     timeline(
       [
         [
-          "#icon",
-          { filter: ["hue-rotate(360deg)", "hue-rotate(0deg)"] },
-          { duration: 5, delay: 0, easing: "linear" },
+          '#icon',
+          { filter: ['hue-rotate(360deg)', 'hue-rotate(0deg)'] },
+          { duration: 5, delay: 0, easing: 'linear' },
         ],
       ],
       { repeat: Infinity },
-    );
+    )
 
-    console.log("Load finished");
-    model.value = true;
-  });
-});
+    console.log('Load finished')
+    model.value = true
+  })
+})
 </script>
 
 <template>
@@ -61,7 +61,7 @@ onMounted(() => {
         id="icon"
         src="/logo_rough.svg"
         class="translate-x-[100%] max-h-[220px] h-[25vw]"
-      />
+      >
 
       <h1
         id="message"
@@ -77,7 +77,10 @@ onMounted(() => {
     >
       <span class="inline"> Now Playing </span>
 
-      <PhPlay weight="fill" class="h-full" />
+      <PhPlay
+        weight="fill"
+        class="h-full"
+      />
 
       <span class="font-semibold">Testing</span>
     </div>

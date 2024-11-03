@@ -4,8 +4,8 @@ import {
   type CalendarRootEmits,
   type CalendarRootProps,
   useForwardPropsEmits,
-} from "radix-vue";
-import { computed, type HTMLAttributes } from "vue";
+} from 'radix-vue'
+import { computed, type HTMLAttributes } from 'vue'
 import {
   CalendarCell,
   CalendarCellTrigger,
@@ -18,22 +18,22 @@ import {
   CalendarHeading,
   CalendarNextButton,
   CalendarPrevButton,
-} from ".";
-import { cn } from "@/lib/utils";
+} from '.'
+import { cn } from '@/lib/utils'
 
 const props = defineProps<
-  CalendarRootProps & { class?: HTMLAttributes["class"] }
->();
+  CalendarRootProps & { class?: HTMLAttributes['class'] }
+>()
 
-const emits = defineEmits<CalendarRootEmits>();
+const emits = defineEmits<CalendarRootEmits>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
@@ -49,10 +49,16 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     </CalendarHeader>
 
     <div class="flex flex-col gap-y-4 mt-4 sm:flex-row sm:gap-x-4 sm:gap-y-0">
-      <CalendarGrid v-for="month in grid" :key="month.value.toString()">
+      <CalendarGrid
+        v-for="month in grid"
+        :key="month.value.toString()"
+      >
         <CalendarGridHead>
           <CalendarGridRow>
-            <CalendarHeadCell v-for="day in weekDays" :key="day">
+            <CalendarHeadCell
+              v-for="day in weekDays"
+              :key="day"
+            >
               {{ day }}
             </CalendarHeadCell>
           </CalendarGridRow>
@@ -68,7 +74,10 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
               :key="weekDate.toString()"
               :date="weekDate"
             >
-              <CalendarCellTrigger :day="weekDate" :month="month.value" />
+              <CalendarCellTrigger
+                :day="weekDate"
+                :month="month.value"
+              />
             </CalendarCell>
           </CalendarGridRow>
         </CalendarGridBody>

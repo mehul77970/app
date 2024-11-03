@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ms from "ms";
-import { PhStar } from "@phosphor-icons/vue";
+import ms from 'ms'
+import { PhStar } from '@phosphor-icons/vue'
 
 import {
   Select,
@@ -8,92 +8,92 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 import {
   getDefaultMediaStreams,
   createAudioSource,
   createVideoSource,
   createSubtitleSource,
-} from "@/lib/player";
+} from '@/lib/player'
 
-definePageMeta({ layout: "authenticated" });
+definePageMeta({ layout: 'authenticated' })
 
-const bgImage = ref(null as null | HTMLImageElement);
-const route = useRoute();
-const mediaBrowser = useMediaBrowserStore();
-const movie = await mediaBrowser.getItem(route.params.id! as string);
+const bgImage = ref(null as null | HTMLImageElement)
+const route = useRoute()
+const mediaBrowser = useMediaBrowserStore()
+const movie = await mediaBrowser.getItem(route.params.id! as string)
 
-const defaultSources = getDefaultMediaStreams(movie);
+const defaultSources = getDefaultMediaStreams(movie)
 
 const audioSources = movie.MediaStreams
-  ? movie.MediaStreams.filter((s) => s.Type == "Audio").map((s) =>
-      createAudioSource(s),
-    )
-  : [];
-const defaultAudioSource = defaultSources.audio;
+  ? movie.MediaStreams.filter(s => s.Type == 'Audio').map(s =>
+    createAudioSource(s),
+  )
+  : []
+const defaultAudioSource = defaultSources.audio
 
 const videoSources = movie.MediaStreams
-  ? movie.MediaStreams.filter((s) => s.Type == "Video").map((s) =>
-      createVideoSource(s),
-    )
-  : [];
-const defaultVideoSource = defaultSources.video;
+  ? movie.MediaStreams.filter(s => s.Type == 'Video').map(s =>
+    createVideoSource(s),
+  )
+  : []
+const defaultVideoSource = defaultSources.video
 
 const subtitleSources = movie.MediaStreams
-  ? movie.MediaStreams.filter((s) => s.Type == "Subtitle").map((s) =>
-      createSubtitleSource(s),
-    )
-  : [];
-const defaultSubtitleSource = defaultSources.subtitle;
+  ? movie.MediaStreams.filter(s => s.Type == 'Subtitle').map(s =>
+    createSubtitleSource(s),
+  )
+  : []
+const defaultSubtitleSource = defaultSources.subtitle
 
-const selectedAudioTrack = ref(defaultAudioSource?.source?.Index?.toString());
-const selectedVideoTrack = ref(defaultVideoSource?.source?.Index?.toString());
+const selectedAudioTrack = ref(defaultAudioSource?.source?.Index?.toString())
+const selectedVideoTrack = ref(defaultVideoSource?.source?.Index?.toString())
 const selectedSubtitleTrack = ref(
   defaultSubtitleSource?.source?.Index?.toString(),
-);
+)
 
-const scrollFactor = ref(0);
-const offset = ref(0);
+const scrollFactor = ref(0)
+const offset = ref(0)
 
 onMounted(() => {
-  if (!bgImage.value) return;
-  const eventHandler = () => requestAnimationFrame(calculateParallax);
+  if (!bgImage.value) return
+  const eventHandler = () => requestAnimationFrame(calculateParallax)
 
   function calculateParallax() {
-    const containerRect = bgImage.value!.getBoundingClientRect();
+    const containerRect = bgImage.value!.getBoundingClientRect()
 
-    const viewportOffsetTop = containerRect.top;
-    const viewportOffsetBottom = window.innerHeight - viewportOffsetTop;
+    const viewportOffsetTop = containerRect.top
+    const viewportOffsetBottom = window.innerHeight - viewportOffsetTop
 
-    scrollFactor.value =
-      viewportOffsetBottom / (window.innerHeight + containerRect.height);
+    scrollFactor.value
+      = viewportOffsetBottom / (window.innerHeight + containerRect.height)
 
-    offset.value = scrollFactor.value * containerRect.height * 0.25;
+    offset.value = scrollFactor.value * containerRect.height * 0.25
   }
 
-  addComponentEventListener(window, "scroll", () => eventHandler());
+  addComponentEventListener(window, 'scroll', () => eventHandler())
 
-  eventHandler();
-});
+  eventHandler()
+})
 
 const getEndsAtTime = () => {
-  if (!movie.RunTimeTicks) return;
-  if (!movie.UserData?.PlaybackPositionTicks) return;
+  if (!movie.RunTimeTicks) return
+  if (!movie.UserData?.PlaybackPositionTicks) return
 
-  const runtimeMs = movie.RunTimeTicks / 10000;
-  const playerMs = movie.UserData?.PlaybackPositionTicks;
+  const runtimeMs = movie.RunTimeTicks / 10000
+  const playerMs = movie.UserData?.PlaybackPositionTicks
 
   const millisecondsLeft = movie.UserData?.PlaybackPositionTicks
     ? runtimeMs - playerMs
-    : runtimeMs;
+    : runtimeMs
 
-  return new Intl.DateTimeFormat("default", {
+  return new Intl.DateTimeFormat('default', {
     hour12: true,
-    hour: "numeric",
-    minute: "numeric",
-  }).format(new Date(Date.now() + millisecondsLeft));
-};
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(new Date(Date.now() + millisecondsLeft))
+}
 </script>
 
 <template>
@@ -101,7 +101,7 @@ const getEndsAtTime = () => {
     <img
       class="w-full opacity-50 top-0 min-h-full h-fit bottom-0 fixed object-cover fade-bg blur-sm"
       :src="mediaBrowser.generateImageURL(movie.Id!!, 'Backdrop/0')"
-    />
+    >
     <div class="inline-flex justify-around w-full h-full">
       <div class="inline-flex flex-wrap w-full justify-center mt-8">
         <div
@@ -110,9 +110,12 @@ const getEndsAtTime = () => {
           <img
             :src="mediaBrowser.generateImageURL(movie.Id!!)"
             class="w-auto h-fit max-h-[80vh] rounded-lg z-[2]"
-          />
+          >
           <div class="content mt-[30px] inline-flex flex-col z-[2] h-fit">
-            <LazyBrowseLogo :item="movie" class="w-[500px] mb-24" />
+            <LazyBrowseLogo
+              :item="movie"
+              class="w-[500px] mb-24"
+            />
             <div class="title inline-flex flex-col gap-1">
               <span
                 v-if="movie.Name"
@@ -137,7 +140,11 @@ const getEndsAtTime = () => {
                 <div
                   class="stars inline-flex items-center justify-center gap-2"
                 >
-                  <PhStar :size="18" weight="fill" class="text-orange-400" />
+                  <PhStar
+                    :size="18"
+                    weight="fill"
+                    class="text-orange-400"
+                  />
                   <span>{{ movie.CommunityRating?.toFixed(1) }}</span>
                 </div>
 
@@ -151,7 +158,9 @@ const getEndsAtTime = () => {
                     v-if="defaultVideoSource"
                     class="inline-flex justify-center items-center"
                   >
-                    <h3 class="text-white/75 w-[120px]">Video</h3>
+                    <h3 class="text-white/75 w-[120px]">
+                      Video
+                    </h3>
 
                     <Select v-model="selectedVideoTrack">
                       <SelectTrigger>
@@ -169,7 +178,10 @@ const getEndsAtTime = () => {
                           :key="index"
                           :value="video?.source?.Index?.toString() || ''"
                         >
-                          <TextVideoWithFeatures v-if="video" :video="video" />
+                          <TextVideoWithFeatures
+                            v-if="video"
+                            :video="video"
+                          />
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -179,7 +191,9 @@ const getEndsAtTime = () => {
                     v-if="defaultAudioSource"
                     class="inline-flex justify-center items-center"
                   >
-                    <h3 class="text-white/75 w-[120px]">Audio</h3>
+                    <h3 class="text-white/75 w-[120px]">
+                      Audio
+                    </h3>
 
                     <Select v-model="selectedAudioTrack">
                       <SelectTrigger>
@@ -197,7 +211,10 @@ const getEndsAtTime = () => {
                           :key="index"
                           :value="audio?.source?.Index?.toString() || '0'"
                         >
-                          <TextAudioWithFeatures v-if="audio" :audio="audio" />
+                          <TextAudioWithFeatures
+                            v-if="audio"
+                            :audio="audio"
+                          />
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -207,7 +224,9 @@ const getEndsAtTime = () => {
                     v-if="defaultSubtitleSource"
                     class="inline-flex justify-center items-center"
                   >
-                    <h3 class="text-white/75 w-[120px]">Subtitles</h3>
+                    <h3 class="text-white/75 w-[120px]">
+                      Subtitles
+                    </h3>
 
                     <Select v-model="selectedSubtitleTrack">
                       <SelectTrigger>
@@ -233,14 +252,17 @@ const getEndsAtTime = () => {
                 </div>
 
                 <div class="inline-flex flex-col gap-1">
-                  <h2 class="text-white/75">Overview</h2>
+                  <h2 class="text-white/75">
+                    Overview
+                  </h2>
                   <span class="break-words lg:text-xl">
-                    {{ movie.Overview }}</span
-                  >
+                    {{ movie.Overview }}</span>
                 </div>
 
                 <template v-if="movie.UserData?.PlaybackPositionTicks != 0">
-                  <h2 class="text-xl font-semibold">Continue Watching</h2>
+                  <h2 class="text-xl font-semibold">
+                    Continue Watching
+                  </h2>
 
                   <VideoPreview
                     :item="movie"
@@ -252,7 +274,9 @@ const getEndsAtTime = () => {
                 </template>
 
                 <template v-else>
-                  <h2 class="text-xl font-semibold">Start Watching</h2>
+                  <h2 class="text-xl font-semibold">
+                    Start Watching
+                  </h2>
 
                   <VideoPreview
                     :item="movie"
@@ -283,7 +307,9 @@ const getEndsAtTime = () => {
                     id="genres"
                     class="inline-flex justify-center items-center gap-4 text-white/75 max-w-full"
                   >
-                    <h2 class="text-lg">Genres</h2>
+                    <h2 class="text-lg">
+                      Genres
+                    </h2>
 
                     <div class="inline-flex gap-1 flex-wrap">
                       <BrowseInternalLinkedContent
@@ -303,7 +329,9 @@ const getEndsAtTime = () => {
                     v-if="movie.Studios && movie.Studios.length > 0"
                     class="inline-flex justify-center items-start max-w-full gap-4"
                   >
-                    <h2 class="text-lg text-white/75">Studios</h2>
+                    <h2 class="text-lg text-white/75">
+                      Studios
+                    </h2>
 
                     <div class="inline-flex gap-1 flex-wrap">
                       <BrowseInternalLinkedContent
@@ -328,7 +356,9 @@ const getEndsAtTime = () => {
                     v-if="movie.OfficialRating"
                     class="inline-flex justify-center items-center max-w-full gap-4"
                   >
-                    <h2 class="text-lg text-white/75">Audience</h2>
+                    <h2 class="text-lg text-white/75">
+                      Audience
+                    </h2>
 
                     <div class="inline-flex flex-">
                       <span>{{ movie.OfficialRating }}</span>

@@ -84,7 +84,19 @@
 }
 
 ::-webkit-scrollbar {
-  display: none;
+  @apply w-1 hover:w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/50 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6E6E6E;
 }
 
 html,

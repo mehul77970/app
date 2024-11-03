@@ -97,6 +97,8 @@ const goBack = () => {
             weight="bold"
           />
         </Button>
+
+        <WatchControlsDebug />
         <div
           class="inline-flex flex-col justify-end w-full mt-auto gap-2 p-6 overflow-hidden fade-bg"
         >

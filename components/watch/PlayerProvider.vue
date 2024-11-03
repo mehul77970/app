@@ -79,6 +79,8 @@ onUnmounted(() => {
   playbackStore.info = null
   playbackStore._transcodingUrl = null
 })
+
+const debug = computed(() => playerStore.debug.enabled)
 </script>
 
 <template>
@@ -97,8 +99,9 @@ onUnmounted(() => {
       :audio-index="Number(audioIndex)"
       :subtitle-index="Number(subtitleIndex)"
       :start-position="startAt"
+      class="flex-gro"
     />
-
+    <WatchDebug v-if="debug" />
     <WatchHTTPPlayer v-if="playerType === 'http'" />
 
     <WatchControlsProvider :id />

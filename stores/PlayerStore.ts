@@ -4,6 +4,7 @@ import type {
   BaseItemDto,
   PlaybackInfoResponse,
 } from '@jellyfin/sdk/lib/generated-client'
+import type { ILogger } from 'hls.js'
 import {
   createAudioSource,
   createSubtitleSource,
@@ -27,6 +28,39 @@ export interface AudioSource {
 export interface SubtitleSource {
   source?: MediaStream
   title: string
+}
+
+export interface HLSLog {
+  type: LogLevel
+  message?: unknown
+  optionalParams: unknown[]
+}
+
+export type LogLevel = 'trace' | 'debug' | 'log' | 'warn' | 'info' | 'error'
+export class HLSLogAdapter implements ILogger {
+  logs: HLSLog[]
+  constructor(logs: HLSLog[]) {
+    this.logs = logs
+  }
+
+  trace(_?: unknown, ...__: unknown[]) {}
+  debug(_?: unknown, ...__: unknown[]) {}
+
+  log(message?: unknown, ...optionalParams: unknown[]) {
+    this.logs.push({ type: 'log', message, optionalParams })
+  }
+
+  warn(message?: unknown, ...optionalParams: unknown[]) {
+    this.logs.push({ type: 'warn', message, optionalParams })
+  }
+
+  info(message?: unknown, ...optionalParams: unknown[]) {
+    this.logs.push({ type: 'info', message, optionalParams })
+  }
+
+  error(message?: unknown, ...optionalParams: unknown[]) {
+    this.logs.push({ type: 'error', message, optionalParams })
+  }
 }
 
 export const usePlayerStore = defineStore('player', {
@@ -66,6 +100,13 @@ export const usePlayerStore = defineStore('player', {
     subtitleTimeSyncOffset: 0 as number,
     item: null as null | BaseItemDto,
 
+    debug: {
+      enabled: false,
+      hls: false,
+      data: {
+        logs: [] as HLSLog[],
+      },
+    },
     settings: {
       subtitle: {
         global: 'video_width',
@@ -138,10 +179,14 @@ export const usePlayerStore = defineStore('player', {
       this.item = null
       this.settings.video.local = this.settings.video.global
     },
+
+    createLogger() {
+      return new HLSLogAdapter(this.debug.data.logs)
+    },
   },
 
   persist: {
-    pick: ['settings.video.global'],
+    pick: ['settings.video.global', 'debug.enabled', 'debug.hls'],
   },
 })
 

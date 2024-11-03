@@ -22,16 +22,19 @@ const {
   startPosition?: number
 }>()
 
-const player = new HLS({
-  backBufferLength: 60,
-  maxBufferLength: 120,
-})
-
 const playbackStore = usePlaybackStore()
 const playerStore = usePlayerStore()
 const deviceStore = useDeviceStore()
-// User config
 
+console.log('Player debug state', playerStore.debug)
+
+const player = new HLS({
+  backBufferLength: 60,
+  maxBufferLength: 120,
+  debug: playerStore.debug.enabled && playerStore.debug.hls ? playerStore.createLogger() : false,
+})
+
+// User config
 playbackStore.setPlaybackAudioIndex(audioIndex)
 playbackStore.setPlaybackVideoIndex(videoIndex)
 playbackStore.setPlaybackSubtitleIndex(subtitleIndex)

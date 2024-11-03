@@ -1,7 +1,11 @@
 <script lang="ts" setup>
+import { PhArrowArcLeft } from '@phosphor-icons/vue'
+import { Button } from '~/components/ui/button'
+
 import { truncate } from '~/lib/utils'
 
 const playerStore = usePlayerStore()
+const router = useRouter()
 
 const info = computed(() => playerStore.item)
 const showControls = ref(false)
@@ -58,6 +62,10 @@ onBeforeUnmount(() => {
     clearTimeout(controlsHideTimer)
   }
 })
+
+const goBack = () => {
+  router.go(-1)
+}
 </script>
 
 <template>
@@ -77,6 +85,18 @@ onBeforeUnmount(() => {
         v-show="showControls || paused"
         class="w-full h-full flex relative"
       >
+        <Button
+          v-focus
+          class="m-4 absolute selectable"
+          variant="ghost"
+          size="icon"
+          @click="goBack"
+        >
+          <PhArrowArcLeft
+            :size="24"
+            weight="bold"
+          />
+        </Button>
         <div
           class="inline-flex flex-col justify-end w-full mt-auto gap-2 p-6 overflow-hidden fade-bg"
         >

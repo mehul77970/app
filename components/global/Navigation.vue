@@ -147,7 +147,7 @@ await mediaStore.getUserViews()
               :src="userStore.getUserImage(64)!!"
               alt="user-avatar"
             />
-            <AvatarFallback v-else>
+            <AvatarFallback v-else-if="user?.Name">
               {{ user ? user.Name[0] : "NA" }}
             </AvatarFallback>
           </Avatar>

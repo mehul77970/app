@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { PhPause, PhCircleNotch, PhArrowArcLeft } from '@phosphor-icons/vue'
+import { PhPause, PhCircleNotch } from '@phosphor-icons/vue'
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
-import { Button } from '@/components/ui/button'
 
 const { info } = defineProps<{
   info: BaseItemDto
@@ -12,10 +11,8 @@ const playerStore = usePlayerStore()
 const paused = computed(() => playerStore.paused)
 const loading = computed(() => playerStore.loading)
 
-const router = useRouter()
-
 const getEndsAtTime = () => {
-  const runtimeMs = info.RunTimeTicks / 10000
+  const runtimeMs = info.RunTimeTicks || 0 / 10000
   const playerMs = playerStore.position.value * 1000
 
   const millisecondsLeft = runtimeMs - playerMs
@@ -25,10 +22,6 @@ const getEndsAtTime = () => {
     hour: 'numeric',
     minute: 'numeric',
   }).format(new Date(Date.now() + millisecondsLeft))
-}
-
-const goBack = () => {
-  router.go(-1)
 }
 </script>
 
@@ -61,20 +54,6 @@ const goBack = () => {
           class="animate-spin"
         />
       </div>
-
-      <Button
-        v-if="paused"
-        v-focus
-        class="m-4 absolute selectable"
-        variant="ghost"
-        size="icon"
-        @click="goBack"
-      >
-        <PhArrowArcLeft
-          :size="24"
-          weight="bold"
-        />
-      </Button>
     </TransitionGroup>
   </div>
 </template>

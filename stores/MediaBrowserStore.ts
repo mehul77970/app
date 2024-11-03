@@ -59,6 +59,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
       return data.Items!
     },
 
+    // TODO: Add sort asc/desc
     async getItemsOfView(view: string, limit: number = 20) {
       const authentication = useAuthenticationStore()
 

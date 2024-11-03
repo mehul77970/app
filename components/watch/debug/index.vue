@@ -34,7 +34,7 @@ const toggleHLSDebug = () => {
       </h3>
       <div class="inline-flex flex-wrap gap-2 break-al">
         <span>Controls:</span>
-        {{ hideControls ? 'visible' : 'hidden' }}
+        {{ hideControls ? 'hidden' : 'visible' }}
       </div>
       <div class="inline-flex flex-wrap gap-2 break-al">
         <span>Loaded:</span>

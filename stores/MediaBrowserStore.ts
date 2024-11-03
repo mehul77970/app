@@ -75,8 +75,8 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
     },
 
     async getEpisodesOfSeason(
-      show: string,
-      season: string,
+      show?: string,
+      season?: string,
       limit: number = 20,
     ) {
       const authentication = useAuthenticationStore()

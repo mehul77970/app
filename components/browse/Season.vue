@@ -7,6 +7,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel'
 import Radial from '@/components/ui/radial/Radial.vue'
+import { getDefaultMediaStreams, getMediaSources } from '~/lib/player';
 
 const { id, parentId } = defineProps<{ id: string, parentId: string }>()
 
@@ -24,6 +25,13 @@ const staticBackground = mediaStore.generateImageURL(
 )
 const logo = mediaStore.generateImageURL(parentId, 'Logo/0', 600)
 const currentWatch = await mediaStore.getNextUp(season.Id!, 1)
+
+// TODO: Configure if we should try to figure out video/audio/subtitle track info, can make the inital load slower.
+
+const episode = await mediaStore.getItem(episodes[0].Id || '')
+const defaultSources = getDefaultMediaStreams(episode)
+
+const { videoSources, audioSources, subtitleSources } = getMediaSources(episode)
 
 const getEpisodeImage = (episode: string) =>
   mediaStore.generateImageURL(episode, undefined, 720, 480)
@@ -59,6 +67,10 @@ onMounted(() => {
     :item="season"
     :background="background()"
     :logo
+    :default-sources
+    :video-sources
+    :audio-sources
+    :subtitle-sources
   >
     <template #sections>
       <section

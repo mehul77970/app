@@ -135,8 +135,10 @@ export function createSubtitleSource(
 export function getDefaultMediaStreams(
   playback: PlaybackInfoResponse | BaseItemDto,
 ) {
-  if (!playback.MediaSources || !playback.MediaSources[0])
-    throw new PlaybackInfoError('No MediaSource found', playback)
+  if (!playback.MediaSources || !playback.MediaSources[0]) {
+    console.warn('No default sources found')
+    return { video: null, audio: null, subtitle: null }
+  }
   const mediaSource = playback.MediaSources[0]
   const mediaStreams = mediaSource.MediaStreams!
 
@@ -157,9 +159,12 @@ export function getDefaultMediaStreams(
 
 export function getSubtitleStreams(
   playback: PlaybackInfoResponse | BaseItemDto,
+  createEmpty: boolean = true,
 ) {
-  if (!playback.MediaSources || !playback.MediaSources[0])
-    throw new PlaybackInfoError('No MediaSource found', playback)
+  if (!playback.MediaSources || !playback.MediaSources[0]) {
+    console.warn('No subtitle sources found')
+    return []
+  }
   const mediaSource = playback.MediaSources[0]
   const subtitleStreams = mediaSource.MediaStreams!.filter(
     src => src.Type === 'Subtitle',
@@ -168,9 +173,14 @@ export function getSubtitleStreams(
   const subtitleSources = [] as SubtitleSource[]
 
   // Create empty subtitle track
-  subtitleSources.push({
-    title: 'None',
-  })
+  if (createEmpty) {
+    subtitleSources.push({
+      title: 'None',
+      source: {
+        Index: -1,
+      },
+    })
+  }
 
   for (let i = 0; subtitleStreams.length > i; i++) {
     const currentSubtitleStream = subtitleStreams[i]
@@ -182,8 +192,10 @@ export function getSubtitleStreams(
 }
 
 export function getAudioStreams(playback: PlaybackInfoResponse | BaseItemDto) {
-  if (!playback.MediaSources || !playback.MediaSources[0])
-    throw new PlaybackInfoError('No MediaSource found', playback)
+  if (!playback.MediaSources || !playback.MediaSources[0]) {
+    console.warn('No audio sources found')
+    return []
+  }
   const mediaSource = playback.MediaSources[0]
   const audioStreams = mediaSource.MediaStreams!.filter(
     src => src.Type === 'Audio',
@@ -198,6 +210,41 @@ export function getAudioStreams(playback: PlaybackInfoResponse | BaseItemDto) {
   }
 
   return audioSources
+}
+
+export function getVideoStreams(playback: PlaybackInfoResponse | BaseItemDto) {
+  if (!playback.MediaSources || !playback.MediaSources[0]) {
+    console.warn('No video sources found')
+    return []
+  }
+
+  const mediaSource = playback.MediaSources[0]
+  const videoStreams = mediaSource.MediaStreams!.filter(
+    src => src.Type === 'Video',
+  )
+
+  const videoSources = [] as VideoSource[]
+
+  for (let i = 0; videoStreams.length > i; i++) {
+    const currentVideoStream = videoStreams[i]
+
+    videoSources.push(createVideoSource(currentVideoStream)!)
+  }
+
+  return videoSources
+}
+
+export function getMediaSources(playback: PlaybackInfoResponse | BaseItemDto, createEmpty: boolean = true) {
+  if (!playback.MediaSources || !playback.MediaSources[0]) {
+    console.warn('No media sources found')
+    return { videoSources: [], audioSources: [], subtitleSources: [] }
+  }
+
+  const videoSources = getVideoStreams(playback)
+  const audioSources = getAudioStreams(playback)
+  const subtitleSources = getSubtitleStreams(playback, createEmpty)
+
+  return { videoSources, audioSources, subtitleSources }
 }
 
 export type PlayerType = 'hls' | 'http'

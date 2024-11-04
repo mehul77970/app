@@ -10,8 +10,8 @@ import {
 import { truncate } from '~/lib/utils'
 
 const playerStore = usePlayerStore()
-const { hideControls, loaded, seeking, loading, paused, volume, muted, pictureInPicture, fullscreen, position, positionTimeline, buffer, video, audio, subtitle, subtitleTimeSyncOffset, item, debug } = storeToRefs(playerStore)
 
+const { hideControls, loaded, seeking, loading, paused, volume, muted, pictureInPicture, fullscreen, position, positionTimeline, buffer, video, audio, subtitle, subtitleTimeSyncOffset, item, debug } = storeToRefs(playerStore)
 const refreshRequired = ref(false)
 
 const toggleHLSDebug = () => {

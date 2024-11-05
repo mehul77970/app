@@ -1,9 +1,13 @@
 <script setup lang="ts">
 const isDesktopApp = ref(false)
 
-// onMounted(() => {
-//   console.log(window.runtime)
-// })
+onMounted(() => {
+  // @ts-expect-error Check for wails
+  if (window.runtime) {
+    console.log('Runtime found. App is probably running as native')
+    isDesktopApp.value = true
+  }
+})
 </script>
 
 <template>

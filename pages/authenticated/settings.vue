@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const isDesktopApp = ref(false)
+
+// onMounted(() => {
+//   console.log(window.runtime)
+// })
+</script>
 
 <template>
   <div class="flex min-h-screen w-full flex-col mt-[72px]">
@@ -20,10 +26,15 @@
           <SettingsLink :to="{ name: 'authenticated-settings-player' }">
             Player
           </SettingsLink>
+          <SettingsLink
+            v-if="isDesktopApp"
+            :to="{ name: 'authenticated-settings-desktop' }"
+          >
+            Desktop
+          </SettingsLink>
           <SettingsLink :to="{ name: 'authenticated-settings-theme' }">
             Theme
           </SettingsLink>
-          <a href="#"> Support </a>
           <SettingsLink :to="{ name: 'authenticated-settings-about' }">
             About
           </SettingsLink>

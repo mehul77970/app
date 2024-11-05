@@ -1,6 +1,12 @@
 import type { UserDto } from '@jellyfin/sdk/lib/generated-client'
 
 export default defineNuxtRouteMiddleware(async () => {
+  const serverStore = useServerStore()
+  const server = useCookie('server')
+
+  console.log('Server Middleware', { cookie: server, store: serverStore })
+  if (!server.value && !serverStore.url) return setup()
+
   const authentication = useCookie('authentication')
   const user = useCookie('user')
   const authStore = useAuthenticationStore()
@@ -32,4 +38,8 @@ export default defineNuxtRouteMiddleware(async () => {
 
 const login = () => {
   return '/login'
+}
+
+const setup = () => {
+  return '/setup'
 }

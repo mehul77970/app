@@ -254,6 +254,7 @@ export function getPlayerType(info?: PlaybackInfoResponse): PlayerType | null {
   const native = useDeviceStore().nativeEnviroment
   const nativePlayerEnabled = usePlayerStore().settings.native
 
+  console.log('Native', native, 'player', nativePlayerEnabled)
   if (native && nativePlayerEnabled) {
     return 'native'
   }

@@ -92,7 +92,7 @@ const debug = computed(() => playerStore.debug.enabled)
     </div>
 
     <!-- HLS Player -->
-    <WatchHLSPlayer
+    <LazyWatchHLSPlayer
       v-if="playerType === 'hls'"
       :id
       :video-index="0"
@@ -102,8 +102,8 @@ const debug = computed(() => playerStore.debug.enabled)
       class="flex-gro"
     />
     <WatchDebug v-if="debug" />
-    <WatchHTTPPlayer v-if="playerType === 'http'" />
-    <WatchNativePlayer v-if="playerType === 'native'" />
+    <LazyWatchHTTPPlayer v-if="playerType === 'http'" />
+    <LazyWatchNativePlayer v-if="playerType === 'native'" />
     <WatchControlsProvider :id />
   </div>
 </template>

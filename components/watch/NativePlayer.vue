@@ -24,3 +24,10 @@ onMounted(async () => {
     MPV Player
   </div>
 </template>
+
+<style>
+html, body {
+  background-color: transparent;
+}
+
+</style>

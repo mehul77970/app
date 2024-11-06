@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     '@oku-ui/motion-nuxt',
     '@nuxt/eslint',
   ],
-  plugins: ['~/plugins/toast.ts', '~/plugins/error-handler'],
+  plugins: ['~/plugins/toast.ts'],
   ssr: false,
   devtools: {
     enabled: false,

@@ -103,7 +103,7 @@ const debug = computed(() => playerStore.debug.enabled)
     />
     <WatchDebug v-if="debug" />
     <WatchHTTPPlayer v-if="playerType === 'http'" />
-
+    <WatchNativePlayer v-if="playerType === 'native'" />
     <WatchControlsProvider :id />
   </div>
 </template>

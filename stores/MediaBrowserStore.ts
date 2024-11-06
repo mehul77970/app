@@ -173,7 +173,12 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
 
       return items!.Items as BaseItemDto[]
     },
+    generateDownloadURL(item: BaseItemDto) {
+      const authentication = useAuthenticationStore()
+      const server = useServerStore()
 
+      return `${server.url}/Items/${item.Id}/Download?api_key=${authentication._header.authorization}`
+    },
     generateImageURL(
       id: string,
       type: string = 'Primary',

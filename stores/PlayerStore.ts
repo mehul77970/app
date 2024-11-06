@@ -108,6 +108,9 @@ export const usePlayerStore = defineStore('player', {
       },
     },
     settings: {
+      native: {
+        enabled: true,
+      },
       subtitle: {
         global: 'video_width',
       },
@@ -186,7 +189,7 @@ export const usePlayerStore = defineStore('player', {
   },
 
   persist: {
-    pick: ['settings.video.global', 'debug.enabled', 'debug.hls'],
+    pick: ['settings.video.global', 'settings.native.enabled', 'debug.enabled', 'debug.hls'],
   },
 })
 

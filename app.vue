@@ -9,6 +9,12 @@ onMounted(() => {
   carouselRotate = setInterval(() => {
     window.dispatchEvent(event)
   }, 5000)
+
+  // @ts-expect-error Check for wails
+  if (window.runtime || window.wails) {
+    console.log('Running on native desktop app, special features will be avaliable :0')
+    deviceStore.nativeEnviroment = true
+  }
 })
 
 onUnmounted(() => {

@@ -1,13 +1,7 @@
 <script setup lang="ts">
-const isDesktopApp = ref(false)
+const deviceStore = useDeviceStore()
 
-onMounted(() => {
-  // @ts-expect-error Check for wails
-  if (window.runtime) {
-    console.log('Runtime found. App is probably running as native')
-    isDesktopApp.value = true
-  }
-})
+const nativeEnviroment = computed(() => deviceStore.nativeEnviroment)
 </script>
 
 <template>
@@ -31,7 +25,7 @@ onMounted(() => {
             Player
           </SettingsLink>
           <SettingsLink
-            v-if="isDesktopApp"
+            v-if="nativeEnviroment"
             :to="{ name: 'authenticated-settings-desktop' }"
           >
             Desktop

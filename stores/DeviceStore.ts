@@ -7,6 +7,7 @@ export const useDeviceStore = defineStore('device', {
     profile: null as null | DeviceProfile,
     bitrate: 100000000,
     acknowledgedEarlyAccess: false,
+    nativeEnviroment: false,
   }),
 
   actions: {

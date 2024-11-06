@@ -247,10 +247,16 @@ export function getMediaSources(playback: PlaybackInfoResponse | BaseItemDto, cr
   return { videoSources, audioSources, subtitleSources }
 }
 
-export type PlayerType = 'hls' | 'http'
+export type PlayerType = 'hls' | 'http' | 'native'
 
 export function getPlayerType(info?: PlaybackInfoResponse): PlayerType | null {
   if (!info) return null
+  const native = useDeviceStore().nativeEnviroment
+  const nativePlayerEnabled = usePlayerStore().settings.native
+
+  if (native && nativePlayerEnabled) {
+    return 'native'
+  }
 
   if (info.MediaSources) {
     const defaultMediaSource = info.MediaSources[0]

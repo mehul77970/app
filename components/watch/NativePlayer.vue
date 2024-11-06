@@ -27,7 +27,14 @@ onMounted(async () => {
 
 <style>
 html, body {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
+#authenticated-layout {
+  background-color: transparent !important;
+}
+
+#player-wrapper {
+  background-color: transparent !important;
+}
 </style>

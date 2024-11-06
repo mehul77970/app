@@ -85,6 +85,7 @@ const debug = computed(() => playerStore.debug.enabled)
 
 <template>
   <div
+    id="player-wrapper"
     class="w-full h-[100vh] max-w-full inline-flex flex-col justify-center items-center relative select-none overflow-hidden bg-black"
   >
     <div v-if="!playerType">

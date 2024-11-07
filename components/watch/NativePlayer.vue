@@ -38,7 +38,11 @@ onMounted(async () => {
     console.log('Got message from player', message)
   })
 
+  let lastCurrentTime = 0
   onPlayerPosition((position_sec) => {
+    if (Math.round(position_sec) === lastCurrentTime) return
+
+    lastCurrentTime = Math.round(position_sec)
     playerStore.position = {
       percent: (position_sec / (playerStore.duration / 1000)) * 100,
       value: position_sec,

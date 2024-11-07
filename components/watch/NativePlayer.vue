@@ -7,7 +7,7 @@ const mediaBrowser = useMediaBrowserStore()
 
 const item = computed(() => playerStore.item)
 const paused = computed(() => playerStore.paused)
-const seeking = computed(() => playerStore.seeking)
+const position = computed(() => playerStore.positionTimeline)
 
 const root = document.documentElement
 
@@ -63,12 +63,10 @@ watch(paused, async () => {
   setPlayerPause(paused.value)
 })
 
-watch(seeking, async (seek, _) => {
-  if (!seek.value) return
+watch(position, async () => {
+  console.log('Native player seeking to: ', position.value)
 
-  console.log('Native player seeking to: ', seek.position)
-
-  await setPlayerPosition(seek.position)
+  await setPlayerPosition(position.value)
 })
 </script>
 

@@ -7,15 +7,19 @@
 const handle = window?.go?.player?.Player
 
 // Set the current url/path of the player controller
-export function setURL(url) {
+export async function setURL(url) {
   handle.SetURL(url)
 }
 
 // Start the player
-export function start() {
-  handle.Start()
+export async function start() {
+  await handle.Start()
 }
 
+// Toggle the pause state on the player
+export async function togglePause() {
+  await handle.TogglePause()
+}
 /**
  * Equivalent to eventEmitter.on
  * @param {import("./types").EventTypes} eventName

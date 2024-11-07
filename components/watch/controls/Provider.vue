@@ -23,7 +23,6 @@ const controlsMouseMove = () => {
   document.body!.style.cursor = 'default'
 
   controlsHideTimer = setTimeout(() => {
-    console.log('First timeout should run')
     hideMouseControls()
   }, 3000)
 }

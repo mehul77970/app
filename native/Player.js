@@ -16,9 +16,12 @@ export async function start() {
   await handle.Start()
 }
 
-// Toggle the pause state on the player
-export async function togglePause() {
-  await handle.TogglePause()
+/**
+ * Pause or unpause the player
+ * @param {boolean} paused Pause or unpause the player
+ */
+export async function setPlayerPause(paused) {
+  await handle.SetPlayerPaused(paused)
 }
 /**
  * Equivalent to eventEmitter.on

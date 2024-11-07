@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { setURL, start, togglePause } from '@/native/Player'
+import { setURL, start, setPlayerPause } from '@/native/Player'
 import { onPlayerLoaded, onPlayerMessage } from '~/native/events'
 
 const playerStore = usePlayerStore()
@@ -42,7 +42,7 @@ onUnmounted(() => {
 })
 
 watch(paused, async () => {
-  await togglePause()
+ setPlayerPause(paused.value)
 })
 </script>
 

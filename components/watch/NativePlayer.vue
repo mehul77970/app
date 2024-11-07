@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { setURL, start, setPlayerPause } from '@/native/Player'
-import { onPlayerLoaded, onPlayerMessage, onPlayerPosition } from '~/native/events'
+import { setURL, start, setPlayerPause, setPlayerPosition } from '@/native/Player'
+import { onPlayerLoaded, onPlayerLoading, onPlayerMessage, onPlayerPlaybackRestart, onPlayerPosition } from '~/native/events'
 
 const playerStore = usePlayerStore()
 const mediaBrowser = useMediaBrowserStore()
 
 const item = computed(() => playerStore.item)
 const paused = computed(() => playerStore.paused)
+const seeking = computed(() => playerStore.seeking)
 
 const root = document.documentElement
 
@@ -29,6 +30,10 @@ onMounted(async () => {
     playerStore.duration = duration_sec * 1000
   })
 
+  onPlayerLoading(() => {
+    playerStore.loading = true
+  })
+
   onPlayerMessage((message) => {
     console.log('Got message from player', message)
   })
@@ -38,6 +43,11 @@ onMounted(async () => {
       percent: (position_sec / (playerStore.duration / 1000)) * 100,
       value: position_sec,
     }
+  })
+
+  onPlayerPlaybackRestart(() => {
+    playerStore.seeking.value = false
+    playerStore.loading = false
   })
 })
 
@@ -51,6 +61,14 @@ onUnmounted(() => {
 
 watch(paused, async () => {
   setPlayerPause(paused.value)
+})
+
+watch(seeking, async (seek, _) => {
+  if (!seek.value) return
+
+  console.log('Native player seeking to: ', seek.position)
+
+  await setPlayerPosition(seek.position)
 })
 </script>
 

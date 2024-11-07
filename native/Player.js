@@ -23,6 +23,15 @@ export async function start() {
 export async function setPlayerPause(paused) {
   await handle.SetPlayerPause(paused)
 }
+
+/**
+ * Set player position
+ * @param {number} position_sec Position in seconds
+ */
+export async function setPlayerPosition(position_sec) {
+  await handle.SetPlayerPosition(position_sec)
+}
+
 /**
  * Equivalent to eventEmitter.on
  * @param {import("./types").EventTypes} eventName

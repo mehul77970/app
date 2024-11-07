@@ -109,6 +109,7 @@ export const usePlayerStore = defineStore('player', {
     },
     settings: {
       native: {
+        transparent: false,
         enabled: true,
       },
       subtitle: {

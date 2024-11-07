@@ -5,3 +5,5 @@ export interface Settings {
   HardwareDecoder: HardwareDecoder
   GPUApi: GPUApi
 }
+
+export type EventTypes = 'PLAYER_PAUSE' | 'PLAYER_LOADED' | 'PLAYER_MESSAGE' | 'PLAYER_GENERIC_ERROR'

@@ -21,7 +21,7 @@ export async function start() {
  * @param {boolean} paused Pause or unpause the player
  */
 export async function setPlayerPause(paused) {
-  await handle.SetPlayerPaused(paused)
+  await handle.SetPlayerPause(paused)
 }
 /**
  * Equivalent to eventEmitter.on

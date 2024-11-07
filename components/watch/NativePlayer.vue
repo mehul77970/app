@@ -23,6 +23,7 @@ onMounted(async () => {
   onPlayerLoaded(() => {
     playerStore.loading = false
     playerStore.loaded = true
+    playerStore.paused = false
   })
 
   onPlayerMessage((message) => {

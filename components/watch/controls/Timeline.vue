@@ -187,6 +187,7 @@ const updateTrickplayTooltip = (milliseconds: number) => {
     class="relative inline-flex flex-col items-start justify-start w-full"
     @mouseenter="sliderEntered"
     @mouseleave="sliderLeft"
+    @click.stop
   >
     <div class="inline-flex justify-between items-end w-full">
       <span class="w-[64px] mb-2">{{
@@ -221,6 +222,7 @@ const updateTrickplayTooltip = (milliseconds: number) => {
                 :max="100"
                 :step="0.01"
                 class="w-full"
+                @click.stop
                 @update:model-value="sliderDrag"
                 @value-commit="sliderTimeCommitted"
                 @mousemove="sliderMouseOver"

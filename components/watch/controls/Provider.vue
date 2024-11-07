@@ -17,13 +17,10 @@ const controlsMouseMove = () => {
   if (controlsHideTimer) {
     clearTimeout(controlsHideTimer)
   }
-
   controlsHideTimer = null
 
   showControls.value = true
   document.body!.style.cursor = 'default'
-
-  console.log('Show controls')
 
   controlsHideTimer = setTimeout(() => {
     console.log('First timeout should run')
@@ -33,8 +30,6 @@ const controlsMouseMove = () => {
 
 const hideMouseControls = () => {
   if (!playerStore.hideControls || paused.value) {
-    console.log('Shouldnt hide controls')
-
     if (controlsHideTimer) {
       clearTimeout(controlsHideTimer)
     }

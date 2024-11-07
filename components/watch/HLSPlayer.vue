@@ -351,14 +351,10 @@ watch(audioSource, async (audioSource) => {
 
   await playbackStore.getPlaybackInfo(
     id,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    audioSource?.source.Index,
-    undefined,
-    undefined,
-    playbackStore.lastPlaybackInfo,
+    {
+      audioIndex: audioSource?.source.Index,
+      last: playbackStore.lastPlaybackInfo,
+    },
   )
 
   const newAudioIndex = audioSource?.source.Index

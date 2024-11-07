@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { setURL, start, setPlayerPause } from '@/native/Player'
-import { onPlayerLoaded, onPlayerMessage } from '~/native/events'
+import { onPlayerLoaded, onPlayerMessage, onPlayerPosition } from '~/native/events'
 
 const playerStore = usePlayerStore()
 const mediaBrowser = useMediaBrowserStore()
@@ -32,6 +32,13 @@ onMounted(async () => {
   onPlayerMessage((message) => {
     console.log('Got message from player', message)
   })
+
+  onPlayerPosition((position_sec) => {
+    playerStore.position = {
+      percent: (position_sec / (playerStore.duration / 1000)) * 100,
+      value: position_sec,
+    }
+  })
 })
 
 onUnmounted(() => {
@@ -43,7 +50,7 @@ onUnmounted(() => {
 })
 
 watch(paused, async () => {
- setPlayerPause(paused.value)
+  setPlayerPause(paused.value)
 })
 </script>
 

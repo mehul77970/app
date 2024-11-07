@@ -3,6 +3,16 @@ import type { PlaybackInfoResponse } from '@jellyfin/sdk/lib/generated-client'
 import type HLS from 'hls.js'
 import { useApiFetch } from '#imports'
 
+export interface PlaybackInfoOptions {
+  isPlayback?: boolean
+  autoOpenLivestream?: boolean
+  maxStreamingBitrate?: number
+  audioIndex?: number
+  videoIndex?: number
+  subtitleIndex?: number
+  last?: string
+}
+
 export const usePlaybackStore = defineStore('playback', {
   state: () => ({
     info: null as null | PlaybackInfoResponse,
@@ -41,44 +51,46 @@ export const usePlaybackStore = defineStore('playback', {
     // TODO: Improve this function and calling
     async getPlaybackInfo(
       id: string,
-      isPlayback: boolean = true,
-      autoOpenLivestream: boolean = true,
-      maxStreamingBitrate: number = 120000000,
-      audioIndex?: number,
-      videoIndex?: number,
-      subtitleIndex?: number,
-      last?: string,
+      options: PlaybackInfoOptions = {
+        isPlayback: true,
+        autoOpenLivestream: true,
+        maxStreamingBitrate: useDeviceStore().bitrate,
+        audioIndex: undefined,
+        videoIndex: undefined,
+        subtitleIndex: undefined,
+        last: undefined,
+      },
     ): Promise<PlaybackInfoResponse> {
       const server = useServerStore()
       const authentication = useAuthenticationStore()
       const device = useDeviceStore()
 
       const url = new URL(
-        last ? last : `${server.url}/Items/${id}/PlaybackInfo`,
+        options.last ? options.last : `${server.url}/Items/${id}/PlaybackInfo`,
       )
 
-      if (isPlayback) {
+      if (options.isPlayback) {
         url.searchParams.set('isPlayback', 'true')
       }
 
-      if (autoOpenLivestream) {
+      if (options.autoOpenLivestream) {
         url.searchParams.set('autoOpenLivestream', 'true')
       }
 
-      if (maxStreamingBitrate) {
-        url.searchParams.set('VideoBitrate', maxStreamingBitrate.toString())
+      if (options.maxStreamingBitrate) {
+        url.searchParams.set('VideoBitrate', options.maxStreamingBitrate.toString())
       }
 
-      if (audioIndex) {
-        url.searchParams.set('AudioStreamIndex', audioIndex.toString())
+      if (options.audioIndex) {
+        url.searchParams.set('AudioStreamIndex', options.audioIndex.toString())
       }
 
-      if (subtitleIndex) {
-        url.searchParams.set('SubtitleStreamIndex', subtitleIndex.toString())
+      if (options.subtitleIndex) {
+        url.searchParams.set('SubtitleStreamIndex', options.subtitleIndex.toString())
       }
 
-      if (videoIndex) {
-        url.searchParams.set('VideoStreamIndex', videoIndex.toString())
+      if (options.videoIndex) {
+        url.searchParams.set('VideoStreamIndex', options.videoIndex.toString())
       }
 
       const data = await useApiFetch<PlaybackInfoResponse>(

@@ -19,3 +19,7 @@ export function onPlayerMessage(callback: (message: string) => void) {
 export function onPlayerGenericError(callback: (error: string) => void) {
   on('PLAYER_GENERIC_ERROR', callback)
 }
+
+export function onPlayerPosition(callback: (position_sec: number) => void) {
+  on('PLAYER_POSITION', callback)
+}

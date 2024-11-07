@@ -45,10 +45,9 @@ const changeVideoResolution = async (bitrate: number, res: number) => {
 
   const info = await playback.getPlaybackInfo(
     videoID,
-    undefined,
-    undefined,
-    undefined,
-    bitrate,
+    {
+      maxStreamingBitrate: bitrate,
+    },
   )
 
   playback.setPlaybackInfo(info)

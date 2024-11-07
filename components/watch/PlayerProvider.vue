@@ -27,14 +27,10 @@ console.log('loading playback info with id', id)
 
 const info = await playbackStore.getPlaybackInfo(
   id,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  Number(audioIndex),
-  undefined,
-  Number(subtitleIndex),
-  undefined,
+  {
+    audioIndex: Number(audioIndex),
+    subtitleIndex: Number(subtitleIndex),
+  },
 )
 
 playbackStore.setPlaybackInfo(info)

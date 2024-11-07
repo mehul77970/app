@@ -68,6 +68,7 @@ export const usePlayerStore = defineStore('player', {
     hideControls: true,
     loaded: false,
 
+    duration: 0,
     seeking: {
       value: false,
       position: 0,

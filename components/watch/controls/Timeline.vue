@@ -22,6 +22,7 @@ const show = ref(true)
 const player = usePlayerStore()
 const currentTime = computed(() => player.position)
 const buffered = computed(() => player.buffer.percent)
+const duration = computed(() => player.duration)
 const slider = ref(null as null | HTMLElement)
 const auth = useAuthenticationStore()
 const serverStore = useServerStore()
@@ -260,7 +261,7 @@ const updateTrickplayTooltip = (milliseconds: number) => {
       </div>
 
       <span class="w-[64px] mb-2">{{
-        formatTimestamp(info.RunTimeTicks!! / 10000)
+        formatTimestamp(duration)
       }}</span>
     </div>
   </div>

@@ -22,10 +22,11 @@ onMounted(async () => {
 
   start()
 
-  onPlayerLoaded(() => {
+  onPlayerLoaded((duration_sec) => {
     playerStore.loading = false
     playerStore.loaded = true
     playerStore.paused = false
+    playerStore.duration = duration_sec * 1000
   })
 
   onPlayerMessage((message) => {

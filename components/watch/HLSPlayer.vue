@@ -58,6 +58,7 @@ const loaderAnimationFinished = ref(false)
 onMounted(async () => {
   if (!video.value) return
 
+  playerStore.duration = playerStore.item?.RunTimeTicks || 0 / 10000
   const videoElement = video.value
   const getAppendedOffset = (eventName: string, frag: BufferAppendedData) => {
     if (

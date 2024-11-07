@@ -6,7 +6,7 @@ export function onPlayerPause(callback: () => void) {
 }
 
 // Called when the player has loaded and begun playing
-export function onPlayerLoaded(callback: () => void) {
+export function onPlayerLoaded(callback: (duration_sec: number) => void) {
   on('PLAYER_LOADED', callback)
 }
 

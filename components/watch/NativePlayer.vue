@@ -25,7 +25,7 @@ onMounted(async () => {
   await start()
 
   onPlayerLoaded(async (duration_sec) => {
-    await setPlayerPosition(Math.floor(ticksToSeconds(startPosition)))
+    await setPlayerPosition(ticksToSeconds(startPosition))
 
     playerStore.loading = false
     playerStore.loaded = true

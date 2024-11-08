@@ -98,9 +98,20 @@ const debug = computed(() => playerStore.debug.enabled)
       :start-position="startAt"
       class="flex-gro"
     />
+
+    <!-- Debug window -->
     <WatchDebug v-if="debug" />
+
+    <!-- HTTP player -->
     <LazyWatchHTTPPlayer v-if="playerType === 'http'" />
-    <LazyWatchNativePlayer v-if="playerType === 'native'" />
+
+    <!-- Native player, only avaliable for desktop! -->
+    <LazyWatchNativePlayer
+      v-if="playerType === 'native'"
+      :start-position="startAt"
+    />
+
+    <!-- Player controls -->
     <WatchControlsProvider :id />
   </div>
 </template>

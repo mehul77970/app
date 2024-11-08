@@ -1,17 +1,25 @@
+// Configure our handle for the player controller
+const handle = window?.go?.player?.Player
+
 /**
  * Set the current player URL to a local or remote path
  * @param {string} url
  */
-
-// Configure our handle for the player controller
-const handle = window?.go?.player?.Player
-
-// Set the current url/path of the player controller
 export async function setURL(url) {
   handle.SetURL(url)
 }
 
-// Start the player
+/**
+ * Set the position for the player to start at
+ * @param {number} position_sec where to start the player in seconds
+ */
+export async function setStartPosition(position_sec) {
+  await handle.SetStartPosition(position_sec)
+}
+
+/**
+ * Start/create the player and allocate the memory to begin playback
+ */
 export async function start() {
   await handle.Start()
 }

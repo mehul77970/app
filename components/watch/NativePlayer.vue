@@ -67,8 +67,6 @@ onUnmounted(() => {
   playerStore.settings.native.transparent = false
 
   root.setAttribute('transparent-player', 'false')
-
-  console.log(root.attributes)
 })
 
 watch(paused, async () => {
@@ -76,8 +74,6 @@ watch(paused, async () => {
 })
 
 watch(position, async () => {
-  console.log('Native player seeking to: ', position.value)
-
   await setPlayerPosition(position.value)
 })
 

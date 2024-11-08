@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { setURL, start, setPlayerPause, setPlayerPosition } from '@/native/Player'
-import { onPlayerLoaded, onPlayerLoading, onPlayerMessage, onPlayerPlaybackRestart, onPlayerPosition } from '~/native/events'
+import { setURL, start, setPlayerPause, setPlayerPosition } from '~/native/player/Player'
+import { onPlayerLoaded, onPlayerLoading, onPlayerMessage, onPlayerPlaybackRestart, onPlayerPosition } from '~/native/player/events'
 
 const playerStore = usePlayerStore()
 const mediaBrowser = useMediaBrowserStore()

@@ -2,7 +2,9 @@
 import { PhCornersIn, PhCornersOut } from '@phosphor-icons/vue'
 import { addComponentEventListener } from '#imports'
 import { Button } from '@/components/ui/button'
+import { fullscreen as enterFullscreen, exitFullscreen } from '~/native/app/App'
 
+const device = useDeviceStore()
 const playerStore = usePlayerStore()
 const fullscreen = computed(() => playerStore.fullscreen)
 
@@ -17,29 +19,35 @@ onMounted(() => {
 })
 
 const toggleFullscreen = () => {
+  if (device.nativeEnviroment) {
+    return toggleFullscreenNative()
+  }
+
+  return toggleFullscreenBrowser()
+}
+
+const toggleFullscreenBrowser = () => {
   if (fullscreen.value) {
     document.exitFullscreen()
+    return
   }
-  else {
-    document.documentElement.requestFullscreen()
+
+  return document.documentElement.requestFullscreen()
+}
+
+const toggleFullscreenNative = () => {
+  if (fullscreen.value) {
+    exitFullscreen()
   }
+
+  return enterFullscreen()
 }
 </script>
 
 <template>
-  <Button
-    variant="ghost"
-    size="icon"
-    @click="toggleFullscreen"
-  >
-    <PhCornersOut
-      v-if="!fullscreen"
-      :size="24"
-    />
+  <Button variant="ghost" size="icon" @click="toggleFullscreen">
+    <PhCornersOut v-if="!fullscreen" :size="24" />
 
-    <PhCornersIn
-      v-else
-      :size="24"
-    />
+    <PhCornersIn v-else :size="24" />
   </Button>
 </template>

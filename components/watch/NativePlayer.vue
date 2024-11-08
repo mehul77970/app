@@ -63,12 +63,6 @@ onMounted(async () => {
   })
 })
 
-onUnmounted(() => {
-  playerStore.settings.native.transparent = false
-
-  root.setAttribute('transparent-player', 'false')
-})
-
 watch(paused, async () => {
   setPlayerPause(paused.value)
 })
@@ -79,6 +73,9 @@ watch(position, async () => {
 
 onUnmounted(async () => {
   if (!item.value || !item.value?.Id) return
+
+  playerStore.settings.native.transparent = false
+  root.setAttribute('transparent-player', 'false')
   // Destroy MPV player
   await destroy()
   // Stop playback progress on backend

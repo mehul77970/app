@@ -36,9 +36,10 @@ const toggleFullscreenBrowser = () => {
 
 const toggleFullscreenNative = () => {
   if (fullscreen.value) {
+    playerStore.fullscreen = false
     return exitFullscreen()
   }
-
+  playerStore.fullscreen = true
   return enterFullscreen()
 }
 </script>

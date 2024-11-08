@@ -1,3 +1,5 @@
+import { getCurrentScope, onScopeDispose } from 'vue'
+
 // Configure our handle for the player controller
 const handle = window?.go?.player?.Player
 

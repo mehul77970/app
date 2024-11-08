@@ -22,7 +22,7 @@ onMounted(async () => {
   const streamURL = mediaBrowser.generateDownloadURL(item.value)
 
   await setURL(streamURL)
-  await setStartPosition(ticksToSeconds(startPosition))
+  await setStartPosition(Math.floor(ticksToSeconds(startPosition)))
 
   start()
 

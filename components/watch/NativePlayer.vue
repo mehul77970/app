@@ -40,6 +40,7 @@ onMounted(async () => {
 
   let lastCurrentTime = 0
   onPlayerPosition((position_sec) => {
+    if (playerStore.subtitleSyncCallback) playerStore.subtitleSyncCallback(position_sec)
     if (Math.round(position_sec) === lastCurrentTime) return
 
     lastCurrentTime = Math.round(position_sec)

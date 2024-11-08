@@ -67,7 +67,6 @@ export function on(eventName, callback) {
 /**
  * Equivalent to eventEmitter.stop
  * @param {import("./types").EventTypes} eventName
- * @param {import("./types").EventTypes} additionalEventNames
  */
 export function stop(eventName, ...additionalEventNames) {
   return window.runtime.EventsOff(eventName, ...additionalEventNames)
@@ -80,4 +79,16 @@ export function stop(eventName, ...additionalEventNames) {
  */
 export function once(eventName, callback) {
   return onMany(eventName, callback, 1)
+}
+
+/**
+ * Create a listener that expires after the component is disposed of
+ * @param {import("./types").EventTypes} name
+ * @param {(any) => void} callback
+ */
+export function addPlayerEventListener(name, fn) {
+  on(name, fn)
+  if (getCurrentScope()) {
+    onScopeDispose(() => stop(name))
+  }
 }

@@ -16,6 +16,11 @@ export async function start() {
   await handle.Start()
 }
 
+// Destroy/Stop the player, and clean up resources
+export async function destroy() {
+  await handle.Destroy()
+}
+
 /**
  * Pause or unpause the player
  * @param {boolean} paused Pause or unpause the player

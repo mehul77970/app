@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { setURL, start, setPlayerPause, setPlayerPosition, destroy, setStartPosition } from '~/native/player/Player'
+import { setURL, start, setPlayerPause, setPlayerPosition, destroy } from '~/native/player/Player'
 import { onPlayerLoaded, onPlayerLoading, onPlayerMessage, onPlayerPlaybackRestart, onPlayerPosition } from '~/native/player/events'
 
 const { startPosition = 0 } = defineProps<{ startPosition: number }>()
@@ -22,11 +22,11 @@ onMounted(async () => {
   const streamURL = mediaBrowser.generateDownloadURL(item.value)
 
   await setURL(streamURL)
-  await setStartPosition(Math.floor(ticksToSeconds(startPosition)))
+  await start()
 
-  start()
+  onPlayerLoaded(async (duration_sec) => {
+    await setPlayerPosition(Math.floor(ticksToSeconds(startPosition)))
 
-  onPlayerLoaded((duration_sec) => {
     playerStore.loading = false
     playerStore.loaded = true
     playerStore.paused = false

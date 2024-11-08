@@ -28,8 +28,7 @@ const toggleFullscreen = () => {
 
 const toggleFullscreenBrowser = () => {
   if (fullscreen.value) {
-    document.exitFullscreen()
-    return
+    return document.exitFullscreen()
   }
 
   return document.documentElement.requestFullscreen()
@@ -37,7 +36,7 @@ const toggleFullscreenBrowser = () => {
 
 const toggleFullscreenNative = () => {
   if (fullscreen.value) {
-    exitFullscreen()
+    return exitFullscreen()
   }
 
   return enterFullscreen()

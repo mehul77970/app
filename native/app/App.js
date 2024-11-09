@@ -10,3 +10,15 @@ export function fullscreen() {
 export function exitFullscreen() {
   handle.UnFullscreen()
 }
+
+/**
+ * Create a listener that expires after the component is disposed of
+ * @param {import("./types").AppEvents} name
+ * @param {(any) => void} callback
+ */
+export function addAppEventListener(name, fn) {
+  on(name, fn)
+  if (getCurrentScope()) {
+    onScopeDispose(() => stop(name))
+  }
+}

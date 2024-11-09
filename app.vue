@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onAppResize } from './native/app/events'
+
 const deviceStore = useDeviceStore()
 
 let carouselRotate: NodeJS.Timeout | undefined
@@ -12,8 +14,20 @@ onMounted(() => {
 
   // @ts-expect-error Check for wails
   if (window.runtime || window.wails) {
+    const root = document.documentElement
     console.log('Running on native desktop app, special features will be avaliable :0')
     deviceStore.nativeEnviroment = true
+
+    let prevResizeTimeout: NodeJS.Timeout | undefined
+
+    onAppResize(() => {
+      if (prevResizeTimeout) clearTimeout(prevResizeTimeout)
+      root.style.opacity = '0'
+
+      prevResizeTimeout = setTimeout(() => {
+        root.style.opacity = '100'
+      }, 1000)
+    })
   }
 })
 

@@ -1,4 +1,5 @@
 import { getCurrentScope, onScopeDispose } from 'vue'
+import { on, stop } from '../listener'
 
 // Configure our handle for the player controller
 const handle = window?.go?.player?.Player
@@ -45,42 +46,6 @@ export async function setPlayerPause(paused) {
  */
 export async function setPlayerPosition(position_sec) {
   await handle.SetPlayerPosition(position_sec)
-}
-
-/**
- * Equivalent to eventEmitter.on
- * @param {import("./types").EventTypes} eventName
- * @param {(any) => void} callback
- * @param {number} maxCallbacks
- */
-export function onMany(eventName, callback, maxCallbacks) {
-  return window.runtime.EventsOnMultiple(eventName, callback, maxCallbacks)
-}
-
-/**
- * Equivalent to eventEmitter.on
- * @param {import("./types").EventTypes} eventName
- * @param {(any) => void} callback
- */
-export function on(eventName, callback) {
-  return onMany(eventName, callback, -1)
-}
-
-/**
- * Equivalent to eventEmitter.stop
- * @param {import("./types").EventTypes} eventName
- */
-export function stop(eventName, ...additionalEventNames) {
-  return window.runtime.EventsOff(eventName, ...additionalEventNames)
-}
-
-/**
- * Equivalent to eventEmitter.once
- * @param {import("./types").EventTypes} eventName
- * @param {(any) => void} callback
- */
-export function once(eventName, callback) {
-  return onMany(eventName, callback, 1)
 }
 
 /**

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import 'overlayscrollbars/overlayscrollbars.css'
+import {
+  OverlayScrollbars,
+  ClickScrollPlugin,
+} from 'overlayscrollbars'
 import { setBackground } from './native/app/App'
 import { onAppResize } from './native/app/events'
 
@@ -7,6 +12,15 @@ const deviceStore = useDeviceStore()
 let carouselRotate: NodeJS.Timeout | undefined
 
 onMounted(() => {
+  // optional: use the ClickScrollPlugin to make the option "scrollbars.clickScroll: true" available
+  OverlayScrollbars.plugin(ClickScrollPlugin)
+
+  OverlayScrollbars(document.body, {
+    scrollbars: {
+      clickScroll: true,
+    },
+  })
+
   const event = new Event('carousel-update')
 
   carouselRotate = setInterval(() => {
@@ -45,9 +59,18 @@ deviceStore.testSetDeviceProfile()
 </script>
 
 <template>
-  <div class="shadfin-ui">
+  <div id="shadfin-ui">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
   </div>
 </template>
+
+<style lang="scss">
+.os-scrollbar-handle {
+  @apply bg-primary/50 !w-[3px] hover:!w-2 hover:!bg-primary/85 transition-all duration-200 ease-in;
+}
+.os-scrollbar-vertical {
+  right: 2px;
+}
+</style>

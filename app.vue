@@ -21,14 +21,18 @@ onMounted(() => {
     setBackground(16, 18, 19)
 
     let prevResizeTimeout: NodeJS.Timeout | undefined
-
+    let lastResize = 0
+    root.style.transition = 'opacity 250ms ease'
     onAppResize(() => {
+      const resizeTime = performance.now()
+      if (resizeTime < lastResize + 20) return
       if (prevResizeTimeout) clearTimeout(prevResizeTimeout)
       root.style.opacity = '0'
 
+      lastResize = resizeTime
       prevResizeTimeout = setTimeout(() => {
         root.style.opacity = '100'
-      }, 1000)
+      }, 150)
     })
   }
 })

@@ -18,13 +18,20 @@ let assPlayer: undefined | ASS
 onMounted(async () => {
   if (!assCaptionElement.value || !document) return
 
-  const videoElement = document.getElementById('video') as HTMLVideoElement
+  const videoElement = document.getElementById('video') as HTMLVideoElement || { currentTime: 0 }
+
+  if (playerStore.settings.native.enabled) {
+    playerStore.subtitleSyncCallback = (time: number) => {
+      videoElement.currentTime = time
+    }
+  }
 
   if (!videoElement) return
 
   assPlayer = new ASS(assStreamText, videoElement, {
     container: assCaptionElement.value,
     resampling: 'video_height',
+    native: playerStore.settings.native.enabled,
   })
 
   playerStore.subtitleLoading = null
@@ -44,8 +51,5 @@ watch(subtitleSyncOffset, (seconds) => {
 </script>
 
 <template>
-  <div
-    ref="assCaptionElement"
-    class="top-0 left-0"
-  />
+  <div ref="assCaptionElement" class="top-0 left-0 w-full h-full" />
 </template>

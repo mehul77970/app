@@ -63,11 +63,6 @@ export default defineNuxtConfig({
     scanPageMeta: true,
   },
   compatibilityDate: '2024-04-03',
-
-  vite: {
-    base: './',
-  },
-
   eslint: {
     config: {
       stylistic: true,

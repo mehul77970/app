@@ -1,3 +1,4 @@
+import { on, stop } from '../listener'
 // Configure our handle for the app controller
 const handle = window?.go?.main?.App
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { setURL, start, setPlayerPause, setPlayerPosition, destroy } from '~/native/player/Player'
 import { onPlayerLoaded, onPlayerLoading, onPlayerMessage, onPlayerPlaybackRestart, onPlayerPosition } from '~/native/player/events'
+import { setBackground } from '~/native/app/App'
 
 const { startPosition = 0 } = defineProps<{ startPosition: number }>()
 const playerStore = usePlayerStore()
@@ -18,6 +19,7 @@ playerStore.settings.native.transparent = true
 onMounted(async () => {
   if (!item.value) return
 
+  setBackground(0, 0, 0)
   root.setAttribute('transparent-player', 'true')
   const streamURL = mediaBrowser.generateDownloadURL(item.value)
 
@@ -76,6 +78,7 @@ onUnmounted(async () => {
 
   playerStore.settings.native.transparent = false
   root.setAttribute('transparent-player', 'false')
+  setBackground(16, 18, 19)
   // Destroy MPV player
   await destroy()
   // Stop playback progress on backend

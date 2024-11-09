@@ -13,6 +13,15 @@ export function exitFullscreen() {
 }
 
 /**
+ * Set RGB background of parent app
+ * @param {number} r Red
+ * @param {number} g Green
+ * @param {number} b Blue
+ */
+export function setBackground(r, g, b) {
+  handle.SetBackground(r, g, b)
+}
+/**
  * Create a listener that expires after the component is disposed of
  * @param {import("./types").AppEvents} name
  * @param {(any) => void} callback

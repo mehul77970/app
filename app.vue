@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { setBackground } from './native/app/App'
 import { onAppResize } from './native/app/events'
 
 const deviceStore = useDeviceStore()
@@ -17,6 +18,7 @@ onMounted(() => {
     const root = document.documentElement
     console.log('Running on native desktop app, special features will be avaliable :0')
     deviceStore.nativeEnviroment = true
+    setBackground(16, 18, 19)
 
     let prevResizeTimeout: NodeJS.Timeout | undefined
 

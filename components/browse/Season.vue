@@ -74,9 +74,9 @@ onMounted(() => {
   >
     <template #sections>
       <section
-        class="inline-flex flex-col justify-start items-start max-w-full gap-4 p-4 mt-[72px]"
+        class="inline-flex flex-col justify-start pb-4 items-start max-w-full gap-4 mt-[72px]"
       >
-        <h1 class="text-gray-400 tracking-wider">
+        <h1 class="text-gray-400 tracking-wider pl-6">
           EPISODES
         </h1>
 
@@ -96,7 +96,7 @@ onMounted(() => {
             <CarouselItem
               v-for="(episode, index) in episodes"
               :key="index"
-              class="basis-1/2 lg:basis-1/4"
+              :class="`basis-1/1 lg:basis-1/4 ${index == 0 ? 'ml-6' : ''}`"
             >
               <div>
                 <NuxtLink

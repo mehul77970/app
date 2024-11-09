@@ -83,6 +83,9 @@
   font-family: "Onest";
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
 
 html,
 body,
@@ -103,6 +106,6 @@ body,
   box-shadow: none;
 }
 
-.selectable {
+/* .selectable {
   @apply border-[3px] border-solid border-transparent group-focus-visible:scale-[101%] focus-visible:border-blue-400  group-focus-visible:border-blue-400;
-}
+} */

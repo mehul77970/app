@@ -18,7 +18,7 @@ await mediaBrowserStore.getResumedContent()
 </script>
 
 <template>
-  <div class="flex min-w-full min-h-full flex-col items-center gap-4 p-6">
+  <div class="flex min-w-full min-h-full flex-col items-center gap-4">
     <!-- TODO: Make this a component. -->
     <div
       v-if="firstResumed"
@@ -68,14 +68,14 @@ await mediaBrowserStore.getResumedContent()
       </div>
     </div>
 
-    <div class="flex flex-col gap-8 justify-start items-start w-full">
-      <div class="flex flex-col max-w-full p-4 gap-8 z-[5]">
+    <div class="flex flex-col gap-8 justify-start pb-4 items-start w-full">
+      <div class="flex flex-col max-w-full gap-8  z-[5]">
         <!-- Continue Watching Section -->
         <section
           id="continue-watching"
-          class="inline-flex flex-col justify-start items-start max-w-full gap-4"
+          class="inline-flex flex-col justify-startitems-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider">
+          <h1 class="text-gray-400 tracking-wider pl-6">
             CONTINUE WATCHING
           </h1>
 
@@ -93,7 +93,7 @@ await mediaBrowserStore.getResumedContent()
                 <VideoPreview
                   v-focus
                   :item="item!!"
-                  class="w-[800px]"
+                  :class="`w-[800px] ${index == 0 ? 'ml-6' : ''}`"
                 />
               </CarouselItem>
             </CarouselContent>
@@ -101,18 +101,18 @@ await mediaBrowserStore.getResumedContent()
         </section>
       </div>
 
-      <div class="flex flex-col max-w-full p-4 gap-8 z-[5]">
+      <div class="flex flex-col w-full max-w-full gap-8 z-[5]">
         <!-- MEDIA -->
         <section
           id="continue-watching"
           class="inline-flex flex-col justify-start items-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider">
+          <h1 class="text-gray-400 tracking-wider pl-6">
             MEDIA
           </h1>
 
           <Carousel
-            class="relative flex max-w-[100%] justify-center"
+            class="relative flex max-w-[100%] w-full justify-center"
             :opts="{
               dragFree: true,
               skipSnaps: true,
@@ -125,7 +125,7 @@ await mediaBrowserStore.getResumedContent()
                 :key="index"
                 class="basis-1/1"
               >
-                <div class="flex flex-row gap-4">
+                <div :class="`flex flex-row gap-4 ${index == 0 ? 'ml-6' : ''}`">
                   <HomeCarouselItem
                     :id="view.Id"
                     v-focus
@@ -138,24 +138,6 @@ await mediaBrowserStore.getResumedContent()
           </Carousel>
         </section>
       </div>
-
-      <!-- My Media Section -->
-      <section class="flex flex-col max-w-full p-4 gap-8">
-        <div
-          class="eyecatch-bar w-full h-[180px] relative bg-[#1e2023] rounded-lg overflow-hidden"
-        >
-          <img
-            src="~/assets/svg/waves.svg"
-            class="absolute w-full h-full rounded-lg overflow-hidden object-cover"
-          >
-
-          <div
-            class="flex justify-center items-center absolute w-full h-full font-bold text-6xl backdrop backdrop-blur-[8px] rounded-lg"
-          >
-            <span>Your Media</span>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
 </template>

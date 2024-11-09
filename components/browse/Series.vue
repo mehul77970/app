@@ -33,14 +33,14 @@ const getSeasonImage = (season: string) =>
   >
     <template #sections>
       <section
-        class="inline-flex flex-col justify-start items-start max-w-full gap-4 p-4 mt-[72px]"
+        class="inline-flex flex-col justify-start pb-4 items-start max-w-full gap-4 mt-[72px] w-full"
       >
-        <h1 class="text-gray-400 tracking-wider">
+        <h1 class="text-gray-400 tracking-wider pl-6">
           SEASONS
         </h1>
 
         <Carousel
-          class="relative flex max-w-[100%] justify-center z-[2]"
+          class="relative flex w-[100%] max-w-[100%] justify-start z-[2]"
           :opts="{
             dragFree: true,
             skipSnaps: true,
@@ -49,12 +49,12 @@ const getSeasonImage = (season: string) =>
         >
           <CarouselContent
             v-focus-section
-            class="items-end"
+            class="items-end w-full"
           >
             <CarouselItem
               v-for="(season, index) in seasons"
               :key="index"
-              class="basis-1/1"
+              :class="`basis-1/1 ${index == 0 ? 'ml-6' : ''}`"
             >
               <div class="flex flex-row gap-4">
                 <NuxtLink

@@ -15,7 +15,7 @@ const { carouselRef, orientation } = useCarousel()
 <template>
   <div
     ref="carouselRef"
-    class="overflow-hidden"
+    class="overflow-hidden w-full"
   >
     <div
       :class="

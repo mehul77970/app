@@ -84,7 +84,7 @@ const goBack = () => {
           class="m-4 absolute selectable"
           variant="ghost"
           size="icon"
-          @click="goBack"
+          @click.stop="goBack"
         >
           <PhArrowArcLeft
             :size="24"

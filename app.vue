@@ -38,14 +38,20 @@ onMounted(() => {
     let lastResize = 0
     root.style.transition = 'opacity 250ms ease'
     onAppResize(() => {
+      console.log('Resized backend resize event...')
       const resizeTime = performance.now()
-      if (resizeTime < lastResize + 20) return
+      if (resizeTime < lastResize + 20) {
+        console.log('Last resize event just happened! Ignoring this one...')
+        return
+      }
       if (prevResizeTimeout) clearTimeout(prevResizeTimeout)
+      console.log('Setting window opacity to 0 during resize')
       root.style.opacity = '0'
 
       lastResize = resizeTime
       prevResizeTimeout = setTimeout(() => {
-        root.style.opacity = '100'
+        root.style.opacity = '1'
+        console.log('Window opacity has been reset to 1')
       }, 150)
     })
   }

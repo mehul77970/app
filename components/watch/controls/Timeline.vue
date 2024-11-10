@@ -34,6 +34,8 @@ const trickplay = ref({
   info: null as null | TrickplayInfo,
   offsetX: 0,
   offsetY: 0,
+  height: 0,
+  width: 0,
   image: '',
 })
 
@@ -120,6 +122,8 @@ onMounted(() => {
     const t = Object.values(Object.values(info.Trickplay)[0])[0]
 
     console.log('Trickplay should be avaliable')
+    trickplay.value.height = t.Height || 0
+    trickplay.value.width = t.Width || 0
     trickplay.value.enabled = true
     trickplay.value.info = t
   }
@@ -196,7 +200,7 @@ const updateTrickplayTooltip = (milliseconds: number) => {
 
       <div class="inline-flex flex-col justify-center items-center">
         <div
-          class="addtional-info w-full inline-flex justify-start items-center absolute"
+          class="additional-info w-full inline-flex justify-start items-center absolute"
         >
           <div
             class="h-2 bg-black/50 rounded-lg absolute"
@@ -242,7 +246,7 @@ const updateTrickplayTooltip = (milliseconds: number) => {
               >
                 <div
                   v-if="trickplay.enabled"
-                  :style="`width: 320px; height: 180px; background-image: url(${trickplay.image}); background-position-x: ${trickplay.offsetX}px; background-position-y: ${trickplay.offsetY}px`"
+                  :style="`width: ${trickplay.width}px; height: ${trickplay.height}px; background-image: url(${trickplay.image}); background-position-x: ${trickplay.offsetX}px; background-position-y: ${trickplay.offsetY}px`"
                 />
                 <div
                   class="absolute bottom-2 bg-popover/50 backdrop-blur-md rounded-lg px-3 py-2 font-semibold justify-center text-center"

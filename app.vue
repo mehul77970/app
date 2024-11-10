@@ -63,6 +63,7 @@ deviceStore.testSetDeviceProfile()
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <LazyToastNotifications />
   </div>
 </template>
 
@@ -70,6 +71,7 @@ deviceStore.testSetDeviceProfile()
 .os-scrollbar-handle {
   @apply bg-primary/50 !w-[3px] hover:!w-2 hover:!bg-primary/85 transition-all duration-200 ease-in;
 }
+
 .os-scrollbar-vertical {
   right: 2px;
 }

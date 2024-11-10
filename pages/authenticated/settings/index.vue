@@ -37,9 +37,7 @@ await serverStore.testServerURL(serverStore.url)
 
               <SettingsServerRestart />
 
-              <Button variant="destructive" class="flex-grow">
-                Shutdown
-              </Button>
+              <SettingsServerShutdown />
             </div>
           </div>
         </CardContent>

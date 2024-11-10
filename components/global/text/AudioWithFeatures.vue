@@ -1,11 +1,12 @@
 <script setup lang="ts">
-const { audio } = defineProps<{ audio: AudioSource }>()
+const { audio, featureOnly = false } = defineProps<{ audio: AudioSource, featureOnly?: boolean }>()
 </script>
 
 <template>
   <span class="inline-flex items-center justify-center">
-    {{ audio.title }}
-
+    <template v-if="!featureOnly">
+      {{ audio.title }}
+    </template>
     <IconDolbyDigital
       v-if="audio.dolbyAudio"
       class="ml-2 h-4 mt-1"

@@ -21,6 +21,11 @@ const nativeEnviroment = computed(() => deviceStore.nativeEnviroment)
           <SettingsLink :to="{ name: 'authenticated-settings' }">
             General
           </SettingsLink>
+
+          <SettingsLink :to="{ name: 'authenticated-settings-browse' }">
+            Browse
+          </SettingsLink>
+
           <SettingsLink :to="{ name: 'authenticated-settings-player' }">
             Player
           </SettingsLink>

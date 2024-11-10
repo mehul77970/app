@@ -17,7 +17,7 @@ const restart = async () => {
       try {
         await serverStore.testServerURL(serverStore.url)
 
-        location.reload()
+        location.href = '/authenticated/settings'
       }
       catch {
         return

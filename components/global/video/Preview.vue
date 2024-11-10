@@ -31,6 +31,7 @@ let previewTimeout = null as NodeJS.Timeout | null
 const video = ref(null as null | HTMLMediaElement)
 const preview = ref(null as null | HTMLElement)
 
+const hovered = ref(false)
 const playing = ref(false)
 const loading = ref(false)
 const error = ref(null as string | null)
@@ -44,8 +45,10 @@ const onPreviewVideo = () => {
   if (player) return
   if (playing.value) return
 
+  hovered.value = true
   // Create a timeout to wait until trying to load preview
   previewTimeout = setTimeout(async () => {
+    hovered.value = false
     // If video element doesn't exist don't continue
     if (!video.value) return
 
@@ -133,10 +136,12 @@ const onPreviewVideo = () => {
 
     // Seek Video
     video.value.currentTime = calculateStartPosition()
-  }, 500)
+  }, 2000)
 }
 
 const onStopPreviewVideo = () => {
+  hovered.value = false
+
   if (error.value || dontUnload) return
 
   if (previewTimeout) {
@@ -246,7 +251,7 @@ const NaNAsUndefined = (num?: number) => {
 <template>
   <div
     ref="preview"
-    class="video-preview aspect-video lg:h-fit lg:max-w-[600px] max-w-[100%] inline-flex flex-col justify-center items-center relative group cursor-pointer rounded-lg select-none selectable"
+    class="video-preview aspect-video group ease-in lg:h-fit lg:max-w-[600px] max-w-[100%] inline-flex flex-col justify-center items-center relative group cursor-pointer rounded-lg select-none selectable"
     @mouseenter="onPreviewVideo"
     @focus="onPreviewVideo"
     @blur="onStopPreviewVideo"
@@ -307,10 +312,18 @@ const NaNAsUndefined = (num?: number) => {
         </div>
       </Transition>
 
+      <Transition name="fade-short-slide-reverse">
+        <div
+          v-if="hovered"
+          class="absolute inline-flex justify-center w-full h-full bg-gradient-to-b from-black/20"
+        >
+          <div class="h-1 mt-2 w-[20%] bg-primary rounded-lg" />
+        </div>
+      </Transition>
       <Transition name="fade">
         <div
           v-if="!playing"
-          class="inline-flex flex-col justify-end w-full gap-2 p-8 absolute h-full"
+          class="inline-flex flex-col justify-end w-full gap-2 text-primary ease-in p-8 absolute h-full"
         >
           <div class="inline-flex justify-between items-end flex-wrap">
             <div class="inline-flex flex-col gap-1 w-full">
@@ -389,7 +402,7 @@ const NaNAsUndefined = (num?: number) => {
       <Transition name="fade">
         <div
           v-if="error"
-          class="inline-flex flex-col w-full h-full justify-center items-center backdrop-blur-sm backdrop-saturate-0 rounded-lg text-red-500"
+          class="absolute inline-flex flex-col w-full h-full justify-center items-center backdrop-blur-sm backdrop-saturate-0 rounded-lg text-red-500"
         >
           <PhCloudX
             weight="fill"

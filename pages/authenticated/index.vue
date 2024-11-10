@@ -21,7 +21,7 @@ await mediaBrowserStore.getResumedContent()
     <!-- TODO: Make this a component. -->
     <div
       v-if="firstResumed"
-      class="flex flex-col justify-center items-center md:items-start h-[80vh] w-full px-24"
+      class="flex flex-col justify-center items-center md:items-start h-[80vh] fade-gradient w-full px-24"
     >
       <img
         :src="
@@ -32,7 +32,7 @@ await mediaBrowserStore.getResumedContent()
             undefined,
           )
         "
-        class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0 fade-gradient"
+        class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0"
       >
       <div class="inline-flex flex-col gap-8 show-content z-[2]">
         <div class="inline-flex flex-col gap-2">
@@ -91,7 +91,7 @@ await mediaBrowserStore.getResumedContent()
                 <VideoPreview
                   v-focus
                   :item="item!!"
-                  :class="`w-[800px] ${index == 0 ? 'ml-6' : ''}`"
+                  :class="`w-[800px] ${index == 0 ? 'ml-6' : ''} ${index == resumed.length-1 ? 'mr-6' : ''}`"
                 />
               </CarouselItem>
             </CarouselContent>
@@ -122,7 +122,7 @@ await mediaBrowserStore.getResumedContent()
                 :key="index"
                 class="basis-1/1"
               >
-                <div :class="`flex flex-row gap-4 ${index == 0 ? 'ml-6' : ''}`">
+                <div :class="`flex flex-row gap-4 ${index == 0 ? 'ml-6' : ''} ${index == views.length-1 ? 'mr-6' : ''}`">
                   <HomeCarouselItem
                     :id="view.Id"
                     v-focus

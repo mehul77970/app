@@ -10,7 +10,7 @@ const admin = computed(() => userStore.user?.Policy?.IsAdministrator)
   <div class="relative">
     <div
       v-if="!admin"
-      class="absolute z-[2] w-full h-full inline-flex flex-col gap-2 text-yellow-500 cursor-not-allowed select-none justify-center items-center backdrop-blur-sm backdrop-saturate-50"
+      class="absolute z-[2] w-full h-full inline-flex flex-col gap-2 text-yellow-500 cursor-not-allowed text-center break-all select-none justify-center items-center backdrop-blur-sm backdrop-saturate-50"
     >
       <PhShieldSlash
         class="size-12"

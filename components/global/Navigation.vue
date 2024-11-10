@@ -19,12 +19,10 @@ await mediaStore.getUserViews()
 <template>
   <div
     v-if="currentRoute.value.name !== 'authenticated-new-watch-id'"
-    v-focus-section
     class="fixed z-[5] flex min-w-[90%] bg-[#10121385] backdrop-blur-sm backdrop-saturate-150 mt-3 rounded-xl items-center justify-start py-3 px-8 gap-4 opacity-0 animate-out fill-mode-forwards duration-500 ease"
   >
     <!-- <div class="inline-flex justify-between items-center w-[95%] dark:bg-white/10 rounded-lg px-3 py-2 gap-2"> -->
     <NuxtLink
-      v-focus
       :to="{ name: 'authenticated' }"
       class="md:inline-flex justify-center items-center group hidden"
     >
@@ -104,7 +102,6 @@ await mediaStore.getUserViews()
       <NuxtLink
         v-for="(view, index) in views"
         :key="index"
-        v-focus
         :to="{ name: 'authenticated-browse-id', params: { id: view.Id } }"
         class="inline-flex justify-center items-center group"
       >

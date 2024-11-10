@@ -28,6 +28,21 @@
   opacity: 0;
 }
 
+
+.fade-short-left-enter-active,
+.fade-short-left-leave-active {
+  transition: all 0.1s ease-out;
+}
+.fade-short-left-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.fade-short-left-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
 .fade-short-slide-enter-active,
 .fade-short-slide-leave-active {
   transition: all 0.2s ease-out;
@@ -36,4 +51,15 @@
 .fade-short-slide-leave-to {
   opacity: 0;
   transform: translateY(10px);
+}
+
+
+.fade-short-slide-reverse-enter-active,
+.fade-short-slide-reverse-leave-active {
+  transition: all 0.1s ease-out;
+}
+.fade-short-slide-reverse-enter-from,
+.fade-short-slide-reverse-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }

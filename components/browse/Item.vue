@@ -5,7 +5,7 @@ import {
   PhTreeStructure,
 } from '@phosphor-icons/vue'
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
-import { truncate } from '@/lib/utils'
+import { truncate, cn } from '@/lib/utils'
 import GlobalImageWithPlaceholder from '@/components/global/ImageWithPlaceholder.vue'
 import {
   ContextMenu,
@@ -20,17 +20,19 @@ const {
   type = 'All',
   count = 1,
   item,
+  basis = useSettingsStore().browse.basis,
 } = defineProps<{
   name?: string
   id?: string
   type?: string
   count?: number
   item: BaseItemDto
+  basis?: number
 }>()
 
 const mediaBrowserStore = useMediaBrowserStore()
 
-const image = mediaBrowserStore.generateImageURL(id, undefined, 430, 300, 50)
+const image = mediaBrowserStore.generateImageURL(id, undefined, 430, undefined, 50)
 
 const metadataDialogOpen = ref(false)
 const aboutDialogOpen = ref(false)
@@ -71,9 +73,10 @@ const openRefreshDialog = () => {
     />
   </Dialog>
   <ContextMenu>
-    <ContextMenuTrigger>
+    <ContextMenuTrigger as-child>
       <NuxtLink
         class="flex flex-col gap-1 px-4 py-2 group cursor-pointer"
+        :style="`${basis > 0 ? `width: ${1/basis*100}%;` : 'width: auto;'}`"
         :to="{
           name: `authenticated-browse-${type.toLowerCase()}-id`,
           params: { id },
@@ -82,7 +85,7 @@ const openRefreshDialog = () => {
       >
         <div class="inline-flex justify-center items-center">
           <span
-            class="text-center text-sm lg:text-[15px] font-semibold transition-all duration-250 ease-in-out group-hover:text-white/50 group-focus-visible:text-white/50 name-transition"
+            :class="cn('text-center text-sm lg:text-[15px] text-ellipsis max-w-full break-all font-semibold transition-all duration-250 ease-in-out group-hover:text-white/50 group-focus-visible:text-white/50 name-transition', basis <= 6 ? 'lg:text-2xl text-sm' : '')"
           >{{
             truncate(name, {
               length: 18,
@@ -91,18 +94,18 @@ const openRefreshDialog = () => {
           }}</span>
         </div>
         <div
-          class="flex flex-col flex-grow-1 justify-start items-center relative rounded-md group"
+          :class="cn('flex flex-col mt-auto w-full items-center relative rounded-md group', basis == 0 ? 'h-full' : '')"
         >
           <GlobalImageWithPlaceholder
-            v-if="image"
+            v-if="item.ImageBlurHashes?.Primary"
             :src="image"
-            class-name="object-cover h-[430px] w-[300px] rounded-md transition-all duration-250 ease-in-out group-hover:scale-[102%] group-focus-visible:scale-[102%] browse-card-transition selectable"
+            class-name="h-full w-full object-cover  rounded-md aspect-portrait transition-all duration-250 ease-in-out group-hover:scale-[102%] group-focus-visible:scale-[102%] browse-card-transition selectable"
           />
 
           <img
             v-else
             src="/placeholder.svg"
-            class="object-cover h-[430px] w-[300px] rounded-md transition-all duration-250 ease-in-out hover:scale-[102%] selectable"
+            class="max-h-[500px] w-fit object-cover rounded-md aspect-portrait transition-all duration-250 ease-in-out group-hover:scale-[102%] group-focus-visible:scale-[102%] browse-card-transition selectable"
           >
           <div
             class="w-[20%] h-1 bg-transparent absolute top-2 z-5 transition-all duration-250 rounded-lg group-hover:bg-white/50"

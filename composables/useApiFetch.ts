@@ -1,5 +1,5 @@
 import type { UseFetchOptions } from 'nuxt/app'
-
+import type { FetchError } from 'ofetch'
 // TODO: Handle URL
 export async function useApiFetch<T>(
   path: string,
@@ -18,7 +18,21 @@ export async function useApiFetch<T>(
 
     return data.value! as T
   }
+  try {
+    const data = await $fetch<T>(url, options as any); // eslint-disable-line
+    return data! as T
+  }
+  catch (e: unknown) {
+    throw new ApiFetchError(e, (e as FetchError).response?.json)
+  }
+}
 
-  const data = await $fetch<T>(url, options as any); // eslint-disable-line
-  return data! as T
+export class ApiFetchError extends Error {
+  json: (() => Promise<unknown> | undefined) | undefined
+
+  constructor(error: unknown, json: (() => Promise<unknown> | undefined) | undefined) {
+    console.error(error)
+    super((error as Error).message)
+    this.json = json
+  }
 }

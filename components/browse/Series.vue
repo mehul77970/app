@@ -52,7 +52,7 @@ const getSeasonImage = (season: string) =>
             <CarouselItem
               v-for="(season, index) in seasons"
               :key="index"
-              :class="`basis-1/1 ${index == 0 ? 'ml-6' : ''}`"
+              :class="`basis-1/1 ${index == 0 ? 'ml-6' : ''} ${index == seasons.length-1 ? 'mr-6' : ''}`"
             >
               <div class="flex flex-row gap-4">
                 <NuxtLink

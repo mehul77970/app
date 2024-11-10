@@ -86,6 +86,16 @@ export const useServerStore = defineStore('server', {
       })
     },
 
+    async shutdownServer() {
+      const auth = useAuthenticationStore()
+
+      await useApiFetch(`System/Shutdown`, {
+        method: 'POST',
+        headers: {
+          Authorization: auth.header,
+        },
+      })
+    },
     setServerURL(url: string) {
       this._url = url
     },

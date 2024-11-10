@@ -8,11 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Table, TableBody } from '@/components/ui/table'
+import BrowseListItem from '@/components/browse/ListItem.vue'
 
 definePageMeta({ layout: 'authenticated' })
 
 const route = useRoute()
 const mediaBrowser = useMediaBrowserStore()
+const settingsStore = useSettingsStore()
+
+const { browse } = storeToRefs(settingsStore)
 
 const fetchItems = async () => {
   return await mediaBrowser.getItemsOfView(route.params.id as string, 50)
@@ -44,37 +49,51 @@ const refreshView = async () => {
             class="rounded-tr-none rounded-br-none"
           >
             <PhGridNine
+              v-if="browse.layout == 'grid'"
               class="size-6"
               weight="fill"
+            />
+            <PhList
+              v-else
+              class="size-6"
+              weight="bold"
             />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>
-            Item Display
+          <DropdownMenuLabel
+            as-child
+          >
+            <NuxtLink
+              class="text-primary cursor-pointer hover:underline hover:text-primary/75"
+              :to="{ name: 'authenticated-settings-browse' }"
+            >
+              Item Layout
+            </NuxtLink>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem class="align-middle items-center gap-2">
+          <DropdownMenuCheckboxItem
+            class="align-middle items-center gap-2"
+            :checked="browse.layout == 'grid'"
+            @click="browse.layout = 'grid'"
+          >
             <PhGridNine
               class="size-4"
               weight="fill"
             />
             Grid
-          </DropdownMenuItem>
-          <DropdownMenuItem class="align-middle items-center gap-2">
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            class="align-middle items-center gap-2"
+            :checked="browse.layout == 'list'"
+            @click="browse.layout = 'list'"
+          >
             <PhList
               class="size-4"
               weight="bold"
             />
             List
-          </DropdownMenuItem>
-          <DropdownMenuItem class="align-middle items-center gap-2">
-            <PhGridNine
-              class="size-4"
-              weight="fill"
-            />
-            Thumbnail
-          </DropdownMenuItem>
+          </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button
@@ -128,24 +147,45 @@ const refreshView = async () => {
       </DropdownMenu>
     </div>
 
-    <div
-      id="browse-items"
-      v-focus-section
-      class="inline-flex flex-wrap max-w-full justify-center items-center overflow-y-auto"
-    >
-      <BrowseItem
-        v-for="(item, index) in items"
-        :id="item.Id!!"
-        :key="index"
-        v-focus
-        :name="item.Name!!"
-        :data-id="item.Id!!"
-        :item
-        :data-name="item.Name"
-        :data-index="index"
-        :type="item.Type"
-        :count="item.UserData?.UnplayedItemCount || 0"
-      />
-    </div>
+    <TransitionGroup name="fade-short-left">
+      <div
+        v-if="browse.layout === 'grid'"
+        id="browse-items-grid"
+        v-focus-section
+        class="inline-flex max-auto flex-wrap max-w-full justify-center items-stretch overflow-y-auto overflow-x-hidden"
+      >
+        <BrowseItem
+          v-for="(item, index) in items"
+          :id="item.Id!!"
+          :key="index"
+          v-focus
+          :name="item.Name!!"
+          :data-id="item.Id!!"
+          :item
+          :data-name="item.Name"
+          :data-index="index"
+          :type="item.Type"
+          :count="item.UserData?.UnplayedItemCount || 0"
+        />
+      </div>
+
+      <Table v-if="browse.layout === 'list'">
+        <TableBody>
+          <BrowseListItem
+            v-for="(item, index) in items"
+            :id="item.Id!!"
+            :key="index"
+            v-focus
+            :name="item.Name!!"
+            :data-id="item.Id!!"
+            :item
+            :data-name="item.Name"
+            :data-index="index"
+            :type="item.Type"
+            :count="item.UserData?.UnplayedItemCount || 0"
+          />
+        </TableBody>
+      </Table>
+    </TransitionGroup>
   </div>
 </template>

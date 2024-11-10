@@ -11,7 +11,7 @@ import {
   <div>
     <NotificationGroup>
       <div
-        class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none z-50"
+        class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none z-[99999]"
       >
         <div class="w-full max-w-sm">
           <Notification
@@ -78,25 +78,25 @@ import {
       <div
         class="fixed inset-x-0 bottom-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none"
       >
-        <div class="w-full max-w-sm">
+        <div class="w-[450px] max-w-full">
           <Notification
             v-slot="{ notifications }"
             enter="ease-out duration-300 transition"
             enter-from="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"
             enter-to="translate-y-0 opacity-100 sm:translate-x-0"
-            leave="transition ease-in duration-500"
+            leave="transition ease-in duration-200"
             leave-from="opacity-100"
-            leave-to="opacity-0"
+            leave-to="translate-x-4 opacity-0"
             move="transition duration-500"
             move-delay="delay-300"
           >
             <div
               v-for="notification in notifications"
               :key="notification.id"
-              class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-[#1e2023] rounded-lg shadow-md"
+              class="flex w-full mx-auto mt-4 overflow-hidden bg-[#1e2023] rounded-lg shadow-md"
             >
               <template v-if="notification.type == 'error'">
-                <div class="flex items-center justify-center w-12 bg-red-500">
+                <div class="flex items-center justify-center flex-grow max-w-[100px] px-4 bg-red-500">
                   <PhXCircle
                     type="fill"
                     :size="24"
@@ -116,7 +116,7 @@ import {
               </template>
 
               <template v-if="notification.type == 'info'">
-                <div class="flex items-center justify-center w-12 bg-blue-500">
+                <div class="flex items-center justify-center max-w-[100px] px-4 bg-blue-500">
                   <PhExclamationMark
                     type="bold"
                     :size="24"
@@ -136,7 +136,7 @@ import {
               </template>
 
               <template v-if="notification.type == 'success'">
-                <div class="flex items-center justify-center w-12 bg-green-500">
+                <div class="flex items-center justify-center max-w-[100px] px-4 bg-green-500">
                   <PhCheckCircle
                     type="fill"
                     :size="24"

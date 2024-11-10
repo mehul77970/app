@@ -94,7 +94,7 @@ onMounted(() => {
             <CarouselItem
               v-for="(episode, index) in episodes"
               :key="index"
-              :class="`basis-1/1 lg:basis-1/4 ${index == 0 ? 'ml-6' : ''}`"
+              :class="`basis-1/1 lg:basis-1/4 ${index == 0 ? 'ml-6' : ''} ${index == episodes.length-1 ? 'mr-6' : ''}`"
             >
               <div>
                 <NuxtLink

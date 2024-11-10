@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Carousel,
   CarouselContent,
@@ -45,7 +44,6 @@ const getSeasonImage = (season: string) =>
             dragFree: true,
             skipSnaps: true,
           }"
-          :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'y' })]"
         >
           <CarouselContent
             v-focus-section

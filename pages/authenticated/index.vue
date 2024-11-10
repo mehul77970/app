@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Carousel,
   CarouselContent,
@@ -82,7 +81,6 @@ await mediaBrowserStore.getResumedContent()
           <Carousel
             class="relative flex max-w-[100%] justify-center items-center gap-4"
             :opts="{ align: 'center' }"
-            :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'y' })]"
           >
             <CarouselContent v-focus-section>
               <CarouselItem
@@ -117,7 +115,6 @@ await mediaBrowserStore.getResumedContent()
               dragFree: true,
               skipSnaps: true,
             }"
-            :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'y' })]"
           >
             <CarouselContent v-focus-section>
               <CarouselItem

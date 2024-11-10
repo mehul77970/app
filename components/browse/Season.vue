@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import type { EmblaCarouselType } from 'embla-carousel'
 import {
   Carousel,
@@ -87,7 +86,6 @@ onMounted(() => {
             dragFree: true,
             skipSnaps: false,
           }"
-          :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'y' })]"
         >
           <CarouselContent
             v-focus-section

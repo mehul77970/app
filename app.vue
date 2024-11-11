@@ -10,7 +10,6 @@ import { onAppResize } from './native/app/events'
 const deviceStore = useDeviceStore()
 
 let carouselRotate: NodeJS.Timeout | undefined
-
 onMounted(() => {
   // optional: use the ClickScrollPlugin to make the option "scrollbars.clickScroll: true" available
   OverlayScrollbars.plugin(ClickScrollPlugin)
@@ -27,7 +26,6 @@ onMounted(() => {
     window.dispatchEvent(event)
   }, 5000)
 
-  // @ts-expect-error Check for wails
   if (window.runtime || window.wails) {
     const root = document.documentElement
     console.log('Running on native desktop app, special features will be avaliable :0')

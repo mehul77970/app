@@ -14,6 +14,7 @@ const views = computed(() => mediaStore.views)
 const currentRoute = computed(() => router.currentRoute)
 
 await mediaStore.getUserViews()
+userStore.getUser()
 </script>
 
 <template>

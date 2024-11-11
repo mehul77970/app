@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
 
       const server = useServerStore()
 
-      const { data, error } = useFetch<UserDto>(
+      const { data, error } = await useFetch<UserDto>(
         `${server.url}/Users/${this.user!.Id!}`,
         {
           headers: {
@@ -52,6 +52,7 @@ export const useUserStore = defineStore('user', {
     },
   },
   persist: {
+    storage: localStorage,
     pick: ['user'],
   },
 })

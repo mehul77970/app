@@ -4,7 +4,10 @@ export default defineNuxtRouteMiddleware(async () => {
   const serverStore = useServerStore()
   const server = useCookie('server')
 
-  console.log('Server Middleware', { cookie: server, store: serverStore })
+  if (window?.wails) {
+    await useNativeStorage()
+  }
+
   if (!server.value && !serverStore.url) return setup()
 
   const authentication = useCookie('authentication')

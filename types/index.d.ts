@@ -8,6 +8,8 @@ declare global {
     }
     opr: unknown
     opera: unknown
+    wails: unknown
+    runtime: unknown
   }
 
   interface opr {

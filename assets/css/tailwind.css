@@ -106,9 +106,6 @@ body,
   box-shadow: none;
 }
 
-.aspect-portrait {
-  aspect-ratio: 2/3;
-}
-/* .selectable {
+.selectable {
   @apply border-[3px] border-solid border-transparent group-focus-visible:scale-[101%] focus-visible:border-blue-400  group-focus-visible:border-blue-400;
-} */
+}

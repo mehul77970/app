@@ -1,89 +1,92 @@
 <script setup lang="ts">
-import { PhWarning } from "@phosphor-icons/vue";
-import { ClickScrollPlugin, OverlayScrollbars } from "overlayscrollbars";
-import { setBackground } from "./native/app/App";
-import { onAppResize } from "./native/app/events";
-import "overlayscrollbars/overlayscrollbars.css";
+import { PhWarning } from '@phosphor-icons/vue'
+import { ClickScrollPlugin, OverlayScrollbars } from 'overlayscrollbars'
+import { setBackground } from './native/app/App'
+import { onAppResize } from './native/app/events'
+import 'overlayscrollbars/overlayscrollbars.css'
 
-const deviceStore = useDeviceStore();
-const l = useLoggerStore();
-let carouselRotate: NodeJS.Timeout | undefined;
+const deviceStore = useDeviceStore()
+const l = useLoggerStore()
+let carouselRotate: NodeJS.Timeout | undefined
 onMounted(() => {
   // optional: use the ClickScrollPlugin to make the option "scrollbars.clickScroll: true" available
-  OverlayScrollbars.plugin(ClickScrollPlugin);
+  OverlayScrollbars.plugin(ClickScrollPlugin)
 
   OverlayScrollbars(document.body, {
     scrollbars: {
       clickScroll: true,
     },
-  });
+  })
 
-  console.log("Am i working", OverlayScrollbars);
-  const event = new Event("carousel-update");
+  console.log('Am i working', OverlayScrollbars)
+  const event = new Event('carousel-update')
 
   carouselRotate = setInterval(() => {
-    window.dispatchEvent(event);
-  }, 5000);
+    window.dispatchEvent(event)
+  }, 5000)
 
   if (window.runtime || window.wails) {
-    const root = document.documentElement;
+    const root = document.documentElement
     l.$log({
-      type: "info",
-      location: "App",
+      type: 'info',
+      location: 'App',
       message:
-        "Running on native desktop app, special features will be avaliable :0",
-    });
-    deviceStore.nativeEnviroment = true;
-    setBackground(16, 18, 19);
+        'Running on native desktop app, special features will be avaliable :0',
+    })
+    deviceStore.nativeEnviroment = true
+    setBackground(16, 18, 19)
 
-    let prevResizeTimeout: NodeJS.Timeout | undefined;
-    let lastResize = 0;
-    root.style.transition = "opacity 250ms ease";
+    let prevResizeTimeout: NodeJS.Timeout | undefined
+    let lastResize = 0
+    root.style.transition = 'opacity 250ms ease'
     onAppResize(() => {
-      l.$log({ location: "App", message: "Received backend resize event.." });
+      l.$log({ location: 'App', message: 'Received backend resize event..' })
 
-      const resizeTime = performance.now();
+      const resizeTime = performance.now()
       if (resizeTime < lastResize + 20) {
         l.$log({
-          location: "App",
-          message: "A resize event just happened, ignoring this one...",
-        });
-        return;
+          location: 'App',
+          message: 'A resize event just happened, ignoring this one...',
+        })
+        return
       }
-      if (prevResizeTimeout) clearTimeout(prevResizeTimeout);
+      if (prevResizeTimeout) clearTimeout(prevResizeTimeout)
       l.$log({
-        location: "App",
-        message: "Setting window opacity to 0 during resize",
-      });
-      root.style.opacity = "0";
+        location: 'App',
+        message: 'Setting window opacity to 0 during resize',
+      })
+      root.style.opacity = '0'
 
-      lastResize = resizeTime;
+      lastResize = resizeTime
       prevResizeTimeout = setTimeout(() => {
-        root.style.opacity = "1";
+        root.style.opacity = '1'
         l.$log({
-          location: "App",
-          message: "Window opacity reset back to 1 (normal)",
-        });
-      }, 150);
-    });
+          location: 'App',
+          message: 'Window opacity reset back to 1 (normal)',
+        })
+      }, 150)
+    })
   }
-});
+})
 
 onUnmounted(() => {
-  clearInterval(carouselRotate);
-});
+  clearInterval(carouselRotate)
+})
 
 const hardReload = () => {
-  window.location.href = "/authenticated/";
-};
+  window.location.href = '/authenticated/'
+}
 
-deviceStore.testSetDeviceProfile();
+const reportError = (e: unknown) => {
+  l.$log({ type: 'error', optionalParams: [e] })
+}
+deviceStore.testSetDeviceProfile()
 </script>
 
 <template>
   <div id="shadfin-ui">
     <NuxtLayout>
-      <NuxtErrorBoundary>
+      <NuxtErrorBoundary @error="reportError">
         <LazyNuxtPage />
 
         <template #error="{ error }">
@@ -91,7 +94,10 @@ deviceStore.testSetDeviceProfile();
             <Alert
               class="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
             >
-              <PhWarning class="size-6" weight="fill" />
+              <PhWarning
+                class="size-6"
+                weight="fill"
+              />
               <AlertTitle
                 class="inline-flex gap-2 justify-center items-center ml-3"
               >
@@ -103,7 +109,11 @@ deviceStore.testSetDeviceProfile();
               </AlertDescription>
             </Alert>
             <div class="inline-flex justify-center mt-4 items-center w-full">
-              <Button class="w-full" variant="outline" @click="hardReload">
+              <Button
+                class="w-full"
+                variant="outline"
+                @click="hardReload"
+              >
                 Reload Page
               </Button>
             </div>

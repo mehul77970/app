@@ -3,24 +3,30 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
-import { ticksToSeconds } from "@/composables/ticksToSeconds";
-import { formatTime } from "@/lib/utils";
+} from '@/components/ui/carousel'
+import { ticksToSeconds } from '@/composables/ticksToSeconds'
+import { formatTime } from '@/lib/utils'
 
-const l = useLoggerStore();
-const mediaBrowserStore = useMediaBrowserStore();
+const l = useLoggerStore()
+const mediaBrowserStore = useMediaBrowserStore()
 
-const views = computed(() => mediaBrowserStore.views);
-const resumed = computed(() => mediaBrowserStore.resumed);
-const firstResumed = computed(() => resumed.value[0]!);
+const views = computed(() => mediaBrowserStore.views)
+const resumed = computed(() => mediaBrowserStore.resumed)
+const firstResumed = computed(() => resumed.value.length > 0
+  ? resumed.value[0]
+  : {
+      Name: 'Start Watching',
+      Id: '0',
+      ProductionYear: new Date().getFullYear(),
+    })
 
-await mediaBrowserStore.getResumedContent();
+await mediaBrowserStore.getResumedContent()
 
 onMounted(() => {
   l.$log({
-    optionalParams: [useServerImage(firstResumed.value, { type: "Primary" })],
-  });
-});
+    optionalParams: [useServerImage(firstResumed.value, { type: 'Primary' })],
+  })
+})
 </script>
 
 <template>
@@ -33,7 +39,7 @@ onMounted(() => {
       <img
         :src="useServerImage(firstResumed)"
         class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0"
-      />
+      >
       <div class="inline-flex flex-col gap-8 show-content z-[2]">
         <div class="inline-flex flex-col gap-2">
           <img
@@ -42,7 +48,7 @@ onMounted(() => {
             "
             loading="lazy"
             width="700"
-          />
+          >
 
           <div class="h-1 w-full rounded-lg bg-white/50" />
         </div>
@@ -68,7 +74,9 @@ onMounted(() => {
           id="continue-watching"
           class="inline-flex flex-col justify-startitems-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider pl-6">CONTINUE WATCHING</h1>
+          <h1 class="text-gray-400 tracking-wider pl-6">
+            CONTINUE WATCHING
+          </h1>
 
           <Carousel
             class="relative flex max-w-[100%] justify-center items-center gap-4"
@@ -97,7 +105,9 @@ onMounted(() => {
           id="continue-watching"
           class="inline-flex flex-col justify-start items-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider pl-6">MEDIA</h1>
+          <h1 class="text-gray-400 tracking-wider pl-6">
+            MEDIA
+          </h1>
 
           <Carousel
             class="relative flex max-w-[100%] w-full justify-center"

@@ -1,53 +1,53 @@
 <script setup lang="ts">
-import { PhPlay } from "@phosphor-icons/vue";
-import { timeline } from "motion";
+import { PhPlay } from '@phosphor-icons/vue'
+import { animate } from 'motion'
 
-const { name } = defineProps<{ name: string }>();
-const model = defineModel<boolean>();
+const { name } = defineProps<{ name: string }>()
+const model = defineModel<boolean>()
 
 onMounted(() => {
-  const loader = timeline(
+  const loader = animate(
     [
       [
-        "#icon",
+        '#icon',
         {
           opacity: 1,
-          x: ["100%", "0%"],
-          filter: ["hue-rotate(360deg)", "hue-rotate(0deg)"],
+          x: ['100%', '0%'],
+          filter: ['hue-rotate(360deg)', 'hue-rotate(0deg)'],
         },
         { duration: 1, delay: 0 },
       ],
       [
-        "#icon",
-        { filter: ["hue-rotate(360deg)", "hue-rotate(0deg)"] },
-        { duration: 1.8, delay: -1, easing: "ease" },
+        '#icon',
+        { filter: ['hue-rotate(360deg)', 'hue-rotate(0deg)'] },
+        { duration: 1.8, delay: -1, easing: 'ease' },
       ],
       [
-        "#message",
-        { opacity: 1, x: ["-30%", "0%"] },
-        { duration: 0.8, delay: -1.5, easing: "ease-out" },
+        '#message',
+        { opacity: 1, x: ['-30%', '0%'] },
+        { duration: 0.8, delay: -1.5, easing: 'ease-out' },
       ],
-      ["#prompt", { opacity: 1, y: 50 }, { duration: 1.2, delay: 0 }],
+      ['#prompt', { opacity: 1, y: 50 }, { duration: 1.2, delay: 0 }],
     ],
     { repeat: 0 },
-  );
+  )
 
-  loader.finished.then(() => {
-    timeline(
+  loader.then(() => {
+    animate(
       [
         [
-          "#icon",
-          { filter: ["hue-rotate(360deg)", "hue-rotate(0deg)"] },
-          { duration: 5, delay: 0, easing: "linear" },
+          '#icon',
+          { filter: ['hue-rotate(360deg)', 'hue-rotate(0deg)'] },
+          { duration: 5, delay: 0, easing: 'linear' },
         ],
       ],
       { repeat: Infinity },
-    );
+    )
 
-    console.log("Load finished");
-    model.value = true;
-  });
-});
+    console.log('Load finished')
+    model.value = true
+  })
+})
 </script>
 
 <template>
@@ -63,7 +63,7 @@ onMounted(() => {
         id="icon"
         src="/shadfin_app_concept.svg"
         class="translate-x-[100%] max-h-[120px] h-[25vw]"
-      />
+      >
 
       <h1
         id="message"
@@ -79,7 +79,10 @@ onMounted(() => {
     >
       <span class="inline"> Now Playing </span>
 
-      <PhPlay weight="fill" class="h-full" />
+      <PhPlay
+        weight="fill"
+        class="h-full"
+      />
 
       <span class="font-semibold">{{ name }}</span>
     </div>

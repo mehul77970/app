@@ -5,19 +5,19 @@ import {
   type SwitchRootProps,
   SwitchThumb,
   useForwardPropsEmits,
-} from 'radix-vue'
-import { computed, type HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
+} from "radix-vue";
+import { computed, type HTMLAttributes } from "vue";
+import { cn } from "@/lib/utils";
 
 const props = defineProps<
-  SwitchRootProps & { class?: HTMLAttributes['class'] }
->()
-const emits = defineEmits<SwitchRootEmits>()
+  SwitchRootProps & { class?: HTMLAttributes["class"] }
+>();
+const emits = defineEmits<SwitchRootEmits>();
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-  return delegated
-})
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
+  const { class: _, ...delegated } = props;
+  return delegated;
+});
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>

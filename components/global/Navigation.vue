@@ -1,25 +1,26 @@
 <script setup lang="ts">
-import { PhHouse, PhMagnifyingGlass, PhList } from '@phosphor-icons/vue'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { PhHouse, PhList, PhMagnifyingGlass } from "@phosphor-icons/vue";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
-const userStore = useUserStore()
-const mediaStore = useMediaBrowserStore()
-const router = useRouter()
+const userStore = useUserStore();
+const mediaStore = useMediaBrowserStore();
+const router = useRouter();
 
-const user = computed(() => userStore.user)
+const user = computed(() => userStore.user);
 
-const views = computed(() => mediaStore.views)
+const views = computed(() => mediaStore.views);
 
-const currentRoute = computed(() => router.currentRoute)
+const currentRoute = computed(() => router.currentRoute);
 
-await mediaStore.getUserViews()
-userStore.getUser()
+mediaStore.getUserViews();
+
+userStore.getUser();
 </script>
 
 <template>
   <div
-    v-if="currentRoute.value.name !== 'authenticated-new-watch-id'"
+    v-if="currentRoute?.value?.name !== 'authenticated-new-watch-id'"
     class="fixed z-[5] flex min-w-[90%] bg-[#10121385] backdrop-blur-sm backdrop-saturate-150 mt-3 rounded-xl items-center justify-start py-3 px-8 gap-4 opacity-0 animate-out fill-mode-forwards duration-500 ease"
   >
     <!-- <div class="inline-flex justify-between items-center w-[95%] dark:bg-white/10 rounded-lg px-3 py-2 gap-2"> -->
@@ -27,10 +28,7 @@ userStore.getUser()
       :to="{ name: 'authenticated' }"
       class="md:inline-flex justify-center items-center group hidden"
     >
-      <Button
-        variant="ghost"
-        size="icon"
-      >
+      <Button variant="ghost" size="icon">
         <PhHouse
           :size="24"
           :weight="
@@ -83,8 +81,8 @@ userStore.getUser()
 
                     <div
                       v-if="
-                        currentRoute.value.name === `authenticated-browse-id`
-                          && currentRoute.value.params.id === view.Id
+                        currentRoute.value.name === `authenticated-browse-id` &&
+                        currentRoute.value.params.id === view.Id
                       "
                       class="bg-white/25 h-[3px] w-full rounded-lg"
                     />
@@ -112,8 +110,8 @@ userStore.getUser()
 
             <div
               v-if="
-                currentRoute.value.name === `authenticated-browse-id`
-                  && currentRoute.value.params.id === view.Id
+                currentRoute.value.name === `authenticated-browse-id` &&
+                currentRoute.value.params.id === view.Id
               "
               class="bg-white/25 h-[3px] w-full rounded-lg"
             />
@@ -124,14 +122,8 @@ userStore.getUser()
 
     <div class="inline-flex gap-8 items-center ml-auto">
       <!-- Global Search -->
-      <div
-        v-if="false"
-        class="search"
-      >
-        <PhMagnifyingGlass
-          :size="24"
-          weight="fill"
-        />
+      <div v-if="false" class="search">
+        <PhMagnifyingGlass :size="24" weight="fill" />
       </div>
 
       <ClientOnly>

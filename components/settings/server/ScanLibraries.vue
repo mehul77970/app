@@ -1,45 +1,43 @@
 <script setup lang="ts">
-import type { ScheduledTasksInfoMessage } from '@jellyfin/sdk/lib/generated-client'
-import { notify } from 'notiwind'
-import Radial from '~/components/ui/radial/Radial.vue'
-import type { ApiFetchError } from '~/composables/useApiFetch'
+import type { ScheduledTasksInfoMessage } from "@jellyfin/sdk/lib/generated-client";
+import { notify } from "notiwind";
+import Radial from "~/components/ui/radial/Radial.vue";
+import type { ApiFetchError } from "~/composables/useApiFetch";
 
-const socket = useSocketStore()
-const server = useServerStore()
-const progress = ref(undefined as number | undefined)
+const socket = useSocketStore();
+const server = useServerStore();
+const progress = ref(undefined as number | undefined);
 
-const scanAllLibraries = async () => {
-  console.log('Attempting to connect to socket')
-  socket.connectToSocket()
-  socket.bus.on('ScheduledTasksInfo', (data: ScheduledTasksInfoMessage) => {
+async function scanAllLibraries() {
+  socket.connectToSocket();
+  socket.bus.on("ScheduledTasksInfo", (data: ScheduledTasksInfoMessage) => {
     const scan = data.Data?.find(
-      task => task.Id == ScheduledTasks.GLOBAL_SCAN,
-    )
-    const percent = scan?.CurrentProgressPercentage
+      (task) => task.Id === ScheduledTasks.GLOBAL_SCAN,
+    );
+    const percent = scan?.CurrentProgressPercentage;
 
-    if (percent == undefined) {
-      socket.disconnectSocket()
+    if (percent === undefined) {
+      socket.disconnectSocket();
     }
-    progress.value = percent || 0
-  })
+    progress.value = percent || 0;
+  });
 
   try {
-    await server.scanAllLibraries()
-    progress.value = 1
-  }
-  catch (e: unknown) {
-    progress.value = undefined
+    await server.scanAllLibraries();
+    progress.value = 1;
+  } catch (e: unknown) {
+    progress.value = undefined;
     notify(
       {
-        title: 'Unable to scan libraries',
-        type: 'error',
-        text: (e as ApiFetchError),
-        group: 'bottom',
+        title: "Unable to scan libraries",
+        type: "error",
+        text: e as ApiFetchError,
+        group: "bottom",
       },
       5000,
-    )
+    );
 
-    socket.disconnectSocket()
+    socket.disconnectSocket();
   }
 }
 </script>

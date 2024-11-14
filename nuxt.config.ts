@@ -12,19 +12,10 @@ export default defineNuxtConfig({
   plugins: ["~/plugins/toast.ts"],
   ssr: false,
   devtools: {
-    enabled: false,
+    enabled: true,
 
     timeline: {
       enabled: false,
-    },
-  },
-
-  vite: {
-    // Force optimize deps on these routes to prevent super laggy first time navigation in dev server.
-    // This eagerly scans all routes and components and optimizes their dependencies first, rather than later.
-    // If you want a faster start-up comment out the "optimizeDeps"
-    optimizeDeps: {
-      entries: ['./components/**', './pages/**'],
     },
   },
   app: {
@@ -71,6 +62,15 @@ export default defineNuxtConfig({
     scanPageMeta: true,
   },
   compatibilityDate: "2024-04-03",
+
+  vite: {
+    // Force optimize deps on these routes to prevent super laggy first time navigation in dev server.
+    // This eagerly scans all routes and components and optimizes their dependencies first, rather than later.
+    // If you want a faster start-up comment out the "optimizeDeps"
+    optimizeDeps: {
+      entries: ["./components/**", "./pages/**"],
+    },
+  },
   eslint: {
     config: {
       stylistic: true,

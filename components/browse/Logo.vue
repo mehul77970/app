@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
+import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
 
-const { item } = defineProps<{ item: BaseItemDto }>()
+const { item } = defineProps<{ item: BaseItemDto }>();
 
-const media = useMediaBrowserStore()
+const media = useMediaBrowserStore();
 
-const itemHasLogo = () => {
-  const logo = item.ImageTags?.['Logo']
+function itemHasLogo() {
+  const logo = item.ImageTags?.Logo;
 
-  if (!logo) return
+  if (!logo) return;
 
-  return logo
+  return logo;
 }
 </script>
 
@@ -18,5 +18,5 @@ const itemHasLogo = () => {
   <img
     v-if="itemHasLogo()"
     :src="media.generateImageURL(item.Id!!, 'Logo', 500, undefined, 100)"
-  >
+  />
 </template>

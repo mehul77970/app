@@ -1,31 +1,32 @@
 <script setup lang="ts">
-import { PhArrowsClockwise, PhGridNine, PhSortAscending } from '@phosphor-icons/vue'
+import {
+  PhArrowsClockwise,
+  PhGridNine,
+  PhSortAscending,
+} from "@phosphor-icons/vue";
+import BrowseListItem from "@/components/browse/ListItem.vue";
+import SettingDisabled from "@/components/settings/SettingDisabled.vue";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import SettingDisabled from '@/components/settings/SettingDisabled.vue'
-import BrowseListItem from '@/components/browse/ListItem.vue'
-import { Button } from '@/components/ui/button'
-import {
-  Table,
-  TableBody,
-} from '@/components/ui/table'
+} from "@/components/ui/card";
+import { Table, TableBody } from "@/components/ui/table";
 
-const settingsStore = useSettingsStore()
-const { browse } = storeToRefs(settingsStore)
+const settingsStore = useSettingsStore();
+const { browse } = storeToRefs(settingsStore);
 
-const createEmptyArray = (size: number) => {
-  const array = []
+function createEmptyArray(size: number) {
+  const array = [];
 
   for (let i = 0; i < size; i++) {
-    array.push('')
+    array.push("");
   }
 
-  return array
+  return array;
 }
 </script>
 
@@ -43,16 +44,15 @@ const createEmptyArray = (size: number) => {
             <div
               class="browse-wrapper w-full max-h-[545px] select-none overflow-y-scroll h-fit inline-flex flex-col justify-start pt-4 items-center aspect-video bg-background rounded-lg relative"
             >
-              <div class="inline-flex flex-wrap options bg-primary-foreground rounded-md pointer-events-none">
+              <div
+                class="inline-flex flex-wrap options bg-primary-foreground rounded-md pointer-events-none"
+              >
                 <Button
                   size="icon"
                   variant="ghost"
                   class="rounded-tr-none rounded-br-none w-8 h-fit aspect-square"
                 >
-                  <PhGridNine
-                    class="size-4"
-                    weight="fill"
-                  />
+                  <PhGridNine class="size-4" weight="fill" />
                 </Button>
 
                 <Button
@@ -75,7 +75,7 @@ const createEmptyArray = (size: number) => {
               </div>
 
               <TransitionGroup name="fade-short-slide">
-                <Table v-if="browse.layout == 'list'">
+                <Table v-if="browse.layout === 'list'">
                   <TableBody>
                     <BrowseListItem
                       v-for="(_, index) in createEmptyArray(24)"
@@ -89,7 +89,7 @@ const createEmptyArray = (size: number) => {
                 </Table>
                 <!-- List display -->
                 <div
-                  v-if="browse.layout == 'grid'"
+                  v-if="browse.layout === 'grid'"
                   class="flex w-full justify-center flex-wrap gap-1 pointer-events-none"
                 >
                   <BrowseItem
@@ -106,14 +106,19 @@ const createEmptyArray = (size: number) => {
           </div>
         </CardDescription>
       </CardHeader>
-      <CardContent class="inline-flex flex-col justify-between gap-3 flex-wrap w-full">
-        <div class="inline-flex justify-start flex-col w-full gap-4 items-start">
-          <div class="inline-flex w-full flex-wrap justify-between items-center gap-4">
-            <h2 class="text-lg">
-              Layout
-            </h2>
+      <CardContent
+        class="inline-flex flex-col justify-between gap-3 flex-wrap w-full"
+      >
+        <div
+          class="inline-flex justify-start flex-col w-full gap-4 items-start"
+        >
+          <div
+            class="inline-flex w-full flex-wrap justify-between items-center gap-4"
+          >
+            <h2 class="text-lg">Layout</h2>
             <p class="text-secondary-foreground/50">
-              The layout defines how each item should be displayed, either as a card or list
+              The layout defines how each item should be displayed, either as a
+              card or list
             </p>
           </div>
 
@@ -122,12 +127,8 @@ const createEmptyArray = (size: number) => {
               <SelectValue :placeholder="browse.layout" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="grid">
-                Grid
-              </SelectItem>
-              <SelectItem value="list">
-                List
-              </SelectItem>
+              <SelectItem value="grid"> Grid </SelectItem>
+              <SelectItem value="list"> List </SelectItem>
             </SelectContent>
           </Select>
         </div>

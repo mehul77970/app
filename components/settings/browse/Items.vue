@@ -1,46 +1,50 @@
 <script setup lang="ts">
-import { PhArrowsClockwise, PhGridNine, PhSortAscending } from '@phosphor-icons/vue'
+import {
+  PhArrowsClockwise,
+  PhGridNine,
+  PhSortAscending,
+} from "@phosphor-icons/vue";
+import SettingDisabled from "@/components/settings/SettingDisabled.vue";
+import { Button } from "@/components/ui/button";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 
-import { Button } from '@/components/ui/button'
-import SettingDisabled from '@/components/settings/SettingDisabled.vue'
+const defaultBrowseBasis = 8;
 
-const defaultBrowseBasis = 8
+const settingsStore = useSettingsStore();
+const { browse } = storeToRefs(settingsStore);
 
-const settingsStore = useSettingsStore()
-const { browse } = storeToRefs(settingsStore)
+const basis = ref([browse.value.basis]);
 
-const basis = ref([browse.value.basis])
-
-const createEmptyArray = (size: number) => {
-  const array = []
+function createEmptyArray(size: number) {
+  const array = [];
 
   for (let i = 0; i < size; i++) {
-    array.push('')
+    array.push("");
   }
 
-  return array
+  return array;
 }
 
-const resetBrowseBasis = () => {
-  basis.value[0] = defaultBrowseBasis
-  browse.value.basis = defaultBrowseBasis
+function resetBrowseBasis() {
+  basis.value[0] = defaultBrowseBasis;
+  browse.value.basis = defaultBrowseBasis;
 }
 
-const switchBrowseBasisToAuto = () => {
-  basis.value[0] = 0
-  browse.value.basis = 0
+function switchBrowseBasisToAuto() {
+  basis.value[0] = 0;
+  browse.value.basis = 0;
 }
 </script>
 
 <template>
-  <SettingDisabled :disabled="browse.layout == 'list'">
+  <SettingDisabled :disabled="browse.layout === 'list'">
     <template #reason>
       <p>Browse layout must be set to <b>Grid</b>, or <b>Thumbnail</b></p>
     </template>
@@ -56,16 +60,15 @@ const switchBrowseBasisToAuto = () => {
             <div
               class="browse-wrapper w-full max-h-[545px] select-none overflow-y-scroll h-fit inline-flex flex-col justify-start pt-4 items-center aspect-video bg-background rounded-lg relative"
             >
-              <div class="inline-flex flex-wrap options bg-primary-foreground rounded-md pointer-events-none">
+              <div
+                class="inline-flex flex-wrap options bg-primary-foreground rounded-md pointer-events-none"
+              >
                 <Button
                   size="icon"
                   variant="ghost"
                   class="rounded-tr-none rounded-br-none w-8 h-fit aspect-square"
                 >
-                  <PhGridNine
-                    class="size-4"
-                    weight="fill"
-                  />
+                  <PhGridNine class="size-4" weight="fill" />
                 </Button>
 
                 <Button
@@ -87,7 +90,9 @@ const switchBrowseBasisToAuto = () => {
                 </Button>
               </div>
 
-              <div class="flex w-full justify-center flex-wrap gap-1 pointer-events-none">
+              <div
+                class="flex w-full justify-center flex-wrap gap-1 pointer-events-none"
+              >
                 <BrowseItem
                   v-for="(_, index) in createEmptyArray(24)"
                   id="0000"
@@ -102,23 +107,25 @@ const switchBrowseBasisToAuto = () => {
           </div>
         </CardDescription>
       </CardHeader>
-      <CardContent class="inline-flex flex-col justify-between gap-3 flex-wrap w-full">
-        <div class="inline-flex justify-start flex-col w-full gap-4 items-start">
+      <CardContent
+        class="inline-flex flex-col justify-between gap-3 flex-wrap w-full"
+      >
+        <div
+          class="inline-flex justify-start flex-col w-full gap-4 items-start"
+        >
           <div class="inline-flex w-full justify-between items-center gap-4">
-            <h2 class="text-lg">
-              Basis
-            </h2>
+            <h2 class="text-lg">Basis</h2>
             <div class="inline-flex gap-2">
               <Button
                 class="w-full"
-                :disabled="browse.basis == defaultBrowseBasis"
+                :disabled="browse.basis === defaultBrowseBasis"
                 @click="resetBrowseBasis"
               >
                 Reset to default
               </Button>
               <Button
                 class="w-full"
-                :disabled="browse.basis == 0"
+                :disabled="browse.basis === 0"
                 @click="switchBrowseBasisToAuto"
               >
                 Switch to Auto
@@ -127,21 +134,15 @@ const switchBrowseBasisToAuto = () => {
           </div>
 
           <p class="text-secondary-foreground/50">
-            The basis of each item defines how many you would like to fit on each line
-            <br>
+            The basis of each item defines how many you would like to fit on
+            each line
+            <br />
             Will attempt to fit <b>{{ basis[0] }}</b> items per line
           </p>
-          <Slider
-            ref="slider"
-            v-model="basis"
-            :min="1"
-            :max="25"
-            :step="1"
-            class="w-full"
-          />
+          <Slider v-model="basis" :min="1" :max="25" :step="1" class="w-full" />
           <Button
             class="w-full"
-            :disabled="browse.basis == basis[0]"
+            :disabled="browse.basis === basis[0]"
             @click="browse.basis = basis[0]"
           >
             Save

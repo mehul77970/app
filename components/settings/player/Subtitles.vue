@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { CaptionsRenderer, parseText } from 'media-captions'
+import { CaptionsRenderer, parseText } from "media-captions";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import ASS from '@/lib/subtitles/ass'
+} from "@/components/ui/select";
+import ASS from "@/lib/subtitles/ass";
 
 const assText = `[Script Info]
 Title:
@@ -33,73 +33,73 @@ Style: Alt,Times New Roman,40,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Comment: 0,0:00:00.00,0:00:05.00,Default,,0000,0000,0000,,This line is a comment and should not display on rendered output. This file is intended to be rendered on a 640x480 video, preferably a single solid colour, or maybe a checkerboard pattern.
 Dialogue: 0,0:00:00.00,0:00:05.00,Default,,0000,0000,0000,,This is an example of the ASS subtitle format
-`
+`;
 
 const vttText = `
 WEBVTT - Example Title
 
 00:00:00.00 --> 00:00:05.00 align:middle
 This is an example vtt/srt subtitle.
-`
-const vttSubsData = await parseText(vttText)
+`;
+const vttSubsData = await parseText(vttText);
 
 type ResampleConfig =
-  | 'video_height'
-  | 'video_height'
-  | 'video_width'
-  | 'script_height'
-  | 'script_width'
+  | "video_height"
+  | "video_height"
+  | "video_width"
+  | "script_height"
+  | "script_width";
 
-const resampling = ref('video_height' as ResampleConfig)
-const scaling = ref([100])
-const vttCaptionElement = ref(null as null | HTMLElement)
+const resampling = ref("video_height" as ResampleConfig);
+const scaling = ref([100]);
+const vttCaptionElement = ref(null as null | HTMLElement);
 
-let assPlayer: undefined | ASS
-let vttPlayer: undefined | CaptionsRenderer
+let assPlayer: undefined | ASS;
+let vttPlayer: undefined | CaptionsRenderer;
 
 onMounted(() => {
-  createAssPlayer()
-  createVTTPlayer()
-})
+  createAssPlayer();
+  createVTTPlayer();
+});
 
 onUnmounted(() => {
-  destroyAssPlayer()
-})
+  destroyAssPlayer();
+});
 
-const createAssPlayer = (resample: ResampleConfig = 'video_width') => {
+function createAssPlayer(resample: ResampleConfig = "video_width") {
   assPlayer = new ASS(
     assText,
-    document.getElementById('video')! as HTMLVideoElement,
+    document.getElementById("video")! as HTMLVideoElement,
     {
       resampling: resample,
-      container: document.getElementById('ass-container')!,
+      container: document.getElementById("ass-container")!,
     },
-  )
+  );
 }
 
-const createVTTPlayer = () => {
-  if (!vttCaptionElement.value) return
+function createVTTPlayer() {
+  if (!vttCaptionElement.value) return;
 
-  vttPlayer = new CaptionsRenderer(vttCaptionElement.value!)
+  vttPlayer = new CaptionsRenderer(vttCaptionElement.value!);
 
-  vttPlayer.changeTrack(vttSubsData)
+  vttPlayer.changeTrack(vttSubsData);
 }
-const destroyAssPlayer = () => {
-  if (!assPlayer) return
-  assPlayer.destroy()
-  assPlayer = undefined
+function destroyAssPlayer() {
+  if (!assPlayer) return;
+  assPlayer.destroy();
+  assPlayer = undefined;
 }
 
-const onScaleDrag = (scale: number[] | undefined) => {
-  if (!scale || !scale[0]) return
+function onScaleDrag(scale: number[] | undefined) {
+  if (!scale || !scale[0]) return;
 
-  vttCaptionElement.value!.style.setProperty('--vtt-font-size', `${scale[0]}%`)
+  vttCaptionElement.value!.style.setProperty("--vtt-font-size", `${scale[0]}%`);
   // createAssPlayer(scale[0]);
 }
 
-const onResamplePicked = (sample: string) => {
-  destroyAssPlayer()
-  createAssPlayer(sample as ResampleConfig)
+function onResamplePicked(sample: string) {
+  destroyAssPlayer();
+  createAssPlayer(sample as ResampleConfig);
 }
 </script>
 
@@ -136,43 +136,24 @@ const onResamplePicked = (sample: string) => {
       class="inline-flex flex-col justify-between gap-3 flex-wrap w-full"
     >
       <div class="inline-flex justify-start flex-col gap-2 items-start">
-        <h2 class="text-xl font-semibold">
-          Resampling (ASS)
-        </h2>
-        <Select
-          v-model="resampling"
-          @update:model-value="onResamplePicked"
-        >
+        <h2 class="text-xl font-semibold">Resampling (ASS)</h2>
+        <Select v-model="resampling" @update:model-value="onResamplePicked">
           <SelectTrigger>
-            <SelectValue
-              value="video_height"
-              placeholder="Video Height"
-            />
+            <SelectValue value="video_height" placeholder="Video Height" />
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="video_height">
-              Video Height
-            </SelectItem>
-            <SelectItem value="video_width">
-              Video Width
-            </SelectItem>
-            <SelectItem value="script_height">
-              Script Height
-            </SelectItem>
-            <SelectItem value="script_width">
-              Script Width
-            </SelectItem>
+            <SelectItem value="video_height"> Video Height </SelectItem>
+            <SelectItem value="video_width"> Video Width </SelectItem>
+            <SelectItem value="script_height"> Script Height </SelectItem>
+            <SelectItem value="script_width"> Script Width </SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div class="inline-flex justify-start flex-col gap-2 items-start">
-        <h2 class="text-xl font-semibold">
-          Scaling (SRT/VTT)
-        </h2>
+        <h2 class="text-xl font-semibold">Scaling (SRT/VTT)</h2>
         <Slider
-          ref="slider"
           v-model="scaling"
           :min="1"
           :max="500"

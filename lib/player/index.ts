@@ -1,5 +1,5 @@
 export interface ShaddyPlayer {
-  load(url: string): void
+  load: (url: string) => void;
 }
 
-export * from './utils'
+export * from "./utils";

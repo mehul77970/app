@@ -1,8 +1,9 @@
 {
   "name": "shadfin",
-  "private": true,
   "type": "module",
-  "version": "0.0.4-DEV",
+  "version": "0.0.5-DEV",
+  "private": true,
+  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903",
   "scripts": {
     "build": "nuxt build",
     "analyze": "nuxt analyze",
@@ -17,13 +18,12 @@
   },
   "dependencies": {
     "@jellyfin/sdk": "^0.11.0",
-    "@nuxt/eslint": "^0.6.1",
     "@oku-ui/motion": "^0.3.4",
     "@oku-ui/motion-nuxt": "^0.2.1",
     "@phosphor-icons/vue": "^2.2.1",
     "@pinia/nuxt": "^0.5.5",
     "@types/bun": "^1.1.11",
-    "@vueuse/core": "^10.11.1",
+    "@vueuse/core": "^11.2.0",
     "ass-compiler": "^0.1.14",
     "assjs": "brys0/ASSJS-fix-text#f912ab9",
     "axios": "^1.7.7",
@@ -31,7 +31,6 @@
     "clsx": "^2.1.1",
     "embla-carousel-vue": "^8.3.0",
     "embla-carousel-wheel-gestures": "^8.0.1",
-    "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eventemitter3": "^5.0.1",
@@ -41,7 +40,7 @@
     "luxon": "^3.5.0",
     "media-captions": "^0.0.18",
     "moment": "^2.30.1",
-    "motion": "^10.18.0",
+    "motion": "^11.11.15",
     "ms": "^2.1.3",
     "notiwind": "^2.0.2",
     "overlayscrollbars": "^2.10.0",
@@ -50,22 +49,26 @@
     "prettier": "^3.3.3",
     "radix-vue": "^1.9.7",
     "shadcn-nuxt": "^0.10.4",
+    "split-type": "^0.3.4",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.3",
     "vaul-vue": "^0.2.0",
-    "vite-plugin-eslint2": "^5.0.1",
     "vue": "latest",
     "vue-router": "latest"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^3.8.0",
+    "@nuxt/eslint": "^0.6.1",
     "@nuxtjs/color-mode": "^3.5.1",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@types/luxon": "^3.4.2",
     "@types/ms": "^0.7.34",
+    "eslint": "^9.14.0",
+    "eslint-plugin-format": "^0.1.2",
     "nuxt": "^3.13.2",
-    "sass-embedded": "^1.80.6"
-  },
-  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+    "sass-embedded": "^1.80.6",
+    "vue-eslint-parser": "^9.4.3"
+  }
 }

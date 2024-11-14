@@ -1,8 +1,8 @@
 export class Logger {
-  name: string
+  name: string;
 
-  constructor(name: string | undefined = 'Logger') {
-    this.name = name
+  constructor(name: string | undefined = "Logger") {
+    this.name = name;
   }
 
   /**
@@ -17,6 +17,6 @@ export class Logger {
    * })
    */
   log(...logs: unknown[]): void {
-    console.log(this.name + ' ->', ...logs)
+    console.log(`${this.name} ->`, ...logs);
   }
 }

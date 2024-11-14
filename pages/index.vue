@@ -1,3 +1,3 @@
 <script setup lang="ts">
-await navigateTo('authenticated')
+await navigateTo("authenticated");
 </script>

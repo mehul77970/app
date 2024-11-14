@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { PhPalette } from '@phosphor-icons/vue'
+import { PhPalette } from "@phosphor-icons/vue";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
-} from '@/components/ui/popover'
-import { hexToHSL } from '~/lib/utils'
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { hexToHSL } from "~/lib/utils";
 
-const changeStyleColor = (v: string, hex: string) => {
-  const { h, s, l } = hexToHSL(hex)
-  document.documentElement.style.setProperty(v, `${h} ${s}% ${l}%`)
+function changeStyleColor(v: string, hex: string) {
+  const { h, s, l } = hexToHSL(hex);
+  document.documentElement.style.setProperty(v, `${h} ${s}% ${l}%`);
 }
 </script>
 
 <template>
   <div class="grid gap-6">
-    <h2 class="text-2xl font-semibold">
-      Theme
-    </h2>
+    <h2 class="text-2xl font-semibold">Theme</h2>
     <Card>
       <CardHeader class="flex-row justify-around">
         <div class="inline-flex flex-col justify-center items-center gap-2">
@@ -181,11 +179,7 @@ const changeStyleColor = (v: string, hex: string) => {
                   />
                 </Button>
 
-                <input
-                  id="picker"
-                  type="color"
-                  class="hidden"
-                >
+                <input id="picker" type="color" class="hidden" />
                 <Button
                   variant="ghost"
                   size="icon"
@@ -206,9 +200,7 @@ const changeStyleColor = (v: string, hex: string) => {
           <div class="color-swatch">
             <Popover>
               <PopoverTrigger>
-                <Button variant="outline">
-                  #ff5c3
-                </Button>
+                <Button variant="outline"> #ff5c3 </Button>
               </PopoverTrigger>
 
               <PopoverContent> Swatch data </PopoverContent>

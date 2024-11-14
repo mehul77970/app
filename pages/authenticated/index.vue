@@ -3,17 +3,24 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel'
-import { formatTime } from '@/lib/utils'
-import { ticksToSeconds } from '@/composables/ticksToSeconds'
+} from "@/components/ui/carousel";
+import { ticksToSeconds } from "@/composables/ticksToSeconds";
+import { formatTime } from "@/lib/utils";
 
-const mediaBrowserStore = useMediaBrowserStore()
+const l = useLoggerStore();
+const mediaBrowserStore = useMediaBrowserStore();
 
-const views = computed(() => mediaBrowserStore.views)
-const resumed = computed(() => mediaBrowserStore.resumed)
-const firstResumed = computed(() => resumed.value[0]!)
+const views = computed(() => mediaBrowserStore.views);
+const resumed = computed(() => mediaBrowserStore.resumed);
+const firstResumed = computed(() => resumed.value[0]!);
 
-await mediaBrowserStore.getResumedContent()
+await mediaBrowserStore.getResumedContent();
+
+onMounted(() => {
+  l.$log({
+    optionalParams: [useServerImage(firstResumed.value, { type: "Primary" })],
+  });
+});
 </script>
 
 <template>
@@ -24,31 +31,18 @@ await mediaBrowserStore.getResumedContent()
       class="flex flex-col justify-center items-center md:items-start h-[80vh] fade-gradient w-full px-24"
     >
       <img
-        :src="
-          mediaBrowserStore.generateImageURL(
-            firstResumed.Id!!,
-            undefined,
-            1920,
-            undefined,
-          )
-        "
+        :src="useServerImage(firstResumed)"
         class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0"
-      >
+      />
       <div class="inline-flex flex-col gap-8 show-content z-[2]">
         <div class="inline-flex flex-col gap-2">
           <img
             :src="
-              mediaBrowserStore.generateImageURL(
-                firstResumed.Type == 'Episode'
-                  ? firstResumed.SeriesId!!
-                  : firstResumed.Id!!,
-                'Logo/0',
-                1920,
-                undefined,
-              )
+              useServerImage(firstResumed, { type: 'Logo', fallback: 'Logo' })
             "
+            loading="lazy"
             width="700"
-          >
+          />
 
           <div class="h-1 w-full rounded-lg bg-white/50" />
         </div>
@@ -68,15 +62,13 @@ await mediaBrowserStore.getResumedContent()
     </div>
 
     <div class="flex flex-col gap-8 justify-start pb-4 items-start w-full">
-      <div class="flex flex-col max-w-full gap-8  z-[5]">
+      <div class="flex flex-col max-w-full gap-8 z-[5]">
         <!-- Continue Watching Section -->
         <section
           id="continue-watching"
           class="inline-flex flex-col justify-startitems-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider pl-6">
-            CONTINUE WATCHING
-          </h1>
+          <h1 class="text-gray-400 tracking-wider pl-6">CONTINUE WATCHING</h1>
 
           <Carousel
             class="relative flex max-w-[100%] justify-center items-center gap-4"
@@ -91,7 +83,7 @@ await mediaBrowserStore.getResumedContent()
                 <VideoPreview
                   v-focus
                   :item="item!!"
-                  :class="`w-[800px] ${index == 0 ? 'ml-6' : ''} ${index == resumed.length-1 ? 'mr-6' : ''}`"
+                  :class="`w-[800px] ${index === 0 ? 'ml-6' : ''} ${index === resumed.length - 1 ? 'mr-6' : ''}`"
                 />
               </CarouselItem>
             </CarouselContent>
@@ -105,9 +97,7 @@ await mediaBrowserStore.getResumedContent()
           id="continue-watching"
           class="inline-flex flex-col justify-start items-start max-w-full gap-4"
         >
-          <h1 class="text-gray-400 tracking-wider pl-6">
-            MEDIA
-          </h1>
+          <h1 class="text-gray-400 tracking-wider pl-6">MEDIA</h1>
 
           <Carousel
             class="relative flex max-w-[100%] w-full justify-center"
@@ -122,7 +112,9 @@ await mediaBrowserStore.getResumedContent()
                 :key="index"
                 class="basis-1/1"
               >
-                <div :class="`flex flex-row gap-4 ${index == 0 ? 'ml-6' : ''} ${index == views.length-1 ? 'mr-6' : ''}`">
+                <div
+                  :class="`flex flex-row gap-4 ${index === 0 ? 'ml-6' : ''} ${index === views.length - 1 ? 'mr-6' : ''}`"
+                >
                   <HomeCarouselItem
                     :id="view.Id"
                     v-focus

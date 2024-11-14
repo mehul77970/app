@@ -1,15 +1,15 @@
-import { getCurrentScope, onScopeDispose } from 'vue'
-import { on, stop } from '../listener'
+import { getCurrentScope, onScopeDispose } from "vue";
+import { on, stop } from "../listener";
 
 // Configure our handle for the player controller
-const handle = window?.go?.player?.Player
+const handle = window?.go?.player?.Player;
 
 /**
  * Set the current player URL to a local or remote path
  * @param {string} url
  */
 export async function setURL(url) {
-  handle.SetURL(url)
+  handle.SetURL(url);
 }
 
 /**
@@ -17,19 +17,19 @@ export async function setURL(url) {
  * @param {number} position_sec where to start the player in seconds
  */
 export async function setStartPosition(position_sec) {
-  await handle.SetStartPosition(position_sec)
+  await handle.SetStartPosition(position_sec);
 }
 
 /**
  * Start/create the player and allocate the memory to begin playback
  */
 export async function start() {
-  await handle.Start()
+  await handle.Start();
 }
 
 // Destroy/Stop the player, and clean up resources
 export async function destroy() {
-  await handle.Destroy()
+  await handle.Destroy();
 }
 
 /**
@@ -37,7 +37,7 @@ export async function destroy() {
  * @param {boolean} paused Pause or unpause the player
  */
 export async function setPlayerPause(paused) {
-  await handle.SetPlayerPause(paused)
+  await handle.SetPlayerPause(paused);
 }
 
 /**
@@ -45,7 +45,7 @@ export async function setPlayerPause(paused) {
  * @param {number} position_sec Position in seconds
  */
 export async function setPlayerPosition(position_sec) {
-  await handle.SetPlayerPosition(position_sec)
+  await handle.SetPlayerPosition(position_sec);
 }
 
 /**
@@ -54,8 +54,8 @@ export async function setPlayerPosition(position_sec) {
  * @param {(any) => void} callback
  */
 export function addPlayerEventListener(name, fn) {
-  on(name, fn)
+  on(name, fn);
   if (getCurrentScope()) {
-    onScopeDispose(() => stop(name))
+    onScopeDispose(() => stop(name));
   }
 }

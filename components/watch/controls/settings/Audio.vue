@@ -1,29 +1,29 @@
 <script lang="ts" setup>
-import { PhSpeakerHifi } from '@phosphor-icons/vue'
+import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
 
-import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
+import { PhSpeakerHifi } from "@phosphor-icons/vue";
 import {
+  DropdownMenuCheckboxItem,
   DropdownMenuPortal,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuCheckboxItem,
-} from '@/components/ui/dropdown-menu'
-import { getAudioStreams } from '~/lib/player'
-import AudioWithFeatures from '~/components/global/text/AudioWithFeatures.vue'
+} from "@/components/ui/dropdown-menu";
+import AudioWithFeatures from "~/components/global/text/AudioWithFeatures.vue";
+import { getAudioStreams } from "~/lib/player";
 
 const { item } = defineProps<{
-  item: BaseItemDto
-}>()
+  item: BaseItemDto;
+}>();
 
-const audioSources = getAudioStreams(item)
+const audioSources = getAudioStreams(item);
 
-const playerStore = usePlayerStore()
+const playerStore = usePlayerStore();
 
-const selectedAudio = computed(() => playerStore.audio)
+const selectedAudio = computed(() => playerStore.audio);
 
-const changeAudio = (audio: AudioSource) => {
-  playerStore.audio = audio
+function changeAudio(audio: AudioSource) {
+  playerStore.audio = audio;
 }
 </script>
 
@@ -34,10 +34,7 @@ const changeAudio = (audio: AudioSource) => {
         v-focus
         class="inline-flex gap-2 justify-center items-center selectable"
       >
-        <PhSpeakerHifi
-          :size="24"
-          weight="fill"
-        />
+        <PhSpeakerHifi :size="24" weight="fill" />
         <span>Audio</span>
       </div>
     </DropdownMenuSubTrigger>

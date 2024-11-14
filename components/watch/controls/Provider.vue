@@ -1,73 +1,70 @@
 <script lang="ts" setup>
-import { PhArrowArcLeft } from '@phosphor-icons/vue'
-import { Button } from '~/components/ui/button'
+import { PhArrowArcLeft } from "@phosphor-icons/vue";
+import { Button } from "~/components/ui/button";
 
-import { truncate } from '~/lib/utils'
+import { truncate } from "~/lib/utils";
 
-const playerStore = usePlayerStore()
-const router = useRouter()
+const playerStore = usePlayerStore();
+const router = useRouter();
 
-const info = computed(() => playerStore.item)
-const showControls = ref(false)
-const paused = computed(() => playerStore.paused)
+const info = computed(() => playerStore.item);
+const showControls = ref(false);
+const paused = computed(() => playerStore.paused);
 
-let controlsHideTimer = null as null | NodeJS.Timeout
+let controlsHideTimer = null as null | NodeJS.Timeout;
 
-const controlsMouseMove = () => {
+function controlsMouseMove() {
   if (controlsHideTimer) {
-    clearTimeout(controlsHideTimer)
+    clearTimeout(controlsHideTimer);
   }
-  controlsHideTimer = null
+  controlsHideTimer = null;
 
-  showControls.value = true
-  document.body!.style.cursor = 'default'
+  showControls.value = true;
+  document.body!.style.cursor = "default";
 
   controlsHideTimer = setTimeout(() => {
-    hideMouseControls()
-  }, 3000)
+    hideMouseControls();
+  }, 3000);
 }
 
-const hideMouseControls = () => {
+function hideMouseControls() {
   if (!playerStore.hideControls || paused.value) {
     if (controlsHideTimer) {
-      clearTimeout(controlsHideTimer)
+      clearTimeout(controlsHideTimer);
     }
 
-    controlsHideTimer = setTimeout(hideMouseControls, 3000)
-    return
+    controlsHideTimer = setTimeout(hideMouseControls, 3000);
+    return;
   }
 
-  document.body!.style.cursor = 'none'
-  showControls.value = false
+  document.body!.style.cursor = "none";
+  showControls.value = false;
 }
 
-const togglePause = () => {
-  playerStore.paused = !playerStore.paused
+function togglePause() {
+  playerStore.paused = !playerStore.paused;
 
   if (!playerStore.paused) {
-    playerStore.hideControls = true
+    playerStore.hideControls = true;
   }
 }
 
 onBeforeUnmount(() => {
-  document.body!.style.cursor = 'default'
+  document.body!.style.cursor = "default";
 
   if (controlsHideTimer) {
-    clearTimeout(controlsHideTimer)
+    clearTimeout(controlsHideTimer);
   }
-})
+});
 
-const goBack = () => {
-  router.go(-1)
+function goBack() {
+  router.go(-1);
 }
 </script>
 
 <template>
   <LazyWatchSubtitles v-if="info" />
-  <WatchControlsPlayerPause
-    v-if="info"
-    :info="info"
-  />
+  <WatchControlsPlayerPause v-if="info" :info="info" />
   <div
     id="controls-detection-area"
     class="min-h-full mt-auto justify-start w-full inline-flex z-[50]"
@@ -75,10 +72,7 @@ const goBack = () => {
     @click="togglePause"
   >
     <Transition name="fade-short-slide">
-      <div
-        v-show="showControls || paused"
-        class="w-full h-full flex relative"
-      >
+      <div v-show="showControls || paused" class="w-full h-full flex relative">
         <Button
           v-focus
           class="m-4 absolute selectable"
@@ -86,10 +80,7 @@ const goBack = () => {
           size="icon"
           @click.stop="goBack"
         >
-          <PhArrowArcLeft
-            :size="24"
-            weight="bold"
-          />
+          <PhArrowArcLeft :size="24" weight="bold" />
         </Button>
 
         <WatchControlsDebug />
@@ -115,41 +106,25 @@ const goBack = () => {
             class="inline-flex gap-2 items-center justify-between w-full"
           >
             <div class="inline-flex flex-col">
-              <h1
-                v-if="info"
-                class="lg:text-2xl font-semibold text-white"
-              >
+              <h1 v-if="info" class="lg:text-2xl font-semibold text-white">
                 {{ info.Name }}
               </h1>
-              <p
-                v-if="info?.Overview"
-                class="text-gray-400 max-w-full"
-              >
+              <p v-if="info?.Overview" class="text-gray-400 max-w-full">
                 {{
                   truncate(info?.Overview!!, { length: 120, position: "end" })
                 }}
               </p>
             </div>
 
-            <div
-              id="top-controls"
-              class="inline-flex justify-end"
-              @click.stop
-            >
+            <div id="top-controls" class="inline-flex justify-end" @click.stop>
               <WatchControlsVolume />
-              <WatchControlsSettings
-                v-if="info"
-                :item="info"
-              />
+              <WatchControlsSettings v-if="info" :item="info" />
               <WatchControlsPictureInPicture />
               <WatchControlsFullscreen />
             </div>
           </div>
 
-          <WatchControlsTimeline
-            v-if="info"
-            :info="info"
-          />
+          <WatchControlsTimeline v-if="info" :info="info" />
         </div>
       </div>
     </Transition>

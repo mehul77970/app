@@ -1,24 +1,29 @@
-import { getData, setAuthentication, setServer, setUser } from '@/native/config'
+import {
+  getData,
+  setAuthentication,
+  setServer,
+  setUser,
+} from "@/native/config";
 
 export async function useNativeStorage() {
-  const authentication = useAuthenticationStore()
-  const server = useServerStore()
-  const user = useUserStore()
-  const data = await getData()
+  const authentication = useAuthenticationStore();
+  const server = useServerStore();
+  const user = useUserStore();
+  const data = await getData();
 
-  if (data.authentication) authentication.$patch(data.authentication)
-  if (data.server) server.$patch(data.server)
-  if (data.user) user.$patch(data.user)
+  if (data.authentication) authentication.$patch(data.authentication);
+  if (data.server) server.$patch(data.server);
+  if (data.user) user.$patch(data.user);
 
   authentication.$subscribe(() => {
-    setAuthentication(authentication.$state)
-  })
+    setAuthentication(authentication.$state);
+  });
 
   server.$subscribe(() => {
-    setServer(server.$state)
-  })
+    setServer(server.$state);
+  });
 
   user.$subscribe(() => {
-    setUser(user.$state)
-  })
+    setUser(user.$state);
+  });
 }

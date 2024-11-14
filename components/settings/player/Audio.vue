@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 
 import {
   Select,
@@ -13,9 +13,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 
-const quality = ref('auto')
+const quality = ref("auto");
 </script>
 
 <template>
@@ -43,63 +43,28 @@ const quality = ref('auto')
       class="inline-flex flex-col justify-between gap-3 flex-wrap w-full"
     >
       <div class="inline-flex justify-start flex-col gap-2 items-start">
-        <h2 class="text-lg">
-          Max Channels
-        </h2>
+        <h2 class="text-lg">Max Channels</h2>
         <Select v-model="quality">
           <SelectTrigger>
-            <SelectValue
-              value="auto"
-              placeholder="Auto"
-            />
+            <SelectValue value="auto" placeholder="Auto" />
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="auto">
-              Auto
-            </SelectItem>
-            <SelectItem value="display">
-              Same as Display
-            </SelectItem>
-            <SelectItem value="source">
-              Source
-            </SelectItem>
-            <SelectItem value="120000000">
-              4K - 120 Mbps
-            </SelectItem>
-            <SelectItem value="80000000">
-              4K - 80 Mbps
-            </SelectItem>
-            <SelectItem value="60000000">
-              1080p - 60 Mbps
-            </SelectItem>
-            <SelectItem value="40000000">
-              1080p - 40 Mbps
-            </SelectItem>
-            <SelectItem value="20000000">
-              1080p - 20 Mbps
-            </SelectItem>
-            <SelectItem value="1500000">
-              1080p - 15 Mbps
-            </SelectItem>
-            <SelectItem value="1000000">
-              1080p - 10 Mbps
-            </SelectItem>
-            <SelectItem value="8000000">
-              720p - 8 Mbps
-            </SelectItem>
-            <SelectItem value="6000000">
-              720p - 6 Mbps
-            </SelectItem>
-            <SelectItem value="4000000">
-              720p - 4 Mbps
-            </SelectItem>
-            <SelectItem value="3000000">
-              480p - 3 Mbps
-            </SelectItem>
-            <SelectItem value="15000">
-              480p - 1.5 Mbps
-            </SelectItem>
+            <SelectItem value="auto"> Auto </SelectItem>
+            <SelectItem value="display"> Same as Display </SelectItem>
+            <SelectItem value="source"> Source </SelectItem>
+            <SelectItem value="120000000"> 4K - 120 Mbps </SelectItem>
+            <SelectItem value="80000000"> 4K - 80 Mbps </SelectItem>
+            <SelectItem value="60000000"> 1080p - 60 Mbps </SelectItem>
+            <SelectItem value="40000000"> 1080p - 40 Mbps </SelectItem>
+            <SelectItem value="20000000"> 1080p - 20 Mbps </SelectItem>
+            <SelectItem value="1500000"> 1080p - 15 Mbps </SelectItem>
+            <SelectItem value="1000000"> 1080p - 10 Mbps </SelectItem>
+            <SelectItem value="8000000"> 720p - 8 Mbps </SelectItem>
+            <SelectItem value="6000000"> 720p - 6 Mbps </SelectItem>
+            <SelectItem value="4000000"> 720p - 4 Mbps </SelectItem>
+            <SelectItem value="3000000"> 480p - 3 Mbps </SelectItem>
+            <SelectItem value="15000"> 480p - 1.5 Mbps </SelectItem>
           </SelectContent>
         </Select>
       </div>

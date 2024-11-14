@@ -1,13 +1,13 @@
 <script setup lang="ts">
-definePageMeta({ middleware: 'authenticated', layout: 'authenticated' })
+definePageMeta({ middleware: "authenticated", layout: "authenticated" });
 
-const deviceStore = useDeviceStore()
+const deviceStore = useDeviceStore();
 
 onMounted(() => {
   window.requestIdleCallback(() => {
-    deviceStore.bitrateTest()
-  })
-})
+    deviceStore.bitrateTest();
+  });
+});
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Button } from '@/components/ui/button'
+import { ref } from "vue";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -8,18 +8,17 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
-
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
+} from "@/components/ui/popover";
 
-import langs from '~/assets/json/langs.json'
+import langs from "~/assets/json/langs.json";
 
-const open = ref(false)
-const value = ref('')
+const open = ref(false);
+const value = ref("");
 </script>
 
 <template>
@@ -44,10 +43,7 @@ const value = ref('')
       side="bottom"
     >
       <Command>
-        <CommandInput
-          class="h-9"
-          placeholder="Search language..."
-        />
+        <CommandInput class="h-9" placeholder="Search language..." />
         <CommandEmpty>No language found.</CommandEmpty>
         <CommandList>
           <CommandGroup>

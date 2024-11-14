@@ -1,19 +1,22 @@
 html[transparent-player="true"] {
-    background-color: transparent !important;
+  background-color: transparent !important;
 
-    body {
-      background-color: transparent !important;
-    }
-    
-    #authenticated-layout {
-      background-color: transparent !important;
-    }
-    
-    #player-wrapper {
-      background-color: transparent !important;
-    }
+  body {
+    background-color: transparent !important;
+  }
+
+  #authenticated-layout {
+    background-color: transparent !important;
+  }
+
+  #player-wrapper {
+    background-color: transparent !important;
+  }
 }
 
-html, body, #authenticated-layout, #player-wrapper {
+html,
+body,
+#authenticated-layout,
+#player-wrapper {
   transition: background-color 1s ease;
 }

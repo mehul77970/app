@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GlobalNavigation from '@/components/global/Navigation.vue'
+import GlobalNavigation from "@/components/global/Navigation.vue";
 </script>
 
 <template>

@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { PhCircleNotch } from '@phosphor-icons/vue'
-import { notify } from 'notiwind'
+import { PhCircleNotch } from "@phosphor-icons/vue";
+import { notify } from "notiwind";
 
-const playerStore = usePlayerStore()
+const playerStore = usePlayerStore();
 
-const subtitle = computed(() => playerStore.subtitle)
-const subtitleLoadInfo = computed(() => playerStore.subtitleLoading)
-const loaded = computed(() => playerStore.loaded)
-const elementLoad = ref(false)
+const subtitle = computed(() => playerStore.subtitle);
+const subtitleLoadInfo = computed(() => playerStore.subtitleLoading);
+const loaded = computed(() => playerStore.loaded);
+const elementLoad = ref(false);
 
 onMounted(() => {
-  elementLoad.value = true
-})
+  elementLoad.value = true;
+});
 
 onErrorCaptured((err) => {
   notify(
     {
-      title: 'Subtitle Load Failed',
-      type: 'error',
+      title: "Subtitle Load Failed",
+      type: "error",
       text: `${err.message}`,
-      group: 'bottom',
+      group: "bottom",
     },
     5000,
-  )
-  playerStore.subtitleLoading = null
-})
+  );
+  playerStore.subtitleLoading = null;
+});
 
 watch(subtitle, (newSub) => {
-  if (!newSub?.source) return
+  if (!newSub?.source) return;
 
-  playerStore.subtitleLoading = `Fetching ${newSub?.title} Subtitle Data..`
-})
+  playerStore.subtitleLoading = `Fetching ${newSub?.title} Subtitle Data..`;
+});
 </script>
 
 <template>
@@ -43,10 +43,7 @@ watch(subtitle, (newSub) => {
         v-if="subtitleLoadInfo"
         class="inline-flex gap-2 items-center justify-center z-[999999] absolute right-5 top-4"
       >
-        <PhCircleNotch
-          :size="32"
-          class="animate-spin"
-        />
+        <PhCircleNotch :size="32" class="animate-spin" />
         {{ subtitleLoadInfo }}
       </div>
     </Transition>

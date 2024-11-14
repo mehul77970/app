@@ -1,51 +1,50 @@
 import type {
-  MediaStream,
   BaseItemDto,
+  MediaStream,
   PlaybackInfoResponse,
-} from '@jellyfin/sdk/lib/generated-client'
+} from "@jellyfin/sdk/lib/generated-client";
 
 export interface VideoSource {
-  source: MediaStream
-  hdr: boolean
-  dolbyDigital: boolean
-  is4k: boolean
-  title: string
+  source: MediaStream;
+  hdr: boolean;
+  dolbyDigital: boolean;
+  is4k: boolean;
+  title: string;
 }
 
 export interface AudioSource {
-  source: MediaStream
-  dolbyAudio: boolean
-  dtsAudio: boolean
-  channelTitle?: string
-  title: string
+  source: MediaStream;
+  dolbyAudio: boolean;
+  dtsAudio: boolean;
+  channelTitle?: string;
+  title: string;
 }
 
 export interface SubtitleSource {
-  source?: MediaStream
-  title: string
+  source?: MediaStream;
+  title: string;
 }
 
 export function createVideoSource(source?: MediaStream): VideoSource | null {
-  console.log('Got video source', source)
-  if (!source) return null
+  if (!source) return null;
 
-  let title = ''
-  let hdr = false
-  let is4k = false
-  let dolbyDigital = false
+  let title = "";
+  let hdr = false;
+  let is4k = false;
+  let dolbyDigital = false;
 
-  title += `${source.Width}x${source.Height}`
+  title += `${source.Width}x${source.Height}`;
 
-  if (source.VideoRange === 'HDR') {
-    hdr = true
+  if (source.VideoRange === "HDR") {
+    hdr = true;
   }
 
-  if (source.DisplayTitle?.includes('Dolby Vision')) {
-    dolbyDigital = true
+  if (source.DisplayTitle?.includes("Dolby Vision")) {
+    dolbyDigital = true;
   }
 
   if (source.Width! >= 3840) {
-    is4k = true
+    is4k = true;
   }
 
   return {
@@ -54,48 +53,48 @@ export function createVideoSource(source?: MediaStream): VideoSource | null {
     dolbyDigital,
     is4k,
     title,
-  }
+  };
 }
 
 export function createAudioSource(source?: MediaStream): AudioSource | null {
-  if (!source || !source.Language) return null
+  if (!source || !source.Language) return null;
 
-  let title = ''
-  let channelTitle = undefined as undefined | string
-  let dolbyAudio = false
-  let dtsAudio = false
+  let title = "";
+  let channelTitle = undefined as undefined | string;
+  let dolbyAudio = false;
+  let dtsAudio = false;
 
-  const languages = new Intl.DisplayNames(['en'], { type: 'language' })
+  const languages = new Intl.DisplayNames(["en"], { type: "language" });
 
-  title += `${languages.of(source.Language!)}`
+  title += `${languages.of(source.Language!)}`;
 
-  title += ' ('
+  title += " (";
   switch (source.ChannelLayout) {
-    case 'mono':
-      title += 'Mono'
-      break
-    case 'stereo':
-      title += 'Stereo'
-      break
+    case "mono":
+      title += "Mono";
+      break;
+    case "stereo":
+      title += "Stereo";
+      break;
     default:
-      title += `${source.ChannelLayout}`
-      channelTitle = `${source.ChannelLayout}`
-      break
+      title += `${source.ChannelLayout}`;
+      channelTitle = `${source.ChannelLayout}`;
+      break;
   }
 
-  if (source.DisplayTitle?.includes('Dolby Digital')) {
-    dolbyAudio = true
+  if (source.DisplayTitle?.includes("Dolby Digital")) {
+    dolbyAudio = true;
     // channelTitle += ' Dolby Digital';
     // title += ' Dolby Digital';
   }
 
-  if (source.DisplayTitle?.includes('DTS-HD')) {
-    dtsAudio = true
+  if (source.DisplayTitle?.includes("DTS-HD")) {
+    dtsAudio = true;
     // channelTitle += ' DTS-HD';
     // title += ' DTS-HD';
   }
 
-  title += ')'
+  title += ")";
 
   return {
     source,
@@ -103,58 +102,57 @@ export function createAudioSource(source?: MediaStream): AudioSource | null {
     dtsAudio,
     channelTitle,
     title,
-  }
+  };
 }
 
 export function createSubtitleSource(
   source?: MediaStream,
 ): SubtitleSource | null {
-  if (!source) return null
+  if (!source) return null;
 
-  let title = ''
+  let title = "";
 
-  const languages = new Intl.DisplayNames(['en'], { type: 'language' })
+  const languages = new Intl.DisplayNames(["en"], { type: "language" });
 
   if (source.Language) {
-    title += `${languages.of(source.Language!)}`
-  }
-  else {
-    title += 'Unknown Language'
+    title += `${languages.of(source.Language!)}`;
+  } else {
+    title += "Unknown Language";
   }
 
   if (source.Title) {
-    title += ` (${source.Title})`
+    title += ` (${source.Title})`;
   }
 
   return {
     source,
     title,
-  }
+  };
 }
 
 export function getDefaultMediaStreams(
   playback: PlaybackInfoResponse | BaseItemDto,
 ) {
   if (!playback.MediaSources || !playback.MediaSources[0]) {
-    console.warn('No default sources found')
-    return { video: null, audio: null, subtitle: null }
+    console.warn("No default sources found");
+    return { video: null, audio: null, subtitle: null };
   }
-  const mediaSource = playback.MediaSources[0]
-  const mediaStreams = mediaSource.MediaStreams!
+  const mediaSource = playback.MediaSources[0];
+  const mediaStreams = mediaSource.MediaStreams!;
 
-  const defaultVideo = mediaStreams.find(src => src.Type === 'Video')
+  const defaultVideo = mediaStreams.find((src) => src.Type === "Video");
   const defaultAudio = mediaStreams.find(
-    src => src.Type === 'Audio' && src.IsDefault,
-  )
+    (src) => src.Type === "Audio" && src.IsDefault,
+  );
   const defaultSubtitle = mediaStreams.find(
-    src => src.Type === 'Subtitle' && src.IsDefault,
-  )
+    (src) => src.Type === "Subtitle" && src.IsDefault,
+  );
 
   return {
     video: createVideoSource(defaultVideo),
     audio: createAudioSource(defaultAudio),
     subtitle: createSubtitleSource(defaultSubtitle),
-  }
+  };
 }
 
 export function getSubtitleStreams(
@@ -162,120 +160,122 @@ export function getSubtitleStreams(
   createEmpty: boolean = true,
 ) {
   if (!playback.MediaSources || !playback.MediaSources[0]) {
-    console.warn('No subtitle sources found')
-    return []
+    console.warn("No subtitle sources found");
+    return [];
   }
-  const mediaSource = playback.MediaSources[0]
+  const mediaSource = playback.MediaSources[0];
   const subtitleStreams = mediaSource.MediaStreams!.filter(
-    src => src.Type === 'Subtitle',
-  )
+    (src) => src.Type === "Subtitle",
+  );
 
-  const subtitleSources = [] as SubtitleSource[]
+  const subtitleSources = [] as SubtitleSource[];
 
   // Create empty subtitle track
   if (createEmpty) {
     subtitleSources.push({
-      title: 'None',
+      title: "None",
       source: {
         Index: -1,
       },
-    })
+    });
   }
 
   for (let i = 0; subtitleStreams.length > i; i++) {
-    const currentSubtitleStream = subtitleStreams[i]
+    const currentSubtitleStream = subtitleStreams[i];
 
-    subtitleSources.push(createSubtitleSource(currentSubtitleStream)!)
+    subtitleSources.push(createSubtitleSource(currentSubtitleStream)!);
   }
 
-  return subtitleSources
+  return subtitleSources;
 }
 
 export function getAudioStreams(playback: PlaybackInfoResponse | BaseItemDto) {
   if (!playback.MediaSources || !playback.MediaSources[0]) {
-    console.warn('No audio sources found')
-    return []
+    console.warn("No audio sources found");
+    return [];
   }
-  const mediaSource = playback.MediaSources[0]
+  const mediaSource = playback.MediaSources[0];
   const audioStreams = mediaSource.MediaStreams!.filter(
-    src => src.Type === 'Audio',
-  )
+    (src) => src.Type === "Audio",
+  );
 
-  const audioSources = [] as AudioSource[]
+  const audioSources = [] as AudioSource[];
 
   for (let i = 0; audioStreams.length > i; i++) {
-    const currentAudioStream = audioStreams[i]
+    const currentAudioStream = audioStreams[i];
 
-    audioSources.push(createAudioSource(currentAudioStream)!)
+    audioSources.push(createAudioSource(currentAudioStream)!);
   }
 
-  return audioSources
+  return audioSources;
 }
 
 export function getVideoStreams(playback: PlaybackInfoResponse | BaseItemDto) {
   if (!playback.MediaSources || !playback.MediaSources[0]) {
-    console.warn('No video sources found')
-    return []
+    console.warn("No video sources found");
+    return [];
   }
 
-  const mediaSource = playback.MediaSources[0]
+  const mediaSource = playback.MediaSources[0];
   const videoStreams = mediaSource.MediaStreams!.filter(
-    src => src.Type === 'Video',
-  )
+    (src) => src.Type === "Video",
+  );
 
-  const videoSources = [] as VideoSource[]
+  const videoSources = [] as VideoSource[];
 
   for (let i = 0; videoStreams.length > i; i++) {
-    const currentVideoStream = videoStreams[i]
+    const currentVideoStream = videoStreams[i];
 
-    videoSources.push(createVideoSource(currentVideoStream)!)
+    videoSources.push(createVideoSource(currentVideoStream)!);
   }
 
-  return videoSources
+  return videoSources;
 }
 
-export function getMediaSources(playback: PlaybackInfoResponse | BaseItemDto, createEmpty: boolean = true) {
+export function getMediaSources(
+  playback: PlaybackInfoResponse | BaseItemDto,
+  createEmpty: boolean = true,
+) {
   if (!playback.MediaSources || !playback.MediaSources[0]) {
-    console.warn('No media sources found')
-    return { videoSources: [], audioSources: [], subtitleSources: [] }
+    console.warn("No media sources found");
+    return { videoSources: [], audioSources: [], subtitleSources: [] };
   }
 
-  const videoSources = getVideoStreams(playback)
-  const audioSources = getAudioStreams(playback)
-  const subtitleSources = getSubtitleStreams(playback, createEmpty)
+  const videoSources = getVideoStreams(playback);
+  const audioSources = getAudioStreams(playback);
+  const subtitleSources = getSubtitleStreams(playback, createEmpty);
 
-  return { videoSources, audioSources, subtitleSources }
+  return { videoSources, audioSources, subtitleSources };
 }
 
-export type PlayerType = 'hls' | 'http' | 'native'
+export type PlayerType = "hls" | "http" | "native";
 
 export function getPlayerType(info?: PlaybackInfoResponse): PlayerType | null {
-  if (!info) return null
-  const native = useDeviceStore().nativeEnviroment
-  const nativePlayerEnabled = usePlayerStore().settings.native
+  if (!info) return null;
+  const native = useDeviceStore().nativeEnviroment;
+  const nativePlayerEnabled = usePlayerStore().settings.native;
 
-  console.log('Native', native, 'player', nativePlayerEnabled)
   if (native && nativePlayerEnabled) {
-    return 'native'
+    return "native";
   }
 
   if (info.MediaSources) {
-    const defaultMediaSource = info.MediaSources[0]
-    if (defaultMediaSource.TranscodingUrl) return 'hls'
+    const defaultMediaSource = info.MediaSources[0];
+    if (defaultMediaSource.TranscodingUrl) return "hls";
   }
 
-  return 'http'
+  return "http";
 }
 
 export function getSubtitleStream(subtitle: SubtitleSource, id: string) {
-  if (!subtitle.source) return
-  if (subtitle.source.DeliveryUrl) return subtitle.source.DeliveryUrl
+  if (!subtitle.source) return;
+  if (subtitle.source.DeliveryUrl) return subtitle.source.DeliveryUrl;
 
-  return `/Videos/${id}/${id}/Subtitles/${subtitle.source.Index}/0/Stream.${getSubtitleCodec(subtitle.source.Codec!)}`
+  return `/Videos/${id}/${id}/Subtitles/${subtitle.source.Index}/0/Stream.${getSubtitleCodec(subtitle.source.Codec!)}`;
 }
 
 function getSubtitleCodec(codec: string) {
-  if (codec !== 'subrip') return codec
+  if (codec !== "subrip") return codec;
 
-  if (codec === 'subrip') return 'vtt'
+  if (codec === "subrip") return "vtt";
 }

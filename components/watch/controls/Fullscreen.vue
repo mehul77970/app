@@ -1,46 +1,49 @@
 <script setup lang="ts">
-import { PhCornersIn, PhCornersOut } from '@phosphor-icons/vue'
-import { addComponentEventListener } from '#imports'
-import { Button } from '@/components/ui/button'
-import { fullscreen as enterFullscreen, exitFullscreen } from '~/native/app/App'
+import { PhCornersIn, PhCornersOut } from "@phosphor-icons/vue";
+import { addComponentEventListener } from "#imports";
+import { Button } from "@/components/ui/button";
+import {
+  fullscreen as enterFullscreen,
+  exitFullscreen,
+} from "~/native/app/App";
 
-const device = useDeviceStore()
-const playerStore = usePlayerStore()
-const fullscreen = computed(() => playerStore.fullscreen)
+const device = useDeviceStore();
+const playerStore = usePlayerStore();
+const fullscreen = computed(() => playerStore.fullscreen);
 
 onMounted(() => {
   addComponentEventListener(
     document.documentElement,
-    'fullscreenchange',
+    "fullscreenchange",
     () => {
-      playerStore.fullscreen = !playerStore.fullscreen
+      playerStore.fullscreen = !playerStore.fullscreen;
     },
-  )
-})
+  );
+});
 
-const toggleFullscreen = () => {
+function toggleFullscreen() {
   if (device.nativeEnviroment) {
-    return toggleFullscreenNative()
+    return toggleFullscreenNative();
   }
 
-  return toggleFullscreenBrowser()
+  return toggleFullscreenBrowser();
 }
 
-const toggleFullscreenBrowser = () => {
+function toggleFullscreenBrowser() {
   if (fullscreen.value) {
-    return document.exitFullscreen()
+    return document.exitFullscreen();
   }
 
-  return document.documentElement.requestFullscreen()
+  return document.documentElement.requestFullscreen();
 }
 
-const toggleFullscreenNative = () => {
+function toggleFullscreenNative() {
   if (fullscreen.value) {
-    playerStore.fullscreen = false
-    return exitFullscreen()
+    playerStore.fullscreen = false;
+    return exitFullscreen();
   }
-  playerStore.fullscreen = true
-  return enterFullscreen()
+  playerStore.fullscreen = true;
+  return enterFullscreen();
 }
 </script>
 

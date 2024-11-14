@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
-import { formatDate } from '@/lib/utils'
-import GlobalImageWithPlaceholder from '@/components/global/ImageWithPlaceholder.vue'
+import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
+import GlobalImageWithPlaceholder from "@/components/global/ImageWithPlaceholder.vue";
+import { formatDate } from "@/lib/utils";
 
-const { item, customOriginalName, hdr, channelLayout, videoResolution }
-  = defineProps<{
-    item: BaseItemDto
-    customOriginalName?: string
-    hdr?: string
-    channelLayout?: string
-    videoResolution?: string
-  }>()
+const { item, customOriginalName, hdr, channelLayout, videoResolution } =
+  defineProps<{
+    item: BaseItemDto;
+    customOriginalName?: string;
+    hdr?: string;
+    channelLayout?: string;
+    videoResolution?: string;
+  }>();
 
 // const videoCodecs = [] as string[];
 // const videoContainers = [] as string[];
-const mediaBrowser = useMediaBrowserStore()
+const mediaBrowser = useMediaBrowserStore();
 
 // const getTotalMediaSize = () => {
 //     let size = 0;
@@ -53,8 +53,8 @@ const mediaBrowser = useMediaBrowserStore()
 // });
 
 // TODO: Make a util func
-const seasonHasImage = (season: BaseItemDto) => {
-  return Boolean(season?.ImageTags?.['Primary'])
+function seasonHasImage(season: BaseItemDto) {
+  return Boolean(season?.ImageTags?.Primary);
 }
 </script>
 
@@ -63,10 +63,7 @@ const seasonHasImage = (season: BaseItemDto) => {
     class="item-card inline-flex flex-col gap-8 sm:w-[600px] max-w-full h-fit"
   >
     <div class="title inline-flex flex-col gap-2">
-      <span
-        v-if="item.Name"
-        class="text-4xl font-bold name-transition"
-      >
+      <span v-if="item.Name" class="text-4xl font-bold name-transition">
         {{ item.Name }}
       </span>
 
@@ -77,10 +74,7 @@ const seasonHasImage = (season: BaseItemDto) => {
         {{ item.OriginalTitle }}
       </h2>
 
-      <h2
-        v-else-if="customOriginalName"
-        class="text-2xl text-white/85"
-      >
+      <h2 v-else-if="customOriginalName" class="text-2xl text-white/85">
         {{ customOriginalName }}
       </h2>
     </div>
@@ -95,7 +89,7 @@ const seasonHasImage = (season: BaseItemDto) => {
       v-else
       class="item-image rounded-lg bg-gray-600 shadow-black shadow-2xl object-cover image-fade"
       src="/placeholder.svg"
-    >
+    />
 
     <div class="inline-flex flex-wrap gap-1">
       <div
@@ -105,10 +99,7 @@ const seasonHasImage = (season: BaseItemDto) => {
         <span class="text-white/50 font-semibold">{{ videoResolution }}</span>
       </div>
 
-      <div
-        v-if="hdr"
-        class="hdr-badge py-1 px-2 rounded-md bg-white/25"
-      >
+      <div v-if="hdr" class="hdr-badge py-1 px-2 rounded-md bg-white/25">
         <span class="text-white/50 font-semibold">{{ hdr }}</span>
       </div>
 
@@ -126,9 +117,7 @@ const seasonHasImage = (season: BaseItemDto) => {
         id="genres"
         class="inline-flex flex-col text-white/75 max-w-full"
       >
-        <h2 class="text-lg">
-          Genres
-        </h2>
+        <h2 class="text-lg">Genres</h2>
 
         <div class="inline-flex flex-wrap gap-1">
           <BrowseInternalLinkedContent
@@ -147,9 +136,7 @@ const seasonHasImage = (season: BaseItemDto) => {
         id="tags"
         class="inline-flex flex-col text-white/75 max-w-full"
       >
-        <h2 class="text-lg">
-          Tags
-        </h2>
+        <h2 class="text-lg">Tags</h2>
 
         <div class="inline-flex flex-wrap text-white/50">
           <span>{{ item.Tags?.join(", ") }}</span>
@@ -162,22 +149,15 @@ const seasonHasImage = (season: BaseItemDto) => {
             v-if="item.CommunityRating"
             class="rating inline-flex flex-col gap-2"
           >
-            <h2 class="text-lg">
-              Rating
-            </h2>
+            <h2 class="text-lg">Rating</h2>
 
             <div class="inline-flex flex-wrap gap-[4px] text-white/50">
               <BrowseRating :rating="item.CommunityRating" />
             </div>
           </div>
 
-          <div
-            v-if="item.PremiereDate"
-            class="inline-flex flex-col gap-2"
-          >
-            <h2 class="text-lg">
-              Released
-            </h2>
+          <div v-if="item.PremiereDate" class="inline-flex flex-col gap-2">
+            <h2 class="text-lg">Released</h2>
 
             <div class="inline-flex flex-wrap gap-[4px] text-white/50">
               <span>{{ formatDate(item.PremiereDate) }}</span>
@@ -189,9 +169,7 @@ const seasonHasImage = (season: BaseItemDto) => {
             v-if="item.Studios && item.Studios.length > 0"
             class="inline-flex flex-col gap-2"
           >
-            <h2 class="text-lg">
-              Studios
-            </h2>
+            <h2 class="text-lg">Studios</h2>
 
             <div
               class="inline-flex gap-[4px] flex-wrap text-lg text-white/50 max-w-full break-words"
@@ -206,26 +184,16 @@ const seasonHasImage = (season: BaseItemDto) => {
             </div>
           </div>
 
-          <div
-            v-if="item.DateCreated"
-            class="inline-flex flex-col gap-2"
-          >
-            <h2 class="text-lg">
-              Date Added
-            </h2>
+          <div v-if="item.DateCreated" class="inline-flex flex-col gap-2">
+            <h2 class="text-lg">Date Added</h2>
 
             <div class="inline-flex flex-wrap gap-[4px] text-white/50">
               <span>{{ formatDate(item.DateCreated) }}</span>
             </div>
           </div>
 
-          <div
-            v-if="item.OfficialRating"
-            class="inline-flex flex-col gap-2"
-          >
-            <h2 class="text-lg">
-              Audience
-            </h2>
+          <div v-if="item.OfficialRating" class="inline-flex flex-col gap-2">
+            <h2 class="text-lg">Audience</h2>
 
             <div class="inline-flex flex-wrap gap-[4px] text-white/50">
               <span>{{ item.OfficialRating }}</span>

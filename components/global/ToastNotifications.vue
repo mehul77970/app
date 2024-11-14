@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NotificationGroup, Notification } from 'notiwind'
 import {
-  PhXCircle,
   PhCheckCircle,
   PhExclamationMark,
-} from '@phosphor-icons/vue'
+  PhXCircle,
+} from "@phosphor-icons/vue";
+import { Notification, NotificationGroup } from "notiwind";
 </script>
 
 <template>
@@ -71,10 +71,7 @@ import {
       </div>
     </NotificationGroup>
 
-    <NotificationGroup
-      group="bottom"
-      position="bottom"
-    >
+    <NotificationGroup group="bottom" position="bottom">
       <div
         class="fixed inset-x-0 bottom-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none"
       >
@@ -95,12 +92,11 @@ import {
               :key="notification.id"
               class="flex w-full mx-auto mt-4 overflow-hidden bg-[#1e2023] rounded-lg shadow-md"
             >
-              <template v-if="notification.type == 'error'">
-                <div class="flex items-center justify-center flex-grow max-w-[100px] px-4 bg-red-500">
-                  <PhXCircle
-                    type="fill"
-                    :size="24"
-                  />
+              <template v-if="notification.type === 'error'">
+                <div
+                  class="flex items-center justify-center flex-grow max-w-[100px] px-4 bg-red-500"
+                >
+                  <PhXCircle type="fill" :size="24" />
                 </div>
 
                 <div class="px-4 py-2 -mx-3">
@@ -115,12 +111,11 @@ import {
                 </div>
               </template>
 
-              <template v-if="notification.type == 'info'">
-                <div class="flex items-center justify-center max-w-[100px] px-4 bg-blue-500">
-                  <PhExclamationMark
-                    type="bold"
-                    :size="24"
-                  />
+              <template v-if="notification.type === 'info'">
+                <div
+                  class="flex items-center justify-center max-w-[100px] px-4 bg-blue-500"
+                >
+                  <PhExclamationMark type="bold" :size="24" />
                 </div>
 
                 <div class="px-4 py-2 -mx-3">
@@ -135,12 +130,11 @@ import {
                 </div>
               </template>
 
-              <template v-if="notification.type == 'success'">
-                <div class="flex items-center justify-center max-w-[100px] px-4 bg-green-500">
-                  <PhCheckCircle
-                    type="fill"
-                    :size="24"
-                  />
+              <template v-if="notification.type === 'success'">
+                <div
+                  class="flex items-center justify-center max-w-[100px] px-4 bg-green-500"
+                >
+                  <PhCheckCircle type="fill" :size="24" />
                 </div>
 
                 <div class="px-4 py-2 -mx-3">

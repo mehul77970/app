@@ -1,41 +1,40 @@
 <script setup lang="ts">
-import { PhCircleNotch } from '@phosphor-icons/vue'
-import { notify } from 'notiwind'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useServerStore } from '@/stores/ServerStore'
+import { PhCircleNotch } from "@phosphor-icons/vue";
+import { notify } from "notiwind";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useServerStore } from "@/stores/ServerStore";
 
-const serverStore = useServerStore()
+const serverStore = useServerStore();
 
-const url = ref('')
+const url = ref("");
 const load = ref({
   loading: false,
   error: null as null | string,
-})
+});
 
-const saveUrl = async () => {
-  load.value.loading = true
+async function saveUrl() {
+  load.value.loading = true;
   try {
-    await serverStore.testServerURL(url.value)
-    serverStore.setServerURL(url.value)
-    navigateTo('/login')
-  }
-  catch (e: unknown) {
-    load.value.error = (e as Error).message
+    await serverStore.testServerURL(url.value);
+    serverStore.setServerURL(url.value);
+    navigateTo("/login");
+  } catch (e: unknown) {
+    load.value.error = (e as Error).message;
     notify(
       {
-        title: 'Invalid Server',
-        type: 'error',
+        title: "Invalid Server",
+        type: "error",
         text: load.value.error,
-        group: 'bottom',
+        group: "bottom",
       },
       5000,
-    )
-    throw e
+    );
+    throw e;
   }
 
-  load.value.loading = false
+  load.value.loading = false;
   // navigateTo('/login')
 }
 </script>
@@ -49,11 +48,9 @@ const saveUrl = async () => {
         src="~/assets/images/jellyfin/banner-dark.svg"
         height="256px"
         width="256px"
-      >
+      />
       <div class="inline-flex flex-col gap-2 text-center">
-        <h1 class="text-3xl font-bold">
-          Getting Started
-        </h1>
+        <h1 class="text-3xl font-bold">Getting Started</h1>
         <p class="text-balance text-muted-foreground">
           Please enter your server URL to continue
         </p>
@@ -77,18 +74,13 @@ const saveUrl = async () => {
           @click="saveUrl"
         >
           <template v-if="load.loading">
-            <PhCircleNotch
-              :size="18"
-              class="animate-spin w-4 h-4 mr-2"
-            />
+            <PhCircleNotch :size="18" class="animate-spin w-4 h-4 mr-2" />
           </template>
           Save
         </Button>
 
         <div class="info inline-flex flex-col gap-2 mt-4">
-          <p class="font-semibold">
-            Self Hosting
-          </p>
+          <p class="font-semibold">Self Hosting</p>
 
           <p>SERVER_URL=serverurl (TODO)</p>
         </div>

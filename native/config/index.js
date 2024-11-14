@@ -1,5 +1,5 @@
 // Configure our handle for the config controller
-const handle = window?.go?.config?.Config
+const handle = window?.go?.config?.Config;
 
 /**
  * Im too lazy to add proper typing...
@@ -10,26 +10,27 @@ const handle = window?.go?.config?.Config
  */
 
 export function Read() {
-  handle.Read()
+  handle.Read();
 }
 
 // Request to exit fullscreen
 export function Write() {
-  handle.Write()
+  handle.Write();
 }
 
-/** Get config data from backend
-* @returns {ConfigData} Config data
-*/
+/**
+ * Get config data from backend
+ * @returns {ConfigData} Config data
+ */
 export async function getData() {
-  return await handle.GetData()
+  return await handle.GetData();
 }
 /**
  * Set authentication on backend
  * @param {any} store
  */
 export function setAuthentication(store) {
-  handle.SetAuthentication(store)
+  handle.SetAuthentication(store);
 }
 
 /**
@@ -37,7 +38,7 @@ export function setAuthentication(store) {
  * @param {any} store
  */
 export function setServer(store) {
-  handle.SetServer(store)
+  handle.SetServer(store);
 }
 
 /**
@@ -45,5 +46,5 @@ export function setServer(store) {
  * @param {any} store
  */
 export function setUser(store) {
-  handle.SetUser(store)
+  handle.SetUser(store);
 }

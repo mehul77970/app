@@ -1,5 +1,5 @@
-import { addAppEventListener } from './App'
+import { addAppEventListener } from "./App";
 
 export function onAppResize(callback: () => void) {
-  addAppEventListener('APP_RESIZE', callback)
+  addAppEventListener("APP_RESIZE", callback);
 }

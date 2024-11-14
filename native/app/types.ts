@@ -1,1 +1,1 @@
-export type AppEvents = 'APP_RESIZE'
+export type AppEvents = "APP_RESIZE";

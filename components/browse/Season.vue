@@ -1,64 +1,57 @@
 <script setup lang="ts">
-import type { EmblaCarouselType } from 'embla-carousel'
+import type { EmblaCarouselType } from "embla-carousel";
+import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel'
-import Radial from '@/components/ui/radial/Radial.vue'
-import { getDefaultMediaStreams, getMediaSources } from '~/lib/player'
+} from "@/components/ui/carousel";
+import Radial from "@/components/ui/radial/Radial.vue";
+import { getDefaultMediaStreams, getMediaSources } from "~/lib/player";
 
-const { id, parentId } = defineProps<{ id: string, parentId: string }>()
+const { id, parentId } = defineProps<{ id: string; parentId: string }>();
 
-const episodesCarousel = ref(null as { carouselApi: EmblaCarouselType } | null)
-const mediaStore = useMediaBrowserStore()
+const episodesCarousel = ref(null as { carouselApi: EmblaCarouselType } | null);
+const mediaStore = useMediaBrowserStore();
 
-const season = await mediaStore.getItem(id)
-const episodes = await mediaStore.getEpisodesOfSeason(parentId, id, 99999)
+const season = await mediaStore.getItem(id);
+const episodes = await mediaStore.getEpisodesOfSeason(parentId, id, 99999);
 
-const staticBackground = mediaStore.generateImageURL(
-  parentId,
-  undefined,
-  1200,
-  1200,
-)
-const logo = mediaStore.generateImageURL(parentId, 'Logo/0', 600)
-const currentWatch = await mediaStore.getNextUp(season.Id!, 1)
+const staticBackground = useServerImage(season, { type: "Thumb" });
+const logo = useServerImage(season, { type: "Logo", fallback: "Logo" });
+const currentWatch = await mediaStore.getNextUp(season.Id!, 1);
 
 // TODO: Configure if we should try to figure out video/audio/subtitle track info, can make the inital load slower.
 
-const episode = await mediaStore.getItem(episodes[0].Id || '')
-const defaultSources = getDefaultMediaStreams(episode)
+const episode = await mediaStore.getItem(episodes[0].Id || "");
+const defaultSources = getDefaultMediaStreams(episode);
 
-const { videoSources, audioSources, subtitleSources } = getMediaSources(episode)
+const { videoSources, audioSources, subtitleSources } =
+  getMediaSources(episode);
 
-const getEpisodeImage = (episode: string) =>
-  mediaStore.generateImageURL(episode, undefined, 720, 480)
+function getEpisodeImage(episode: BaseItemDto) {
+  return useServerImage(episode, { type: "Primary", fallback: "Thumb" });
+}
 
-const background = () => {
-  if (!currentWatch[0]) return staticBackground
+function background() {
+  if (!currentWatch[0]) return staticBackground;
 
-  return mediaStore.generateImageURL(
-    currentWatch[0].Id!,
-    undefined,
-    1200,
-    1200,
-  )
+  return useServerImage(currentWatch[0]);
 }
 
 onMounted(() => {
-  if (!episodesCarousel.value) return
+  if (!episodesCarousel.value) return;
 
-  const carouselAPI = episodesCarousel.value.carouselApi
+  const carouselAPI = episodesCarousel.value.carouselApi;
 
   // Automatically scroll to currently playing episode
   const currentEpisodeIndex = currentWatch[0]
-    ? episodes.findIndex(ep => ep.Id == currentWatch[0].Id!)
-    : 0
+    ? episodes.findIndex((ep) => ep.Id == currentWatch[0].Id!)
+    : 0;
 
-  console.log('Should scroll to ep index', currentEpisodeIndex)
-  carouselAPI.scrollTo(currentEpisodeIndex)
-})
+  console.log("Should scroll to ep index", currentEpisodeIndex);
+  carouselAPI.scrollTo(currentEpisodeIndex);
+});
 </script>
 
 <template>
@@ -73,35 +66,30 @@ onMounted(() => {
   >
     <template #sections>
       <section
-        class="inline-flex flex-col justify-start pb-4 items-start max-w-full gap-4 mt-[72px]"
+        class="inline-flex flex-col justify-start pb-4 items-start w-full gap-4 mt-[72px]"
       >
-        <h1 class="text-gray-400 tracking-wider pl-6">
-          EPISODES
-        </h1>
+        <h1 class="text-gray-400 tracking-wider pl-6">EPISODES</h1>
 
         <Carousel
           ref="episodesCarousel"
-          class="relative flex max-w-[100%] justify-start items-start rounded-lg z-[2]"
+          class="relative flex w-full justify-start items-start rounded-lg z-[2]"
           :opts="{
             dragFree: true,
             skipSnaps: false,
           }"
         >
-          <CarouselContent
-            v-focus-section
-            class="items-end"
-          >
+          <CarouselContent v-focus-section class="items-end">
             <CarouselItem
-              v-for="(episode, index) in episodes"
+              v-for="(ep, index) in episodes"
               :key="index"
-              :class="`basis-1/1 lg:basis-1/4 ${index == 0 ? 'ml-6' : ''} ${index == episodes.length-1 ? 'mr-6' : ''}`"
+              :class="`basis-1/3 lg:basis-1/4 ${index == 0 ? 'ml-6' : ''} ${index == episodes.length - 1 ? 'mr-6' : ''}`"
             >
               <div>
                 <NuxtLink
                   v-focus
                   :to="{
                     name: 'authenticated-new-watch-id',
-                    params: { id: episode.Id },
+                    params: { id: ep.Id },
                   }"
                   class="group"
                 >
@@ -109,35 +97,35 @@ onMounted(() => {
                     class="season inline-flex flex-col justify-center gap-2 w-[100%] group select-none"
                   >
                     <h3
-                      class="text-lg group-hover:underline group-hover:text-opacity-75 group-focus-visible:underline group-focus-visible:text-opacity-75 text-white"
+                      class="text-sm lg:text-lg group-hover:underline group-hover:text-opacity-75 group-focus-visible:underline group-focus-visible:text-opacity-75 text-white"
                     >
-                      {{ episode.Name }}
+                      {{ ep.Name }}
                     </h3>
                     <div class="rounded-lg group relative selectable">
                       <div class="bg-black rounded-lg">
-                        <ImageWithPlaceholder
-                          :src="getEpisodeImage(episode.Id!!)"
-                          class-name="h-fit w-full aspect-video object-cover rounded-lg transition-all duration-250 group-hover:opacity-75 z-[3]"
+                        <img
+                          :src="getEpisodeImage(ep)"
+                          class="h-fit w-full aspect-video object-cover rounded-lg transition-all duration-250 group-hover:opacity-75 z-[3]"
                         />
                       </div>
 
                       <!-- TODO: Add short stats -->
                       <div
                         v-if="
-                          episode.UserData?.PlaybackPositionTicks != 0
-                            || episode.UserData?.Played
+                          ep.UserData?.PlaybackPositionTicks != 0 ||
+                          ep.UserData?.Played
                         "
-                        class="absolute h-full rounded-lg max-w-full z-[5] top-0 p-4 w-full inline-flex justify-end text-slate-300"
+                        class="absolute h-full rounded-lg max-w-full z-[5] top-0 p-2 md:p-4 w-full inline-flex justify-end text-slate-300"
                       >
                         <Radial
                           :max="100"
                           :min="0"
                           :value="
-                            episode.UserData!!.Played
+                            ep.UserData!!.Played
                               ? 100
-                              : episode.UserData?.PlayedPercentage!!
+                              : ep.UserData?.PlayedPercentage!!
                           "
-                          class-name="size-8"
+                          class-name="lg:size-8 size-6"
                           gauge-primary-color="rgb(255, 255, 255)"
                           gauge-secondary-color="rgba(0, 0, 0, 0.5)"
                           :show-complete="true"

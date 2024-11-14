@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const { audio, featureOnly = false } = defineProps<{ audio: AudioSource, featureOnly?: boolean }>()
+const { audio, featureOnly = false } = defineProps<{
+  audio: AudioSource;
+  featureOnly?: boolean;
+}>();
 </script>
 
 <template>
@@ -7,13 +10,7 @@ const { audio, featureOnly = false } = defineProps<{ audio: AudioSource, feature
     <template v-if="!featureOnly">
       {{ audio.title }}
     </template>
-    <IconDolbyDigital
-      v-if="audio.dolbyAudio"
-      class="ml-2 h-4 mt-1"
-    />
-    <IconDTS
-      v-if="audio.dtsAudio"
-      class="ml-2 h-3"
-    />
+    <IconDolbyDigital v-if="audio.dolbyAudio" class="ml-2 h-4 mt-1" />
+    <IconDTS v-if="audio.dtsAudio" class="ml-2 h-3" />
   </span>
 </template>

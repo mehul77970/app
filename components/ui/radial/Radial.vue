@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { PhCheckCircle } from '@phosphor-icons/vue'
-import { cn } from '~/lib/utils'
+import { PhCheckCircle } from "@phosphor-icons/vue";
+import { cn } from "~/lib/utils";
 
 interface Props {
-  max: number
-  value: number
-  min: number
-  gaugePrimaryColor: string
-  gaugeSecondaryColor: string
-  className: string
-  showText?: boolean
-  showComplete?: boolean
+  max: number;
+  value: number;
+  min: number;
+  gaugePrimaryColor: string;
+  gaugeSecondaryColor: string;
+  className: string;
+  showText?: boolean;
+  showComplete?: boolean;
 }
 
 const {
@@ -19,14 +19,14 @@ const {
   value = 0,
   gaugePrimaryColor,
   gaugeSecondaryColor,
-  className = '',
+  className = "",
   showText = false,
   showComplete = false,
-} = defineProps<Props>()
+} = defineProps<Props>();
 
-const circumference = 2 * Math.PI * 45
-const percentPx = circumference / 100
-const currentPercent = computed(() => ((value - min) / (max - min)) * 100)
+const circumference = 2 * Math.PI * 45;
+const percentPx = circumference / 100;
+const currentPercent = computed(() => ((value - min) / (max - min)) * 100);
 </script>
 
 <template>
@@ -42,11 +42,11 @@ const currentPercent = computed(() => ((value - min) / (max - min)) * 100)
       '--transition-step': '200ms',
       '--delay': '0s',
       '--percent-to-deg': '3.6deg',
-      'transform': 'translateZ(0)',
+      transform: 'translateZ(0)',
     }"
   >
     <svg
-      v-if="currentPercent != 100"
+      v-if="currentPercent !== 100"
       fill="none"
       class="size-full"
       stroke-width="2"
@@ -62,15 +62,15 @@ const currentPercent = computed(() => ((value - min) / (max - min)) * 100)
         stroke-linejoin="round"
         class="opacity-100"
         :style="{
-          'stroke': gaugeSecondaryColor,
+          stroke: gaugeSecondaryColor,
           '--stroke-percent': 90 - currentPercent,
           '--offset-factor-secondary': 'calc(1 - var(--offset-factor))',
-          'strokeDasharray':
+          strokeDasharray:
             'calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)',
-          'transform':
+          transform:
             'rotate(calc(1turn - 90deg - (var(--gap-percent) * var(--percent-to-deg) * var(--offset-factor-secondary)))) scaleY(-1)',
-          'transition': 'all var(--transition-length) ease var(--delay)',
-          'transformOrigin':
+          transition: 'all var(--transition-length) ease var(--delay)',
+          transformOrigin:
             'calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)',
         }"
       />
@@ -85,23 +85,23 @@ const currentPercent = computed(() => ((value - min) / (max - min)) * 100)
         stroke-linejoin="round"
         class="opacity-100"
         :style="{
-          'stroke': gaugePrimaryColor,
+          stroke: gaugePrimaryColor,
           '--stroke-percent': currentPercent,
-          'strokeDasharray':
+          strokeDasharray:
             'calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)',
-          'transition':
+          transition:
             'var(--transition-length) ease var(--delay),stroke var(--transition-length) ease var(--delay)',
-          'transitionProperty': 'stroke-dasharray,transform',
-          'transform':
+          transitionProperty: 'stroke-dasharray,transform',
+          transform:
             'rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))',
-          'transformOrigin':
+          transformOrigin:
             'calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)',
         }"
       />
     </svg>
 
     <div
-      v-if="showComplete && value == 100"
+      v-if="showComplete && value === 100"
       class="duration-[var(--transition-length)] delay-[var(--delay)] absolute inset-0 w-full h-full size-fit ease-linear animate-in fade-in text-white inline-flex justify-center items-center rounded-lg"
     >
       <PhCheckCircle

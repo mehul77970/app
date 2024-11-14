@@ -90,7 +90,7 @@ deviceStore.testSetDeviceProfile()
         <LazyNuxtPage />
 
         <template #error="{ error }">
-          <div class="flex flex-col items-start justify-center absolute h-full">
+          <div class="flex flex-col items-center justify-center absolute h-full">
             <Alert
               class="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
             >

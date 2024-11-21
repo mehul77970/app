@@ -1,178 +1,225 @@
 <script setup lang="ts">
-import { PhStar } from "@phosphor-icons/vue";
-import ms from "ms";
-import { animate, stagger } from "motion";
+import { PhStar } from '@phosphor-icons/vue'
+import ms from 'ms'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 import {
   createAudioSource,
   createSubtitleSource,
   createVideoSource,
   getDefaultMediaStreams,
-} from "@/lib/player";
+} from '@/lib/player'
+import Motion from '@/components/ui/motion/Motion.vue'
+import Presence from '@/components/ui/motion/Presence.vue'
 
-definePageMeta({ layout: "authenticated" });
+definePageMeta({ layout: 'authenticated' })
+const route = useRoute()
+const mediaBrowser = useMediaBrowserStore()
+const breadcrumbStore = useBreadcrumbStore()
 
-const bgImage = ref(null as null | HTMLImageElement);
-const route = useRoute();
-const mediaBrowser = useMediaBrowserStore();
+const movie = await mediaBrowser.getItem(route.params.id! as string)
 
-onMounted(() => {
-  const controller = animate([
-    [
-      ".stagger",
-      { opacity: 1, x: [-20, 0] },
-      { duration: 0.2, delay: stagger(0.02) },
-    ],
-  ]);
-
-  console.log("Controller", controller);
-  const eventHandler = () => requestAnimationFrame(calculateParallax);
-
-  function calculateParallax() {
-    const containerRect = bgImage.value!.getBoundingClientRect();
-
-    const viewportOffsetTop = containerRect.top;
-    const viewportOffsetBottom = window.innerHeight - viewportOffsetTop;
-
-    scrollFactor.value =
-      viewportOffsetBottom / (window.innerHeight + containerRect.height);
-
-    offset.value = scrollFactor.value * containerRect.height * 0.25;
-  }
-
-  addComponentEventListener(window, "scroll", () => eventHandler());
-
-  eventHandler();
-});
-
-const movie = await mediaBrowser.getItem(route.params.id! as string);
-
-const defaultSources = getDefaultMediaStreams(movie);
+const defaultSources = getDefaultMediaStreams(movie)
 
 const audioSources = movie.MediaStreams
-  ? movie.MediaStreams.filter((s) => s.Type === "Audio").map((s) =>
-      createAudioSource(s),
-    )
-  : [];
-const defaultAudioSource = defaultSources.audio;
+  ? movie.MediaStreams.filter(s => s.Type === 'Audio').map(s =>
+    createAudioSource(s),
+  )
+  : []
+const defaultAudioSource = defaultSources.audio
 
 const videoSources = movie.MediaStreams
-  ? movie.MediaStreams.filter((s) => s.Type === "Video").map((s) =>
-      createVideoSource(s),
-    )
-  : [];
-const defaultVideoSource = defaultSources.video;
+  ? movie.MediaStreams.filter(s => s.Type === 'Video').map(s =>
+    createVideoSource(s),
+  )
+  : []
+const defaultVideoSource = defaultSources.video
 
 const subtitleSources = movie.MediaStreams
-  ? movie.MediaStreams.filter((s) => s.Type === "Subtitle").map((s) =>
-      createSubtitleSource(s),
-    )
-  : [];
-const defaultSubtitleSource = defaultSources.subtitle;
+  ? movie.MediaStreams.filter(s => s.Type === 'Subtitle').map(s =>
+    createSubtitleSource(s),
+  )
+  : []
+const defaultSubtitleSource = defaultSources.subtitle
 
-const selectedAudioTrack = ref(defaultAudioSource?.source?.Index?.toString());
-const selectedVideoTrack = ref(defaultVideoSource?.source?.Index?.toString());
+const selectedAudioTrack = ref(defaultAudioSource?.source?.Index?.toString())
+const selectedVideoTrack = ref(defaultVideoSource?.source?.Index?.toString())
 const selectedSubtitleTrack = ref(
   defaultSubtitleSource?.source?.Index?.toString(),
-);
-
-const scrollFactor = ref(0);
-const offset = ref(0);
+)
 
 function getEndsAtTime() {
-  if (!movie.RunTimeTicks) return;
-  if (!movie.UserData?.PlaybackPositionTicks) return;
+  if (!movie.RunTimeTicks) return
+  if (!movie.UserData?.PlaybackPositionTicks) return
 
-  const runtimeMs = movie.RunTimeTicks / 10000;
-  const playerMs = movie.UserData?.PlaybackPositionTicks;
+  const runtimeMs = movie.RunTimeTicks / 10000
+  const playerMs = movie.UserData?.PlaybackPositionTicks
 
   const millisecondsLeft = movie.UserData?.PlaybackPositionTicks
     ? runtimeMs - playerMs
-    : runtimeMs;
+    : runtimeMs
 
-  return new Intl.DateTimeFormat("default", {
+  return new Intl.DateTimeFormat('default', {
     hour12: true,
-    hour: "numeric",
-    minute: "numeric",
-  }).format(new Date(Date.now() + millisecondsLeft));
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(new Date(Date.now() + millisecondsLeft))
 }
+
+onMounted(() => {
+  // animate([
+  //   [
+  //     '.stagger',
+  //     { opacity: [0, 1], x: [-20, 0], class: 'mounted' },
+  //     { duration: 0.2, delay: stagger(0.02) },
+  //   ],
+  // ])
+
+  // mounted = true
+})
+
+breadcrumbStore.setBreadcrumbs([{
+  name: 'Browse',
+}])
+
+breadcrumbStore.setPage({
+  name: movie.Name || 'No Name Provided',
+  path: `${route.fullPath}`,
+})
 </script>
 
 <template>
   <div class="hide-scroll">
-    <img
-      class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-cover object-top top-0 left-0 fade-gradient"
-      height="100%"
-      width="100%"
-      :src="mediaBrowser.generateImageURL(movie.Id!!, 'Backdrop/0')"
-    />
+    <Presence>
+      <Motion
+        :initial="{ opacity: 0 }"
+        :animate="{ opacity: [0, 1], y: [20, 0] }"
+        :transition="{ delay: 0.04, duration: 0.5 }"
+        :exit="{ opacity: 0, y: [0, -20] }"
+        class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-top top-0 left-0 fade-gradient"
+      >
+        <img
+          class="w-full h-full  object-cover"
+          height="100%"
+          width="100%"
+          :src="mediaBrowser.generateImageURL(movie.Id!!, 'Backdrop/0')"
+        >
+      </Motion>
+    </Presence>
     <div class="inline-flex justify-around mt-[72px]">
       <div class="inline-flex flex-wrap w-full justify-center mt-8">
         <div
-          class="elements grid md:grid-cols-2 gap-16 p-8 max-w-full w-full flex-wrap lg:justify-start justify-center"
+          class="elements grid md:grid-cols-2 gap-4 p-8 max-w-full w-full flex-wrap lg:justify-start justify-center"
         >
-          <img
-            :src="mediaBrowser.generateImageURL(movie.Id!!)"
-            class="w-auto h-fit max-h-[80vh] rounded-lg z-[2] stagger"
-          />
+          <Motion
+            :initial="{ opacity: 0 }"
+            :animate="{ opacity: [0, 1], x: [-20, 0] }"
+            :transition="{ delay: 0.02, duration: 0.2 }"
+          >
+            <img
+              :src="useServerImage(movie, { type: 'Primary', size: 600, quality: 85 })"
+              class="w-auto h-fit max-h-[80vh] rounded-lg z-[2] stagger"
+            >
+          </Motion>
           <div
             id="content"
             class="content mt-[30px] inline-flex flex-col z-[2] h-fit"
           >
-            <LazyBrowseLogo :item="movie" class="w-[500px] mb-24 stagger" />
+            <Motion
+              :initial="{ opacity: 0 }"
+              :animate="{ opacity: [0, 1], x: [-20, 0] }"
+              :transition="{ delay: 0.04, duration: 0.2 }"
+            >
+              <LazyBrowseLogo
+                :item="movie"
+                class="w-[500px] mb-24"
+              />
+            </Motion>
             <div class="title inline-flex flex-col gap-1">
-              <span
-                v-if="movie.Name"
-                class="text-4xl font-bold name-transition stagger"
+              <Motion
+                :initial="{ opacity: 0 }"
+                :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                :transition="{ delay: 0.06, duration: 0.2 }"
               >
-                {{ movie.Name }}
-              </span>
-
-              <h2 class="text-2xl text-white/85 stagger">
-                {{ movie.OriginalTitle }}
-              </h2>
-
-              <div class="short-list-details inline-flex gap-3 stagger">
-                <span>
-                  {{ movie.ProductionYear }}
-                </span>
-
-                <span class="stagger">
-                  {{ ms(movie?.RunTimeTicks || 0 / 10000) }}
-                </span>
-
-                <div
-                  class="stars inline-flex items-center justify-center gap-2 stagger"
+                <span
+                  v-if="movie.Name"
+                  class="text-4xl font-bold name-transition"
                 >
-                  <PhStar :size="18" weight="fill" class="text-orange-400" />
-                  <span>{{ movie.CommunityRating?.toFixed(1) }}</span>
-                </div>
-
-                <span class="stagger"> Ends at {{ getEndsAtTime() }} </span>
-              </div>
-              <div
-                class="inline-flex flex-col w-fit lg:max-w-[1200px] max-w-[600px] gap-4 mt-8"
+                  {{ movie.Name }}
+                </span>
+              </Motion>
+              <Motion
+                :initial="{ opacity: 0 }"
+                :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                :transition="{ delay: 0.08, duration: 0.2 }"
               >
+                <h2 class="text-2xl text-white/85">
+                  {{ movie.OriginalTitle }}
+                </h2>
+              </Motion>
+
+              <div class="short-list-details inline-flex gap-3">
+                <Motion
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                  :transition="{ delay: 0.10, duration: 0.2 }"
+                >
+                  <span>
+                    {{ movie.ProductionYear }}
+                  </span>
+                </Motion>
+                <Motion
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                  :transition="{ delay: 0.12, duration: 0.2 }"
+                >
+                  <span>
+                    {{ ms(movie?.RunTimeTicks || 0 / 10000) }}
+                  </span>
+                </Motion>
+                <Motion
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                  :transition="{ delay: 0.14, duration: 0.2 }"
+                >
+                  <div class="stars inline-flex items-center justify-center gap-2">
+                    <PhStar
+                      :size="18"
+                      weight="fill"
+                      class="text-orange-400"
+                    />
+                    <span>{{ movie.CommunityRating?.toFixed(1) }}</span>
+                  </div>
+                </Motion>
+                <Motion
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                  :transition="{ delay: 0.16, duration: 0.2 }"
+                >
+                  <span> Ends at {{ getEndsAtTime() }} </span>
+                </Motion>
+              </div>
+              <div class="inline-flex flex-col w-fit lg:max-w-[1200px] max-w-[600px] gap-4 mt-8">
                 <div class="flex flex-col gap-2">
                   <div
                     v-if="defaultVideoSource"
                     class="inline-flex justify-center items-center"
                   >
-                    <h3 class="text-white/75 w-[120px]">Video</h3>
+                    <h3 class="text-white/75 w-[120px]">
+                      Video
+                    </h3>
 
                     <Select v-model="selectedVideoTrack">
                       <SelectTrigger>
                         <SelectValue
-                          :placeholder="
-                            defaultVideoSource
-                              ? defaultVideoSource.title
-                              : 'None'
+                          :placeholder="defaultVideoSource
+                            ? defaultVideoSource.title
+                            : 'None'
                           "
                         />
                       </SelectTrigger>
@@ -182,7 +229,10 @@ function getEndsAtTime() {
                           :key="index"
                           :value="video?.source?.Index?.toString() || ''"
                         >
-                          <TextVideoWithFeatures v-if="video" :video="video" />
+                          <TextVideoWithFeatures
+                            v-if="video"
+                            :video="video"
+                          />
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -192,15 +242,16 @@ function getEndsAtTime() {
                     v-if="defaultAudioSource"
                     class="inline-flex justify-center items-center"
                   >
-                    <h3 class="text-white/75 w-[120px]">Audio</h3>
+                    <h3 class="text-white/75 w-[120px]">
+                      Audio
+                    </h3>
 
                     <Select v-model="selectedAudioTrack">
                       <SelectTrigger>
                         <SelectValue
-                          :placeholder="
-                            defaultAudioSource
-                              ? defaultAudioSource.title
-                              : 'None'
+                          :placeholder="defaultAudioSource
+                            ? defaultAudioSource.title
+                            : 'None'
                           "
                         />
                       </SelectTrigger>
@@ -210,7 +261,10 @@ function getEndsAtTime() {
                           :key="index"
                           :value="audio?.source?.Index?.toString() || '0'"
                         >
-                          <TextAudioWithFeatures v-if="audio" :audio="audio" />
+                          <TextAudioWithFeatures
+                            v-if="audio"
+                            :audio="audio"
+                          />
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -220,15 +274,16 @@ function getEndsAtTime() {
                     v-if="defaultSubtitleSource"
                     class="inline-flex justify-center items-center"
                   >
-                    <h3 class="text-white/75 w-[120px]">Subtitles</h3>
+                    <h3 class="text-white/75 w-[120px]">
+                      Subtitles
+                    </h3>
 
                     <Select v-model="selectedSubtitleTrack">
                       <SelectTrigger>
                         <SelectValue
-                          :placeholder="
-                            defaultSubtitleSource
-                              ? defaultSubtitleSource?.title
-                              : 'None'
+                          :placeholder="defaultSubtitleSource
+                            ? defaultSubtitleSource?.title
+                            : 'None'
                           "
                         />
                       </SelectTrigger>
@@ -245,14 +300,21 @@ function getEndsAtTime() {
                   </div>
                 </div>
                 <div class="inline-flex flex-col gap-1">
-                  <h2 class="text-white/75">Overview</h2>
-                  <p id="overview" class="break-words lg:text-xl">
+                  <h2 class="text-white/75">
+                    Overview
+                  </h2>
+                  <p
+                    id="overview"
+                    class="break-words lg:text-xl"
+                  >
                     {{ movie.Overview }}
                   </p>
                 </div>
 
                 <template v-if="movie.UserData?.PlaybackPositionTicks !== 0">
-                  <h2 class="text-xl font-semibold">Continue Watching</h2>
+                  <h2 class="text-xl font-semibold">
+                    Continue Watching
+                  </h2>
 
                   <VideoPreview
                     :item="movie"
@@ -264,7 +326,9 @@ function getEndsAtTime() {
                 </template>
 
                 <template v-else>
-                  <h2 class="text-xl font-semibold">Start Watching</h2>
+                  <h2 class="text-xl font-semibold">
+                    Start Watching
+                  </h2>
 
                   <VideoPreview
                     :item="movie"
@@ -295,7 +359,9 @@ function getEndsAtTime() {
                     id="genres"
                     class="inline-flex justify-center items-center gap-4 text-white/75 max-w-full"
                   >
-                    <h2 class="text-lg">Genres</h2>
+                    <h2 class="text-lg">
+                      Genres
+                    </h2>
 
                     <div class="inline-flex gap-1 flex-wrap">
                       <BrowseInternalLinkedContent
@@ -315,7 +381,9 @@ function getEndsAtTime() {
                     v-if="movie.Studios && movie.Studios.length > 0"
                     class="inline-flex justify-center items-start max-w-full gap-4"
                   >
-                    <h2 class="text-lg text-white/75">Studios</h2>
+                    <h2 class="text-lg text-white/75">
+                      Studios
+                    </h2>
 
                     <div class="inline-flex gap-1 flex-wrap">
                       <BrowseInternalLinkedContent
@@ -340,7 +408,9 @@ function getEndsAtTime() {
                     v-if="movie.OfficialRating"
                     class="inline-flex justify-center items-center max-w-full gap-4"
                   >
-                    <h2 class="text-lg text-white/75">Audience</h2>
+                    <h2 class="text-lg text-white/75">
+                      Audience
+                    </h2>
 
                     <div class="inline-flex flex-">
                       <span>{{ movie.OfficialRating }}</span>
@@ -368,15 +438,8 @@ function getEndsAtTime() {
 
 <style scoped>
 .fade-bg {
-  mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
-}
-
-.stagger,
-.stagger-up {
-  opacity: 0;
+  mask-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.4) 100%);
 }
 </style>

@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import {
   PhDotsThreeVertical,
   PhHeart,
   PhPlay,
   PhStar,
-} from "@phosphor-icons/vue";
-import { Button } from "@/components/ui/button";
-import Radial from "@/components/ui/radial/Radial.vue";
+} from '@phosphor-icons/vue'
+import { animate } from 'motion'
+import { Button } from '@/components/ui/button'
+import Radial from '@/components/ui/radial/Radial.vue'
+import Motion from '@/components/ui/motion/Motion.vue'
+import Presence from '@/components/ui/motion/Presence.vue'
 
+const backgroundLoaded = ref(false)
 const {
   item,
   background,
@@ -18,67 +22,99 @@ const {
   audioSources,
   subtitleSources,
 } = defineProps<{
-  item: BaseItemDto;
-  background: string;
-  logo: string;
+  item: BaseItemDto
+  background: string
+  logo: string
   defaultSources?: {
-    video: VideoSource | null;
-    audio: AudioSource | null;
-    subtitle: SubtitleSource | null;
-  };
-  videoSources?: VideoSource[];
-  audioSources?: AudioSource[];
-  subtitleSources?: SubtitleSource[];
-}>();
+    video: VideoSource | null
+    audio: AudioSource | null
+    subtitle: SubtitleSource | null
+  }
+  videoSources?: VideoSource[]
+  audioSources?: AudioSource[]
+  subtitleSources?: SubtitleSource[]
+}>()
+
+const bgImageLoaded = () => {
+  animate('#bg-image-layout', { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, delay: 0.04 }).play()
+}
 </script>
 
 <template>
   <div class="w-full">
-    <div
-      class="flex flex-col justify-center items-start min-h-[100vh] w-full mt-[128px]"
-    >
-      <img
-        :src="background"
-        class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0 fade-gradient"
-      />
-      <div
-        class="inline-flex flex-col justify-center items-center gap-8 show-content z-[2] max-w-full"
-      >
-        <div
-          class="inline-flex flex-col justify-center items-center gap-2 lg:w-[600px] w-[85%] max-w-full"
+    <div class="flex flex-col justify-center items-start min-h-[100vh] w-full py-8">
+      <Presence>
+        <Motion
+          :exit="{ opacity: 0, y: [0, -20] }"
+          class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-top top-0 left-0 fade-gradient"
         >
-          <img :src="logo" class="w-full" />
+          <img
+            id="bg-image-layout"
+            :src="background"
+            class="h-full w-full object-cover fade-gradient opacity-0 -z-1"
+            alt="hello"
+            @load="bgImageLoaded"
+          >
+        </Motion>
+      </Presence>
+      <div class="inline-flex flex-col justify-center items-center gap-8 show-content z-[2] max-w-full">
+        <div class="inline-flex flex-col justify-center items-center gap-2 lg:w-[600px] w-[85%] max-w-full">
+          <img
+            :src="logo"
+            class="w-full"
+          >
         </div>
 
         <div
           class="show-details inline-flex flex-col gap-3 bg-black/50 p-4 rounded-lg backdrop-blur-lg max-w-[90%] lg:text-[1.2em]"
         >
           <div class="inline-flex justify-between flex-wrap">
-            <h1
-              class="rounded-lg text-2xl font-semibold inline-flex flex-wrap gap-4"
-            >
+            <h1 class="rounded-lg text-2xl font-semibold inline-flex flex-wrap gap-4">
               {{ item.Name }}
               <span
                 v-if="item.OriginalTitle && item.OriginalTitle != item.Name"
                 class="text-white/75 font-normal"
-                >{{ item.OriginalTitle }}</span
-              >
+              >{{
+                item.OriginalTitle }}</span>
             </h1>
 
             <div class="inline-flex gap-2 items-center justify-center">
-              <Button variant="outline" size="icon" disabled>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled
+              >
                 <PhPlay size="24" />
               </Button>
-              <Button v-if="false" variant="ghost"> Movie Reel </Button>
-              <Button variant="outline" size="icon" disabled>
+              <Button
+                v-if="false"
+                variant="ghost"
+              >
+                Movie Reel
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled
+              >
                 <PhHeart :size="24" />
               </Button>
-              <Button variant="outline" size="icon" disabled>
-                <PhDotsThreeVertical :size="24" weight="bold" />
+              <Button
+                variant="outline"
+                size="icon"
+                disabled
+              >
+                <PhDotsThreeVertical
+                  :size="24"
+                  weight="bold"
+                />
               </Button>
             </div>
           </div>
-          <div v-if="item.ProductionYear" class="inline-flex gap-4 w-full">
+          <div
+            v-if="item.ProductionYear"
+            class="inline-flex gap-4 w-full"
+          >
             <span>
               {{ item.ProductionYear }}
             </span>
@@ -87,24 +123,26 @@ const {
               v-if="item.CommunityRating"
               class="stars inline-flex items-center justify-center gap-2"
             >
-              <PhStar weight="fill" class="text-orange-400 lg:h-[1.25rem]" />
+              <PhStar
+                weight="fill"
+                class="text-orange-400 lg:h-[1.25rem]"
+              />
               <span>{{ item.CommunityRating?.toFixed(1) }}</span>
             </div>
           </div>
 
-          <div
-            class="inline-flex flex-col justify-start items-start gap-1 text-[1rem]"
-          >
+          <div class="inline-flex flex-col justify-start items-start gap-1 text-[1rem]">
             <div
               v-if="defaultSources?.video"
               id="video"
               class="inline-flex gap-4 items-center justify-center w-full"
             >
-              <h3 class="text-white/75 w-[120px]">Video</h3>
+              <h3 class="text-white/75 w-[120px]">
+                Video
+              </h3>
 
               <Select
-                :default-value="
-                  defaultSources.video.source.Index?.toString() || '0'
+                :default-value="defaultSources.video.source.Index?.toString() || '0'
                 "
               >
                 <SelectTrigger class="flex-grow-1">
@@ -116,7 +154,10 @@ const {
                     :key="index"
                     :value="video?.source?.Index?.toString() || '0'"
                   >
-                    <TextVideoWithFeatures v-if="video" :video="video" />
+                    <TextVideoWithFeatures
+                      v-if="video"
+                      :video="video"
+                    />
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -127,11 +168,12 @@ const {
               id="audio"
               class="inline-flex gap-4 items-center justify-center w-full"
             >
-              <h3 class="text-white/75 w-[120px]">Audio</h3>
+              <h3 class="text-white/75 w-[120px]">
+                Audio
+              </h3>
 
               <Select
-                :default-value="
-                  defaultSources.audio.source.Index?.toString() || '0'
+                :default-value="defaultSources.audio.source.Index?.toString() || '0'
                 "
               >
                 <SelectTrigger class="flex-grow-1">
@@ -143,7 +185,10 @@ const {
                     :key="index"
                     :value="audio?.source?.Index?.toString() || '0'"
                   >
-                    <TextAudioWithFeatures v-if="audio" :audio="audio" />
+                    <TextAudioWithFeatures
+                      v-if="audio"
+                      :audio="audio"
+                    />
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -154,11 +199,12 @@ const {
               id="subtitle"
               class="inline-flex gap-4 items-center justify-center w-full"
             >
-              <h3 class="text-white/75 w-[120px]">Subtitle</h3>
+              <h3 class="text-white/75 w-[120px]">
+                Subtitle
+              </h3>
 
               <Select
-                :default-value="
-                  defaultSources.subtitle.source?.Index?.toString() || '0'
+                :default-value="defaultSources.subtitle.source?.Index?.toString() || '0'
                 "
               >
                 <SelectTrigger class="flex-grow-1">
@@ -176,16 +222,20 @@ const {
               </Select>
             </div>
           </div>
-          <p v-if="item.Overview" class="max-w-full w-[700px] overview">
+          <p
+            v-if="item.Overview"
+            class="max-w-full w-[700px] overview"
+          >
             {{ item.Overview }}
           </p>
 
-          <p v-else class="max-w-full w-[700px] overview">
+          <p
+            v-else
+            class="max-w-full w-[700px] overview"
+          >
             No overview provided
           </p>
-          <div
-            class="item-details inline-flex max-w-[800px] w-full flex-col justify-start items-start text-white/50"
-          >
+          <div class="item-details inline-flex max-w-[800px] w-full flex-col justify-start items-start text-white/50">
             <div
               v-if="item.Tags!!.length > 0"
               id="tags"
@@ -202,9 +252,14 @@ const {
               id="genres"
               class="inline-flex justify-center items-center gap-4 text-white/75 max-w-full"
             >
-              <h2 class="text-lg">Genres</h2>
+              <h2 class="text-lg">
+                Genres
+              </h2>
 
-              <div v-focus-section class="inline-flex gap-1 flex-wrap">
+              <div
+                v-focus-section
+                class="inline-flex gap-1 flex-wrap"
+              >
                 <BrowseInternalLinkedContent
                   v-for="(genre, index) in item.GenreItems"
                   :key="index"
@@ -220,9 +275,14 @@ const {
               v-if="item.Studios && item.Studios.length > 0"
               class="inline-flex justify-center items-start max-w-full gap-2"
             >
-              <h2 class="text-lg text-white/75">Studios</h2>
+              <h2 class="text-lg text-white/75">
+                Studios
+              </h2>
 
-              <div v-focus-section class="inline-flex gap-1 flex-wrap">
+              <div
+                v-focus-section
+                class="inline-flex gap-1 flex-wrap"
+              >
                 <BrowseInternalLinkedContent
                   v-for="(studio, index) in item.Studios"
                   :key="index"
@@ -246,23 +306,22 @@ const {
               v-if="item.OfficialRating"
               class="inline-flex justify-center items-center max-w-full gap-4"
             >
-              <h2 class="text-lg text-white/75">Audience</h2>
+              <h2 class="text-lg text-white/75">
+                Audience
+              </h2>
 
               <div class="inline-flex flex-">
                 <span>{{ item.OfficialRating }}</span>
               </div>
             </div>
 
-            <div
-              class="inline-flex flex-wrap justify-center items-center gap-3 complete mt-3"
-            >
+            <div class="inline-flex flex-wrap justify-center items-center gap-3 complete mt-3">
               <Radial
                 :max="100"
                 :min="0"
-                :value="
-                  item.UserData!!.Played
-                    ? 100
-                    : item.UserData?.PlayedPercentage!!
+                :value="item.UserData!!.Played
+                  ? 100
+                  : item.UserData?.PlayedPercentage!!
                 "
                 class-name="size-8"
                 gauge-primary-color="rgb(255, 255, 255)"
@@ -270,9 +329,7 @@ const {
                 :show-complete="true"
               />
 
-              <span v-if="!item.UserData?.Played"
-                >{{ item.UserData?.UnplayedItemCount }} episodes left</span
-              >
+              <span v-if="!item.UserData?.Played">{{ item.UserData?.UnplayedItemCount }} episodes left</span>
               <span v-else>Completed</span>
             </div>
           </div>
@@ -286,13 +343,11 @@ const {
 
 <style>
 .fade-gradient {
-  mask-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.1) 30%,
-    rgba(0, 0, 0, 0.2) 40%,
-    rgba(0, 0, 0, 0.9) 80%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
+  mask-image: linear-gradient(to top,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.1) 30%,
+      rgba(0, 0, 0, 0.2) 40%,
+      rgba(0, 0, 0, 0.6) 80%,
+      rgba(0, 0, 0, 0.5) 100%);
 }
 </style>

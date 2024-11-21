@@ -9,6 +9,7 @@ import { formatTime } from '@/lib/utils'
 
 const l = useLoggerStore()
 const mediaBrowserStore = useMediaBrowserStore()
+const breadcrumbStore = useBreadcrumbStore()
 
 const views = computed(() => mediaBrowserStore.views)
 const resumed = computed(() => mediaBrowserStore.resumed)
@@ -27,6 +28,12 @@ onMounted(() => {
     optionalParams: [useServerImage(firstResumed.value, { type: 'Primary' })],
   })
 })
+
+breadcrumbStore.setBreadcrumbs([])
+breadcrumbStore.setPage({
+  name: 'Home',
+  path: '/authenticated',
+})
 </script>
 
 <template>
@@ -44,7 +51,7 @@ onMounted(() => {
         <div class="inline-flex flex-col gap-2">
           <img
             :src="
-              useServerImage(firstResumed, { type: 'Logo', fallback: 'Logo' })
+              useServerImage(firstResumed, { type: 'Logo', fallback: 'Logo', size: 600, quality: 75 })
             "
             loading="lazy"
             width="700"

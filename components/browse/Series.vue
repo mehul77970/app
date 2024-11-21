@@ -1,36 +1,51 @@
 <script setup lang="ts">
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
+} from '@/components/ui/carousel'
 
-const { id } = defineProps<{ id: string }>();
+const { id } = defineProps<{ id: string }>()
 
-const mediaStore = useMediaBrowserStore();
+const mediaStore = useMediaBrowserStore()
+const breadcrumbStore = useBreadcrumbStore()
 
-const series = await mediaStore.getItem(id);
-const seasons = await mediaStore.getSeasons(id);
+const series = await mediaStore.getItem(id)
+const seasons = await mediaStore.getSeasons(id)
 
 const background = useServerImage(series, {
-  type: "Thumb",
-  fallback: "Primary",
-});
-const logo = useServerImage(series, { type: "Logo" });
+  type: 'Thumb',
+  fallback: 'Primary',
+  size: 1920, quality: 75,
+})
+const logo = useServerImage(series, { type: 'Logo', size: 600 })
 
 function getSeasonImage(season: BaseItemDto) {
-  return useServerImage(season);
+  return useServerImage(season, { type: 'Primary', size: 400, quality: 75 })
 }
+
+breadcrumbStore.setBreadcrumbs([
+  {
+    name: 'Browse',
+  },
+])
+breadcrumbStore.setPage({ name: series.Name || 'No Name Provided' })
 </script>
 
 <template>
-  <BrowseLayoutNew :item="series" :background :logo>
+  <BrowseLayoutNew
+    :item="series"
+    :background
+    :logo
+  >
     <template #sections>
       <section
         class="inline-flex flex-col justify-start pb-4 items-start max-w-full gap-4 mt-[72px] w-full"
       >
-        <h1 class="text-gray-400 tracking-wider pl-6">SEASONS</h1>
+        <h1 class="text-gray-400 tracking-wider pl-6">
+          SEASONS
+        </h1>
 
         <Carousel
           class="relative flex w-[100%] max-w-[100%] justify-start z-[2]"
@@ -39,7 +54,10 @@ function getSeasonImage(season: BaseItemDto) {
             skipSnaps: true,
           }"
         >
-          <CarouselContent v-focus-section class="items-end w-full">
+          <CarouselContent
+            v-focus-section
+            class="items-end w-full"
+          >
             <CarouselItem
               v-for="(season, index) in seasons"
               :key="index"
@@ -69,7 +87,7 @@ function getSeasonImage(season: BaseItemDto) {
                       <img
                         :src="getSeasonImage(season)"
                         class="h-full w-auto rounded-lg transition-all duration-250 selectable object-cover"
-                      />
+                      >
                     </div>
                   </div>
                 </NuxtLink>

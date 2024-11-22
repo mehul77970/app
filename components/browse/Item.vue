@@ -50,14 +50,14 @@ function openRefreshDialog() {
 
 <template>
   <Dialog v-model:open="metadataDialogOpen">
-    <BrowseMetadata
+    <LazyBrowseMetadata
       v-model="metadataDialogOpen"
       :item
     />
   </Dialog>
 
   <Dialog v-model:open="aboutDialogOpen">
-    <BrowseAbout
+    <LazyBrowseAbout
       v-if="aboutDialogOpen"
       :item
     />

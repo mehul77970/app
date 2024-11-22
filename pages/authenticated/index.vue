@@ -95,7 +95,7 @@ breadcrumbStore.setPage({
                 :key="index"
                 class="basis-1/1 max-w-full"
               >
-                <VideoPreview
+                <LazyVideoPreview
                   v-focus
                   :item="item!!"
                   :class="`w-[800px] ${index === 0 ? 'ml-6' : ''} ${index === resumed.length - 1 ? 'mr-6' : ''}`"

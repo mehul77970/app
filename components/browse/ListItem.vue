@@ -65,7 +65,7 @@ function goTo() {
 
 <template>
   <Dialog v-model:open="metadataDialogOpen">
-    <BrowseMetadata
+    <LazyBrowseMetadata
       v-model="metadataDialogOpen"
       :item
     />
@@ -88,7 +88,7 @@ function goTo() {
     <ContextMenuTrigger as-child>
       <TableRow
         class="group cursor-pointer"
-        @click="goTo"
+        @click.prevent.stop="goTo"
       >
         <TableCell class="font-medium p-2">
           <img

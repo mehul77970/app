@@ -44,7 +44,6 @@ onMounted(() => {
       { repeat: Infinity },
     )
 
-    console.log('Load finished')
     model.value = true
   })
 })

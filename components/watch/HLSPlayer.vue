@@ -26,8 +26,6 @@ const playbackStore = usePlaybackStore()
 const playerStore = usePlayerStore()
 const deviceStore = useDeviceStore()
 
-console.log('Player debug state', playerStore.debug)
-
 const player = new HLS({
   backBufferLength: 60,
   maxBufferLength: 120,
@@ -69,7 +67,7 @@ onMounted(async () => {
       && frag.frag.sn !== 'initSegment'
       && frag.frag.elementaryStreams.audiovideo
     ) {
-      const { start, startDTS, startPTS, maxStartPTS, elementaryStreams }
+      const { start, elementaryStreams }
         = frag.frag
 
       if (!elementaryStreams.audiovideo) return
@@ -78,13 +76,6 @@ onMounted(async () => {
       // player.off(HLS.Events.BUFFER_APPENDED, getAppendedOffset);
 
       playerStore.subtitleTimeSyncOffset = tOffset
-      console.log('video timestamp offset:', tOffset, {
-        start,
-        startDTS,
-        startPTS,
-        maxStartPTS,
-        elementaryStreams,
-      })
     }
   }
 
@@ -92,10 +83,8 @@ onMounted(async () => {
 
   player.attachMedia(videoElement)
   const { height } = window.screen
-  console.log(window.screen)
 
   if (!Number.isNaN(playerStore.settings.video.global.bitrate)) {
-    console.log('Is this running')
     playbackStore.setPlaybackVideoBitrate(
       Number.parseInt(playerStore.settings.video.global.bitrate),
     )
@@ -105,15 +94,12 @@ onMounted(async () => {
     )
   }
 
-  console.log('Set bitrate to', playbackStore)
   if (playerStore.settings.video.global.bitrate == 'auto') {
     playbackStore.setPlaybackHeightAndWidth(height, height)
     playbackStore.setPlaybackVideoBitrate(deviceStore.bitrate)
-    console.log('Set playback bitrate to approx. ', deviceStore.bitrate)
   }
 
   if (playerStore.settings.video.global.bitrate == 'display') {
-    console.log('Height', height)
     let bitrate = 8000000
     if (height >= 2160) {
       bitrate = 120000000
@@ -131,7 +117,6 @@ onMounted(async () => {
       bitrate = 3000000
     }
 
-    console.log('Video bitrate on display should be approx.', bitrate)
     playbackStore.setPlaybackVideoBitrate(bitrate)
     playbackStore.setPlaybackHeightAndWidth(height, height)
   }
@@ -148,8 +133,6 @@ onMounted(async () => {
 
   loadSource(playbackStore._transcodingUrl.href)
 
-  console.log('HLSPLayer is loading URL: ', playbackStore.transcodingUrl)
-
   // Start video at whatever the startPosition should be.
   videoElement.currentTime = ticksToSeconds(startPosition)
 
@@ -164,8 +147,6 @@ onMounted(async () => {
     lastSavedTime = videoElement.currentTime
 
     await playbackStore.savePlaybackProgress(id, lastSavedTime)
-
-    console.log('Saved current time position of player', lastSavedTime)
   }, 5000)
 
   playerStore.loaded = true
@@ -205,26 +186,19 @@ function capturePageEvents(video: HTMLVideoElement) {
   })
 
   addComponentEventListener(video, 'waiting', () => {
-    console.log('Fire waiting event')
-
     playerStore.loading = true
   })
 
   addComponentEventListener(video, 'loadeddata', () => {
-    console.log('Fired loadeddata event')
-
     finishLoader.value = true
     playerStore.loading = false
   })
 
   addComponentEventListener(video, 'canplay', () => {
-    console.log('Fired canplay')
     finishLoader.value = true
   })
 
   addComponentEventListener(video, 'playing', () => {
-    console.log('Fired playing event')
-
     playerStore.loading = false
   })
 
@@ -263,11 +237,6 @@ onUnmounted(() => {
 
   if (!video.value) return
 
-  console.log(
-    'Sending STOP on playback progress with current player time',
-    video.value.currentTime,
-  )
-
   player.destroy()
   playbackStore.stopPlaybackProgress(id, video.value.currentTime)
 
@@ -287,8 +256,6 @@ watch(seeking, (seek, _) => {
   if (!seek.value) return
 
   if (!video.value) return
-
-  console.log('HLSPlayer Seeking to: ', seek.position)
 
   video.value.currentTime = seek.position
 })
@@ -340,7 +307,6 @@ watch(videoSource, () => {
 })
 
 watch(audioSource, async (audioSource) => {
-  console.log('Should load new source', audioSource)
   if (!video.value) return
   playerStore.loading = true
 
@@ -424,8 +390,6 @@ function useFrameAccurateSync(video: HTMLVideoElement) {
 }
 
 function loadSource(url: string) {
-  console.log('Attempting to load source: ', url)
-
   player.loadSource(url)
 }
 

@@ -51,7 +51,6 @@ onMounted(() => {
     ? episodes.findIndex(ep => ep.Id == currentWatch[0].Id!)
     : 0
 
-  console.log('Should scroll to ep index', currentEpisodeIndex)
   carouselAPI.scrollTo(currentEpisodeIndex)
 })
 

@@ -66,7 +66,6 @@ onUpdated(() => {
 onBeforeUnmount(() => {
   if (state && props.exit && root.value) {
     state.setActive('exit', true)
-    console.log('I should be here!', state)
     // @ts-expect-error This technically doesn't exist
     root.value?.addEventListener('motioncomplete', unmount)
   }

@@ -18,7 +18,6 @@ onMounted(() => {
     },
   })
 
-  console.log('Am i working', OverlayScrollbars)
   const event = new Event('carousel-update')
 
   carouselRotate = setInterval(() => {

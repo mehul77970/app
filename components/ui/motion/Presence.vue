@@ -8,7 +8,6 @@ const doneCallbacks = new WeakMap<Element, VoidFunction>()
 
 function removeDoneCallback(element: Element) {
   const prevDoneCallback = doneCallbacks.get(element)
-  console.log('Removing done cb')
   if (prevDoneCallback)
     if (element && prevDoneCallback) element.removeEventListener('motioncomplete', prevDoneCallback)
   doneCallbacks.delete(element)
@@ -37,7 +36,6 @@ function enter(element: Element) {
 function exit(element: Element, done: VoidFunction) {
   const state = mountedStates.get(element)
 
-  console.log('Received exit event')
   if (!state)
     return done()
 

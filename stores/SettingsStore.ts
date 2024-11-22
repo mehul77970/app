@@ -1,24 +1,25 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
-export type BrowseLayout = "grid" | "list" | "thumb";
-export const useSettingsStore = defineStore("settings", {
+export type BrowseLayout = 'grid' | 'list' | 'thumb'
+export const useSettingsStore = defineStore('settings', {
   state: () => ({
+    hideSidebar: false,
     browse: {
-      layout: "grid" as BrowseLayout,
+      layout: 'grid' as BrowseLayout,
       basis: 0 as number,
     },
   }),
 
   actions: {
     setLayout(layout: BrowseLayout) {
-      this.browse.layout = layout;
+      this.browse.layout = layout
     },
 
     setBasis(basis: number) {
-      this.browse.basis = basis;
+      this.browse.basis = basis
     },
   },
   persist: {
     storage: localStorage,
   },
-});
+})

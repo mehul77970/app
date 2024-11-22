@@ -2,10 +2,7 @@
 import {
   ChevronRight,
   ChevronsUpDown,
-  Frame,
   LogOut,
-  Map,
-  PieChart,
   Settings2,
 } from 'lucide-vue-next'
 import { PhHouse, PhBooks, PhFilmReel, PhCassetteTape, PhTelevisionSimple, PhImageSquare } from '@phosphor-icons/vue'
@@ -20,7 +17,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
@@ -40,7 +36,6 @@ import {
 import { Separator } from '@/components/ui/separator'
 import {
   Sidebar,
-  SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -59,6 +54,7 @@ import {
 const userStore = useUserStore()
 const mediaStore = useMediaBrowserStore()
 const crumbStore = useBreadcrumbStore()
+const settingsStore = useSettingsStore()
 const log = useLoggerStore()
 const router = useRouter()
 
@@ -68,6 +64,7 @@ const views = computed(() => mediaStore.views)
 const crumbs = computed(() => crumbStore.crumbs)
 const pageCrumb = computed(() => crumbStore.page)
 
+const sidebarVisible = computed(() => !settingsStore.hideSidebar)
 const data = {
   navMain: [
     {
@@ -138,6 +135,7 @@ const logout = () => {
 <template>
   <SidebarProvider>
     <Sidebar
+      v-if="sidebarVisible"
       collapsible="icon"
     >
       <div
@@ -216,7 +214,7 @@ const logout = () => {
               v-for="item in data.navMain"
               :key="item.title"
               as-child
-              :default-open="item.isActive"
+              :default-open="item?.isActive"
               class="group/collapsible"
             >
               <SidebarMenuItem>
@@ -288,7 +286,10 @@ const logout = () => {
       <SidebarRail />
     </Sidebar>
     <SidebarInset class="overflow-hidden">
-      <header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] z-[5] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+      <header
+        v-if="sidebarVisible"
+        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] z-[5] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
+      >
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
           <Separator

@@ -104,10 +104,9 @@ async function login() {
     )
 
     router.push({ name: 'authenticated' })
-
-    console.log('Pushed route', router.currentRoute.value)
   }
-  catch {
+  catch (e: unknown) {
+    useLoggerStore().$log({ message: `Couldn't login`, optionalParams: [e] })
     notify(
       {
         title: 'Unable to login',

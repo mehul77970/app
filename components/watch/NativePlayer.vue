@@ -9,8 +9,10 @@ import {
 } from '~/native/player/events'
 import {
   destroy,
+  setPlayerAudioTrack,
   setPlayerPause,
   setPlayerPosition,
+  setPlayerSubtitleTrack,
   setURL,
   start,
 } from '~/native/player/Player'
@@ -23,6 +25,8 @@ const playbackStore = usePlaybackStore()
 const item = computed(() => playerStore.item)
 const paused = computed(() => playerStore.paused)
 const position = computed(() => playerStore.positionTimeline)
+const audioSource = computed(() => playerStore.audio)
+const subtitleSource = computed(() => playerStore.subtitle)
 
 const root = document.documentElement
 
@@ -85,6 +89,20 @@ watch(paused, async () => {
 
 watch(position, async () => {
   await setPlayerPosition(position.value)
+})
+
+watch(audioSource, async (audioSource) => {
+  playerStore.loading = true 
+
+  await setPlayerAudioTrack(audioSource?.source.Index || -1)
+  playerStore.loading = false 
+})
+
+watch(subtitleSource, async (subtitleSource) => {
+  playerStore.loading = true 
+  
+  await setPlayerSubtitleTrack(subtitleSource?.source?.Index || -1)
+  playerStore.loading = false
 })
 
 onUnmounted(async () => {

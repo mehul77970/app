@@ -49,6 +49,22 @@ export async function setPlayerPosition(position_sec) {
 }
 
 /**
+ * Set player audio track
+ * @param {number} track Track index as absolute value, or -1 if you want no audio
+ */
+export async function setPlayerAudioTrack(track) {
+  await handle.SetAudioTrack(track);
+}
+
+/**
+ * Set player subtitle track
+ * @param {number} track Track index as absolute value, or -1 if you want no subtitles
+ */
+export async function setPlayerSubtitleTrack(track) {
+  await handle.SetSubtitleTrack(track);
+}
+
+/**
  * Create a listener that expires after the component is disposed of
  * @param {import("./types").EventTypes} name
  * @param {(any) => void} callback

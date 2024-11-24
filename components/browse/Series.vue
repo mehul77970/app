@@ -11,15 +11,15 @@ const { id } = defineProps<{ id: string }>()
 const mediaStore = useMediaBrowserStore()
 const breadcrumbStore = useBreadcrumbStore()
 
-const series = await mediaStore.getItem(id)
+const series = ref(await mediaStore.getItem(id))
 const seasons = await mediaStore.getSeasons(id)
-
-const background = useServerImage(series, {
+const currentWatch = await mediaStore.getNextUp(series.value.Id || '', 1)
+const background = useServerImage(series.value, {
   type: 'Thumb',
   fallback: 'Primary',
   size: 1920, quality: 75,
 })
-const logo = useServerImage(series, { type: 'Logo', size: 600 })
+const logo = useServerImage(series.value, { type: 'Logo', size: 600 })
 
 function getSeasonImage(season: BaseItemDto) {
   return useServerImage(season, { type: 'Primary', size: 400, quality: 75 })
@@ -30,12 +30,13 @@ breadcrumbStore.setBreadcrumbs([
     name: 'Browse',
   },
 ])
-breadcrumbStore.setPage({ name: series.Name || 'No Name Provided' })
+breadcrumbStore.setPage({ name: series.value.Name || 'No Name Provided' })
 </script>
 
 <template>
   <BrowseLayoutNew
-    :item="series"
+    v-model:item="series"
+    :current-watch="currentWatch[0]"
     :background
     :logo
   >
@@ -55,7 +56,6 @@ breadcrumbStore.setPage({ name: series.Name || 'No Name Provided' })
           }"
         >
           <CarouselContent
-            v-focus-section
             class="items-end w-full"
           >
             <CarouselItem
@@ -65,7 +65,6 @@ breadcrumbStore.setPage({ name: series.Name || 'No Name Provided' })
             >
               <div class="flex flex-row gap-4">
                 <NuxtLink
-                  v-focus
                   :to="{
                     name: 'authenticated-browse-season-id',
                     params: { id: season.Id },

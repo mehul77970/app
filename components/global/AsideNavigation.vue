@@ -147,7 +147,7 @@ const logout = () => {
         />
       </div>
       <SidebarHeader>
-        <LazySidebarMenu>
+        <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
@@ -195,15 +195,17 @@ const logout = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
-        </LazySidebarMenu>
+        </SidebarMenu>
       </SidebarHeader>
-      <LazySidebarContent>
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>App</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton>
-                <PhHouse weight="duotone" />
+                <PhHouse weight="duotone">
+                  eee
+                </PhHouse>
                 <NavigationLink :to="{ name: 'authenticated' }">
                   Home
                 </NavigationLink>
@@ -282,7 +284,7 @@ const logout = () => {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-      </LazySidebarContent>
+      </SidebarContent>
       <SidebarRail />
     </Sidebar>
     <SidebarInset class="overflow-hidden">

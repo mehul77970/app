@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PhHeart } from "@phosphor-icons/vue";
-import license from "~/LICENSE.txt?raw";
-import pkg from "~/package.json";
+import { PhHeart } from '@phosphor-icons/vue'
+import license from '~/LICENSE.txt?raw'
+import pkg from '~/package.json'
 </script>
 
 <template>
@@ -9,7 +9,10 @@ import pkg from "~/package.json";
     <div
       class="welcome inline-flex flex-col gap-4 items-center justify-center w-full"
     >
-      <img src="~/public/shadfin_concept_vertical.svg" class="h-[256px]" />
+      <img
+        src="~/public/shadfin_concept_vertical.svg"
+        class="h-[256px]"
+      >
 
       <h1 class="text-2xl font-semibold">
         {{ pkg.version }}
@@ -17,7 +20,23 @@ import pkg from "~/package.json";
 
       <div class="details inline-flex flex-col gap-4 text-white/50">
         <div class="inline-flex flex-wrap gap-3 flex-col">
-          <h2 class="text-xl font-semibold text-white/75">Powered by</h2>
+          <h2 class="text-xl font-semibold text-white/75">
+            Contributors
+          </h2>
+          <div class="inline-flex gap-2 flex-wrap">
+            <div
+              v-for="(name, index) in pkg.contributors"
+              :key="index"
+              class="contributor"
+            >
+              {{ name }}
+            </div>
+          </div>
+        </div>
+        <div class="inline-flex flex-wrap gap-3 flex-col">
+          <h2 class="text-xl font-semibold text-white/75">
+            Powered by
+          </h2>
           <div class="inline-flex gap-2 flex-wrap">
             <div
               v-for="(version, name) in pkg.dependencies"
@@ -30,7 +49,9 @@ import pkg from "~/package.json";
         </div>
 
         <div class="inline-flex flex-col gap-3">
-          <h2 class="text-xl font-semibold text-white/75">And...</h2>
+          <h2 class="text-xl font-semibold text-white/75">
+            And...
+          </h2>
           <div class="inline-flex gap-2 flex-wrap">
             <div
               v-for="(version, name) in pkg.devDependencies"
@@ -43,7 +64,9 @@ import pkg from "~/package.json";
         </div>
 
         <div class="inline-flex flex-wrap gap-3 flex-col">
-          <h2 class="text-xl font-semibold text-white/75">Inspired By</h2>
+          <h2 class="text-xl font-semibold text-white/75">
+            Inspired By
+          </h2>
           <div class="inline-flex gap-2 flex-wrap">
             <span>Jellyfin</span>
             <span>Jellyfin (Vue)</span>
@@ -55,22 +78,35 @@ import pkg from "~/package.json";
         </div>
 
         <div class="inline-flex flex-wrap gap-3 flex-col">
-          <h2 class="text-xl font-semibold text-white/75">Supported By</h2>
+          <h2 class="text-xl font-semibold text-white/75">
+            Supported By
+          </h2>
           <div class="inline-flex gap-2 flex-wrap">
             <span>You, Thank you.</span>
           </div>
         </div>
 
         <div class="inline-flex flex-wrap gap-3 flex-col">
-          <h2 class="text-xl font-semibold text-white/75">Licensed Under</h2>
+          <h2 class="text-xl font-semibold text-white/75">
+            Licensed Under
+          </h2>
           <div class="inline-flex gap-2 flex-wrap overflow-none">
             <pre class="whitespace-pre-wrap">{{ license }}</pre>
           </div>
         </div>
         <div class="inline-flex gap-2 items-center text-white/75 font-semibold">
-          <PhHeart weight="fill" class="text-red-400" :size="24" />
-          <span>From Brys with love.</span>
+          <PhHeart
+            weight="fill"
+            class="text-red-400"
+            :size="24"
+          />
+          <span>From <a
+            class="link"
+            href="https://github.com/brys0"
+          >Brys</a> with love.</span>
         </div>
+
+        <p>There be bugs in these waters! Yee' have been warned</p>
       </div>
     </div>
   </div>

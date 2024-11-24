@@ -98,7 +98,7 @@ function openRefreshDialog() {
         <div
           :class="
             cn(
-              'flex flex-col mt-auto w-full items-center relative rounded-md group',
+              'flex flex-col flex-grow items-stretch mt-auto w-full relative rounded-md group',
               basis === 0 ? 'h-full' : '',
             )
           "

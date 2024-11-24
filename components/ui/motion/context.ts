@@ -8,6 +8,6 @@ export interface PresenceState {
   initial?: boolean | undefined
 }
 
-export interface Options extends /** @vue-ignore */ PropOptions {
+export interface Options extends PropOptions {
   exit?: VariantDefinition
 }

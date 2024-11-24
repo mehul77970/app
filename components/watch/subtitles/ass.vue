@@ -6,8 +6,6 @@ const serverStore = useServerStore()
 const playerStore = usePlayerStore()
 const deviceStore = useDeviceStore()
 
-const assCaptionElement = ref(null as null | HTMLElement)
-
 const assStreamRaw = await fetch(
   `${serverStore.url}${getSubtitleStream(playerStore.subtitle!, playerStore.item!.Id!)}`,
 )
@@ -17,7 +15,7 @@ const subtitleSyncOffset = computed(() => playerStore.subtitleTimeSyncOffset)
 let assPlayer: undefined | ASS
 
 onMounted(async () => {
-  if (!assCaptionElement.value || !document) return
+  if (!document) return
 
   const videoElement = (document.getElementById(
     'video',
@@ -32,7 +30,7 @@ onMounted(async () => {
   if (!videoElement) return
 
   assPlayer = new ASS(assStreamText, videoElement, {
-    container: assCaptionElement.value,
+    container: document.getElementById('ass-container') || undefined,
     resampling: 'video_height',
     native: playerStore.settings.native.enabled,
   })
@@ -52,10 +50,3 @@ watch(subtitleSyncOffset, (seconds) => {
   assPlayer.delay = seconds
 })
 </script>
-
-<template>
-  <div
-    ref="assCaptionElement"
-    class="top-0 left-0 w-full h-full"
-  />
-</template>

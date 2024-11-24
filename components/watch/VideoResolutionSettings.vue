@@ -1,62 +1,62 @@
 <script setup lang="ts">
-import type { MediaStream } from "@jellyfin/sdk/lib/generated-client";
+import type { MediaStream } from '@jellyfin/sdk/lib/generated-client'
 
-import type HLS from "hls.js";
+import type HLS from 'hls.js'
 
-import { PhSlidersHorizontal } from "@phosphor-icons/vue";
+import { PhSlidersHorizontal } from '@phosphor-icons/vue'
 import {
   DropdownMenuCheckboxItem,
   DropdownMenuPortal,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 
 const { videoID, player, stream, defaultVideoSource, video } = defineProps<{
-  videoID: string;
-  player: HLS;
+  videoID: string
+  player: HLS
 
   stream: {
-    audio: string;
-    video: string;
-    subtitle: string;
-  };
-  defaultVideoSource: MediaStream;
-  video: HTMLMediaElement;
-}>();
+    audio: string
+    video: string
+    subtitle: string
+  }
+  defaultVideoSource: MediaStream
+  video: HTMLMediaElement
+}>()
 
-const playback = usePlaybackStore();
+const playback = usePlaybackStore()
 
-const activeResolution = defineModel<number>("activeResolution", {
+const activeResolution = defineModel<number>('activeResolution', {
   default: 0,
-});
+})
 
 function videoResolutionGreaterThan(res: number) {
-  if (defaultVideoSource.Width! >= res) return true;
-  return false;
+  if (defaultVideoSource.Width! >= res) return true
+  return false
 }
 
 async function changeVideoResolution(bitrate: number, res: number) {
-  if (activeResolution.value == res) return;
-  activeResolution.value = res;
+  if (activeResolution.value == res) return
+  activeResolution.value = res
 
-  player.stopLoad();
-  playback.stopPlaybackTranscode();
+  player.stopLoad()
+  playback.stopPlaybackTranscode()
 
   const info = await playback.getPlaybackInfo(videoID, {
     maxStreamingBitrate: bitrate,
-  });
+  })
 
-  playback.setPlaybackInfo(info);
-  playback.setPlaybackHeightAndWidth(res);
-  playback.setPlaybackAudioIndex(stream.audio);
-  playback.setPlaybackVideoIndex(stream.video);
-  playback.setPlaybackSubtitleIndex(stream.subtitle);
+  playback.setPlaybackInfo(info)
+  playback.setPlaybackHeightAndWidth(res)
+  playback.setPlaybackAudioIndex(stream.audio)
+  playback.setPlaybackVideoIndex(stream.video)
+  playback.setPlaybackSubtitleIndex(stream.subtitle)
 
   // const playerPosition = video.currentTime
 
-  player.loadSource(playback.transcodingUrl);
-  player.startLoad(video.currentTime);
+  player.loadSource(playback.transcodingUrl)
+  player.startLoad(video.currentTime)
 
   // video.currentTime = playerPosition
 }
@@ -65,7 +65,10 @@ async function changeVideoResolution(bitrate: number, res: number) {
 <template>
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
-      <PhSlidersHorizontal :size="24" weight="fill" />
+      <PhSlidersHorizontal
+        :size="24"
+        weight="fill"
+      />
       <span class="ml-2">Quality</span>
     </DropdownMenuSubTrigger>
 

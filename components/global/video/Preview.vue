@@ -264,6 +264,7 @@ function NaNAsUndefined(num?: number) {
       <Transition name="fade">
         <img
           v-if="!playing"
+          loading="lazy"
           :src="useServerImage(item, { type: 'Thumb', size: 600, quality: 75 })"
           class="w-full aspect-video h-full object-cover object-center preview-fade rounded-lg"
         >

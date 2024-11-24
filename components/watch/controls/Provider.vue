@@ -10,6 +10,7 @@ const router = useRouter()
 const info = computed(() => playerStore.item)
 const showControls = ref(false)
 const paused = computed(() => playerStore.paused)
+const playerType = computed(() => playerStore.type)
 
 let controlsHideTimer = null as null | NodeJS.Timeout
 
@@ -80,7 +81,6 @@ function goBack() {
         class="w-full h-full flex relative"
       >
         <Button
-          v-focus
           class="m-4 absolute selectable"
           variant="ghost"
           size="icon"
@@ -138,7 +138,7 @@ function goBack() {
             >
               <WatchControlsVolume />
               <WatchControlsSettings
-                v-if="info"
+                v-if="info && playerType !== 'direct'"
                 :item="info"
               />
               <WatchControlsPictureInPicture />

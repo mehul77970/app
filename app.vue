@@ -86,7 +86,7 @@ deviceStore.testSetDeviceProfile()
   <div id="shadfin-ui">
     <NuxtLayout>
       <NuxtErrorBoundary @error="reportError">
-        <LazyNuxtPage />
+        <NuxtPage />
 
         <template #error="{ error }">
           <div class="flex flex-col items-center justify-center absolute h-full">
@@ -120,7 +120,7 @@ deviceStore.testSetDeviceProfile()
         </template>
       </NuxtErrorBoundary>
     </NuxtLayout>
-    <LazyToastNotifications />
+    <!-- <LazyToastNotifications /> -->
   </div>
 </template>
 

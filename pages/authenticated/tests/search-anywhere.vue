@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import fuzzysearch from 'fuzzysearch-ts'
+import { fuzzysearch } from '@/lib/utils'
 import { Popover, PopoverContent } from '@/components/ui/popover'
 import { cn } from '~/lib/utils'
 

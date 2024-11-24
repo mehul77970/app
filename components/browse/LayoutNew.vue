@@ -9,20 +9,17 @@ import {
 import { animate } from 'motion'
 import { Button } from '@/components/ui/button'
 import Radial from '@/components/ui/radial/Radial.vue'
-import Motion from '@/components/ui/motion/Motion.vue'
-import Presence from '@/components/ui/motion/Presence.vue'
 
-const backgroundLoaded = ref(false)
 const {
-  item,
   background,
   logo,
   defaultSources,
   videoSources,
   audioSources,
   subtitleSources,
+  currentWatch,
 } = defineProps<{
-  item: BaseItemDto
+  currentWatch?: BaseItemDto
   background: string
   logo: string
   defaultSources?: {
@@ -35,28 +32,64 @@ const {
   subtitleSources?: SubtitleSource[]
 }>()
 
-const bgImageLoaded = () => {
-  animate('#bg-image-layout', { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, delay: 0.04 }).play()
+const router = useRouter()
+const item = defineModel<BaseItemDto>('item', { required: true })
+const mediaBrowserStore = useMediaBrowserStore()
+
+const state = ref({
+  load: {
+    like: false,
+    play: false,
+  },
+})
+
+const bgImageLoaded = (ev: Event) => {
+  const imageElement = ev.currentTarget as HTMLElement | null
+  if (!imageElement) return
+  animate(imageElement, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, delay: 0.04 }).play()
+}
+
+const toggleLike = async () => {
+  if (item.value.UserData?.IsFavorite) return await unlike()
+
+  return await like()
+}
+
+const like = async () => {
+  state.value.load.like = true
+  try {
+    item.value.UserData = await mediaBrowserStore.favoriteItem(item.value)
+  }
+  finally {
+    state.value.load.like = false
+  }
+}
+
+const unlike = async () => {
+  state.value.load.like = true
+  try {
+    item.value.UserData = await mediaBrowserStore.unfavoriteItem(item.value)
+  }
+  finally {
+    state.value.load.like = false
+  }
+}
+
+const play = () => {
+  router.push({ name: 'authenticated-new-watch-id', params: { id: currentWatch?.Id || '' } })
 }
 </script>
 
 <template>
   <div class="w-full">
     <div class="flex flex-col justify-center items-start min-h-[100vh] w-full py-8">
-      <Presence>
-        <Motion
-          :exit="{ opacity: 0, y: [0, -20] }"
-          class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-top top-0 left-0 fade-gradient"
-        >
-          <img
-            id="bg-image-layout"
-            :src="background"
-            class="h-full w-full object-cover fade-gradient opacity-0 -z-1"
-            alt="hello"
-            @load="bgImageLoaded"
-          >
-        </Motion>
-      </Presence>
+      <img
+        id="bg-image-layout"
+        :src="background"
+        class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-cover top-0 left-0 fade-gradient -z-1"
+        alt="hello"
+        @load="bgImageLoaded"
+      >
       <div class="inline-flex flex-col justify-center items-center gap-8 show-content z-[2] max-w-full">
         <div class="inline-flex flex-col justify-center items-center gap-2 lg:w-[600px] w-[85%] max-w-full">
           <img
@@ -82,7 +115,7 @@ const bgImageLoaded = () => {
               <Button
                 variant="outline"
                 size="icon"
-                disabled
+                @click="play"
               >
                 <PhPlay size="24" />
               </Button>
@@ -95,9 +128,13 @@ const bgImageLoaded = () => {
               <Button
                 variant="outline"
                 size="icon"
-                disabled
+                :disabled="state.load.like"
+                @click="toggleLike"
               >
-                <PhHeart :size="24" />
+                <PhHeart
+                  :size="24"
+                  :weight="item.UserData?.IsFavorite ? 'fill' : 'regular'"
+                />
               </Button>
               <Button
                 variant="outline"
@@ -257,13 +294,11 @@ const bgImageLoaded = () => {
               </h2>
 
               <div
-                v-focus-section
                 class="inline-flex gap-1 flex-wrap"
               >
                 <BrowseInternalLinkedContent
                   v-for="(genre, index) in item.GenreItems"
                   :key="index"
-                  v-focus
                   :tag="genre"
                   type="genre"
                   :last="item.GenreItems!!.length - 1 == index"
@@ -280,13 +315,12 @@ const bgImageLoaded = () => {
               </h2>
 
               <div
-                v-focus-section
+
                 class="inline-flex gap-1 flex-wrap"
               >
                 <BrowseInternalLinkedContent
                   v-for="(studio, index) in item.Studios"
                   :key="index"
-                  v-focus
                   :tag="studio"
                   type="studio"
                   :last="item.Studios!!.length - 1 == index"

@@ -39,6 +39,7 @@ const player = new HLS({
 playbackStore.setPlaybackAudioIndex(audioIndex)
 playbackStore.setPlaybackVideoIndex(videoIndex)
 playbackStore.setPlaybackSubtitleIndex(subtitleIndex)
+playerStore.type = 'transcode'
 
 const video = ref(null as null | HTMLVideoElement)
 
@@ -59,7 +60,7 @@ const loaderAnimationFinished = ref(false)
 onMounted(async () => {
   if (!video.value) return
 
-  playerStore.duration = playerStore.item?.RunTimeTicks || 0 / 10000
+  playerStore.duration = (playerStore.item?.RunTimeTicks || 0) / 10000
   const videoElement = video.value
   const getAppendedOffset = (eventName: string, frag: BufferAppendedData) => {
     if (
@@ -404,10 +405,13 @@ function loadSource(url: string) {
   <video
     id="video"
     ref="video"
-    class="z-0 p-0 m-0 h-full w-fit absolute"
+    class="h-full max-h-[100vh]"
     :autoplay="true"
   />
-
+  <div
+    id="ass-container"
+    class="absolute top-0 left-0"
+  />
   <Transition name="fade-short-slide">
     <div
       v-if="!(loaderAnimationFinished && finishLoader)"

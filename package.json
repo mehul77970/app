@@ -1,9 +1,11 @@
 {
   "name": "shadfin",
   "type": "module",
-  "version": "0.1.1-DEV",
+  "version": "0.1.2-DEV",
+  "contributors": [
+    "brys0"
+  ],
   "private": true,
-  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903",
   "scripts": {
     "build": "nuxt build",
     "analyze": "nuxt analyze",
@@ -19,10 +21,12 @@
   "dependencies": {
     "@jellyfin/sdk": "^0.11.0",
     "@motionone/dom": "^10.18.0",
+    "@nuxt-modules/compression": "^0.1.0",
     "@oku-ui/motion": "^0.3.4",
     "@oku-ui/motion-nuxt": "^0.2.1",
     "@phosphor-icons/vue": "^2.2.1",
     "@pinia/nuxt": "^0.5.5",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/bun": "^1.1.11",
     "@vueuse/core": "^11.2.0",
     "ass-compiler": "^0.1.14",
@@ -35,7 +39,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eventemitter3": "^5.0.1",
-    "fuzzysearch-ts": "^1.0.3",
     "hls.js": "^1.5.17",
     "libpgs": "^0.5.0",
     "lucide-vue-next": "^0.460.0",
@@ -62,6 +65,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^3.8.0",
     "@nuxt/eslint": "^0.6.1",
+    "@nuxt/image": "^1.8.1",
     "@nuxtjs/color-mode": "^3.5.1",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
@@ -72,5 +76,9 @@
     "nuxt": "^3.13.2",
     "sass-embedded": "^1.80.6",
     "vue-eslint-parser": "^9.4.3"
-  }
+  },
+  "overrides": {
+    "vue": "~3.5.13"
+  },
+  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
 }

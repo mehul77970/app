@@ -1,104 +1,105 @@
 <script setup lang="ts">
-import { setBackground } from "~/native/app/App";
+import { setBackground } from '~/native/app/App'
 import {
   onPlayerLoaded,
   onPlayerLoading,
   onPlayerMessage,
   onPlayerPlaybackRestart,
   onPlayerPosition,
-} from "~/native/player/events";
+} from '~/native/player/events'
 import {
   destroy,
   setPlayerPause,
   setPlayerPosition,
   setURL,
   start,
-} from "~/native/player/Player";
+} from '~/native/player/Player'
 
-const { startPosition = 0 } = defineProps<{ startPosition: number }>();
-const playerStore = usePlayerStore();
-const mediaBrowser = useMediaBrowserStore();
-const playbackStore = usePlaybackStore();
+const { startPosition = 0 } = defineProps<{ startPosition: number }>()
+const playerStore = usePlayerStore()
+const mediaBrowser = useMediaBrowserStore()
+const playbackStore = usePlaybackStore()
 
-const item = computed(() => playerStore.item);
-const paused = computed(() => playerStore.paused);
-const position = computed(() => playerStore.positionTimeline);
+const item = computed(() => playerStore.item)
+const paused = computed(() => playerStore.paused)
+const position = computed(() => playerStore.positionTimeline)
 
-const root = document.documentElement;
+const root = document.documentElement
 
-playerStore.settings.native.transparent = true;
+playerStore.settings.native.transparent = true
+playerStore.type = 'native'
 
 onMounted(async () => {
-  if (!item.value) return;
+  if (!item.value) return
 
-  setBackground(0, 0, 0);
-  root.setAttribute("transparent-player", "true");
-  const streamURL = mediaBrowser.generateDownloadURL(item.value);
+  setBackground(0, 0, 0)
+  root.setAttribute('transparent-player', 'true')
+  const streamURL = mediaBrowser.generateDownloadURL(item.value)
 
-  await setURL(streamURL);
-  await start();
+  await setURL(streamURL)
+  await start()
 
   onPlayerLoaded(async (duration_sec) => {
-    await setPlayerPosition(ticksToSeconds(startPosition));
+    await setPlayerPosition(ticksToSeconds(startPosition))
 
-    playerStore.loading = false;
-    playerStore.loaded = true;
-    playerStore.paused = false;
-    playerStore.duration = duration_sec * 1000;
-  });
+    playerStore.loading = false
+    playerStore.loaded = true
+    playerStore.paused = false
+    playerStore.duration = duration_sec * 1000
+  })
 
   onPlayerLoading(() => {
-    playerStore.loading = true;
-  });
+    playerStore.loading = true
+  })
 
   onPlayerMessage((message) => {
-    console.log("Got message from player", message);
-  });
+    console.log('Got message from player', message)
+  })
 
-  let lastCurrentTime = 0;
+  let lastCurrentTime = 0
   onPlayerPosition((position_sec) => {
     if (playerStore.subtitleSyncCallback)
-      playerStore.subtitleSyncCallback(position_sec);
-    if (Math.round(position_sec) === lastCurrentTime || !item.value?.Id) return;
+      playerStore.subtitleSyncCallback(position_sec)
+    if (Math.round(position_sec) === lastCurrentTime || !item.value?.Id) return
 
     // Round our position_sec to reduce unnecessary component updates
-    lastCurrentTime = Math.round(position_sec);
+    lastCurrentTime = Math.round(position_sec)
     // Save this progress on the server
-    playbackStore.savePlaybackProgress(item.value.Id, Math.floor(position_sec));
+    playbackStore.savePlaybackProgress(item.value.Id, Math.floor(position_sec))
     // Set the player store position
     playerStore.position = {
       percent: (position_sec / (playerStore.duration / 1000)) * 100,
       value: position_sec,
-    };
-  });
+    }
+  })
 
   onPlayerPlaybackRestart(() => {
-    playerStore.seeking.value = false;
-    playerStore.loading = false;
-  });
-});
+    playerStore.seeking.value = false
+    playerStore.loading = false
+  })
+})
 
 watch(paused, async () => {
-  setPlayerPause(paused.value);
-});
+  setPlayerPause(paused.value)
+})
 
 watch(position, async () => {
-  await setPlayerPosition(position.value);
-});
+  await setPlayerPosition(position.value)
+})
 
 onUnmounted(async () => {
-  if (!item.value || !item.value?.Id) return;
+  if (!item.value || !item.value?.Id) return
 
-  playerStore.settings.native.transparent = false;
-  root.setAttribute("transparent-player", "false");
-  setBackground(16, 18, 19);
+  playerStore.settings.native.transparent = false
+  root.setAttribute('transparent-player', 'false')
+  setBackground(16, 18, 19)
   // Destroy MPV player
-  await destroy();
+  await destroy()
   // Stop playback progress on backend
-  playbackStore.stopPlaybackProgress(item.value.Id, playerStore.position.value);
+  playbackStore.stopPlaybackProgress(item.value.Id, playerStore.position.value)
   // Reset player store state
-  playerStore.resetPlayer();
-});
+  playerStore.resetPlayer()
+})
 </script>
 
 <style lang="scss">

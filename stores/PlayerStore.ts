@@ -67,6 +67,7 @@ export const usePlayerStore = defineStore('player', {
   state: () => ({
     hideControls: true,
     loaded: false,
+    type: 'transcode' as 'transcode' | 'direct' | 'native',
     pause: null as null | (() => void),
     duration: 0,
     seeking: {

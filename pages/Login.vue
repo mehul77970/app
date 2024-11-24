@@ -142,7 +142,6 @@ await serverStore.getServerConfig()
           </p>
         </div>
         <div
-          v-focus-section
           class="grid gap-4"
         >
           <div class="grid gap-2 stagger-up">
@@ -151,7 +150,7 @@ await serverStore.getServerConfig()
               id="name"
               ref="nameInput"
               v-model="loginCreds.username"
-              v-focus
+
               type="text"
               placeholder="username"
               required
@@ -169,13 +168,11 @@ await serverStore.getServerConfig()
             <Input
               id="password"
               v-model="loginCreds.password"
-              v-focus
               type="password"
               required
             />
           </div>
           <Button
-            v-focus
             type="submit"
             class="w-full stagger-down"
             :disabled="load.loading"

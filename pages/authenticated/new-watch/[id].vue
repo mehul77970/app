@@ -18,9 +18,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <WatchPlayerProvider
-    :id="videoID"
-    :audio-index
-    :subtitle-index
-  />
+  <div
+    id="player-wrapper"
+    class="absolute flex !h-[100vh] !w-full justify-center bg-black"
+  >
+    <WatchPlayerProvider
+      :id="videoID"
+      :audio-index
+      :subtitle-index
+    />
+  </div>
 </template>

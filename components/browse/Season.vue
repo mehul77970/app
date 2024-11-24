@@ -16,12 +16,12 @@ const episodesCarousel = ref(null as { carouselApi: EmblaCarouselType } | null)
 const mediaStore = useMediaBrowserStore()
 const breadcrumbStore = useBreadcrumbStore()
 
-const season = await mediaStore.getItem(id)
+const season = ref(await mediaStore.getItem(id))
 const episodes = await mediaStore.getEpisodesOfSeason(parentId, id, 99999)
 
-const staticBackground = useServerImage(season, { type: 'Thumb' })
-const logo = useServerImage(season, { type: 'Logo', fallback: 'Logo' })
-const currentWatch = await mediaStore.getNextUp(season.Id!, 1)
+const staticBackground = useServerImage(season.value, { type: 'Thumb' })
+const logo = useServerImage(season.value, { type: 'Logo', fallback: 'Logo' })
+const currentWatch = await mediaStore.getNextUp(season.value.Id!, 1)
 
 // TODO: Configure if we should try to figure out video/audio/subtitle track info, can make the inital load slower.
 
@@ -60,12 +60,13 @@ breadcrumbStore.setBreadcrumbs([
     path: `/authenticated/browse/series/${parentId}`,
   },
 ])
-breadcrumbStore.setPage({ name: season.Name || 'No Name Provided' })
+breadcrumbStore.setPage({ name: season.value.Name || 'No Name Provided' })
 </script>
 
 <template>
   <BrowseLayoutNew
-    :item="season"
+    v-model:item="season"
+    :current-watch="currentWatch[0]"
     :background="background()"
     :logo
     :default-sources
@@ -91,7 +92,6 @@ breadcrumbStore.setPage({ name: season.Name || 'No Name Provided' })
           :plugins="[WheelGesturesPlugin({ forceWheelAxis: 'x' })]"
         >
           <CarouselContent
-            v-focus-section
             class="items-end"
           >
             <CarouselItem
@@ -101,7 +101,6 @@ breadcrumbStore.setPage({ name: season.Name || 'No Name Provided' })
             >
               <div>
                 <NuxtLink
-                  v-focus
                   :to="{
                     name: 'authenticated-new-watch-id',
                     params: { id: ep.Id },

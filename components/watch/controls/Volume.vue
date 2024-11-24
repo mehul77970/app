@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { PhSpeakerX } from "@phosphor-icons/vue";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
+import { PhSpeakerX } from '@phosphor-icons/vue'
+import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip'
 
-const playerStore = usePlayerStore();
+const playerStore = usePlayerStore()
 
-const _internalVolume = ref([100]);
+const _internalVolume = ref([100])
 
-const muted = computed(() => playerStore.muted);
-const volume = computed(() => playerStore.volume);
+const muted = computed(() => playerStore.muted)
+const volume = computed(() => playerStore.volume)
 
 function changeVolume(volume: number[] | undefined) {
-  if (!volume) return;
+  if (!volume) return
 
-  playerStore.volume = volume[0];
+  playerStore.volume = volume[0]
 }
 
 function toggleMute() {
-  playerStore.muted = !playerStore.muted;
+  playerStore.muted = !playerStore.muted
 }
 </script>
 
@@ -34,15 +34,21 @@ function toggleMute() {
     <Tooltip>
       <TooltipTrigger as-child>
         <Button
-          v-focus
           variant="ghost"
           class="selectable"
           size="icon"
           @click="toggleMute"
         >
-          <WatchVolumeIndicators v-if="!muted" :volume="volume" />
+          <WatchVolumeIndicators
+            v-if="!muted"
+            :volume="volume"
+          />
 
-          <PhSpeakerX v-else size="24" weight="duotone" />
+          <PhSpeakerX
+            v-else
+            size="24"
+            weight="duotone"
+          />
         </Button>
       </TooltipTrigger>
 
@@ -50,10 +56,21 @@ function toggleMute() {
         <div
           class="inline-flex justify-center items-center gap-4 w-[250px] h-[32px]"
         >
-          <Button variant="ghost" size="icon" @click="toggleMute">
-            <WatchVolumeIndicators v-if="!muted" :volume="volume" />
+          <Button
+            variant="ghost"
+            size="icon"
+            @click="toggleMute"
+          >
+            <WatchVolumeIndicators
+              v-if="!muted"
+              :volume="volume"
+            />
 
-            <PhSpeakerX v-else size="24" weight="duotone" />
+            <PhSpeakerX
+              v-else
+              size="24"
+              weight="duotone"
+            />
           </Button>
 
           <Slider

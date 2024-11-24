@@ -39,20 +39,26 @@ breadcrumbStore.setPage({
 <template>
   <div class="flex min-w-full min-h-full flex-col items-center gap-4">
     <!-- TODO: Make this a component. -->
+    <div class="absolute w-full overflow-hidden blur-sm fade-bg object-top h-[80vh] top-0 left-0 fade-gradient">
+      <img
+        class="w-full h-full object-cover fade-gradient"
+        :alt="`${firstResumed?.Name} Cover Art`"
+        height="100%"
+        width="100%"
+        :src="useServerImage(firstResumed)"
+      >
+    </div>
     <div
       v-if="firstResumed"
-      class="flex flex-col justify-center items-center md:items-start h-[80vh] fade-gradient w-full px-24"
+      class="flex flex-col justify-center items-center md:items-start h-[80vh] w-full px-24"
     >
-      <img
-        :src="useServerImage(firstResumed)"
-        class="absolute h-full w-full overflow-hidden z-[1] object-cover object-top top-0 left-0"
-      >
       <div class="inline-flex flex-col gap-8 show-content z-[2]">
         <div class="inline-flex flex-col gap-2">
           <img
             :src="
               useServerImage(firstResumed, { type: 'Logo', fallback: 'Logo', size: 600, quality: 75 })
             "
+            :alt="`${firstResumed?.Name} Icon Art`"
             loading="lazy"
             width="700"
           >
@@ -89,14 +95,13 @@ breadcrumbStore.setPage({
             class="relative flex max-w-[100%] justify-center items-center gap-4"
             :opts="{ align: 'center' }"
           >
-            <CarouselContent v-focus-section>
+            <CarouselContent>
               <CarouselItem
                 v-for="(item, index) in resumed"
                 :key="index"
                 class="basis-1/1 max-w-full"
               >
                 <LazyVideoPreview
-                  v-focus
                   :item="item!!"
                   :class="`w-[800px] ${index === 0 ? 'ml-6' : ''} ${index === resumed.length - 1 ? 'mr-6' : ''}`"
                 />
@@ -123,7 +128,7 @@ breadcrumbStore.setPage({
               skipSnaps: true,
             }"
           >
-            <CarouselContent v-focus-section>
+            <CarouselContent>
               <CarouselItem
                 v-for="(view, index) in views"
                 :key="index"
@@ -134,7 +139,6 @@ breadcrumbStore.setPage({
                 >
                   <HomeCarouselItem
                     :id="view.Id"
-                    v-focus
                     :name="view.Name!!"
                     :type="view.CollectionType"
                   />

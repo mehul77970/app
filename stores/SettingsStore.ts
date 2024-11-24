@@ -20,6 +20,6 @@ export const useSettingsStore = defineStore('settings', {
     },
   },
   persist: {
-    storage: localStorage,
+    pick: ['browse'],
   },
 })

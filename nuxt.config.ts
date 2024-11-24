@@ -1,18 +1,20 @@
+import terser from '@rollup/plugin-terser'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
-    "@nuxtjs/tailwindcss",
-    "shadcn-nuxt",
-    "@nuxtjs/color-mode",
-    "@pinia/nuxt",
-    "@pinia-plugin-persistedstate/nuxt",
-    "@oku-ui/motion-nuxt",
-    "@nuxt/eslint",
+    '@nuxtjs/tailwindcss',
+    'shadcn-nuxt',
+    '@nuxtjs/color-mode',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    '@oku-ui/motion-nuxt',
+    '@nuxt/eslint',
+    '@nuxt/image',
   ],
-  plugins: ["~/plugins/toast.ts"],
-  ssr: false,
+  plugins: ['~/plugins/toast.ts'],
+  ssr: true,
   devtools: {
-    enabled: true,
+    enabled: false,
 
     timeline: {
       enabled: false,
@@ -20,32 +22,32 @@ export default defineNuxtConfig({
   },
   app: {
     // TODO: Unstable AF
-    pageTransition: { name: "fade-short-slide", mode: "out-in" },
+    pageTransition: { name: 'fade-short-slide', mode: 'out-in' },
 
     head: {
       meta: [
         {
-          name: "viewport",
+          name: 'viewport',
           content:
-            "width=device-width, initial-scale=1.0, interactive-widget=resizes-content",
+            'width=device-width, initial-scale=1.0, interactive-widget=resizes-content',
         },
       ],
       link: [
         {
-          rel: "icon",
-          href: "/shadfin_app_concept.svg",
+          rel: 'icon',
+          href: '/shadfin_app_concept.svg',
         },
       ],
     },
   },
-  css: ["~/assets/css/transitions.css"],
+  css: ['~/assets/css/transitions.css'],
   vue: {
     propsDestructure: true,
 
     compilerOptions: {},
   },
   colorMode: {
-    classSuffix: "",
+    classSuffix: '',
   },
 
   runtimeConfig: {
@@ -61,14 +63,41 @@ export default defineNuxtConfig({
     renderJsonPayloads: false,
     scanPageMeta: true,
   },
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: '2024-04-03',
+  nitro: {
+    compressPublicAssets: true,
+  },
 
   vite: {
     // Force optimize deps on these routes to prevent super laggy first time navigation in dev server.
     // This eagerly scans all routes and components and optimizes their dependencies first, rather than later.
     // If you want a faster start-up comment out the "optimizeDeps"
+    build: {
+      terserOptions: {
+
+      },
+      rollupOptions: {
+        treeshake: true,
+        plugins: [terser({
+          compress: {
+            defaults: false,
+            drop_console: true,
+          },
+          mangle: {
+            eval: true,
+            module: true,
+            toplevel: true,
+            safari10: true,
+            properties: false,
+          },
+          output: {
+            comments: false,
+          },
+        })],
+      },
+    },
     optimizeDeps: {
-      entries: ["./components/**", "./pages/**"],
+      entries: ['./components/**', './pages/**'],
     },
   },
   eslint: {
@@ -78,9 +107,9 @@ export default defineNuxtConfig({
     checker: true,
   },
   piniaPersistedstate: {
-    storage: "cookies",
+    storage: 'cookies',
     cookieOptions: {
-      sameSite: "lax",
+      sameSite: 'lax',
       secure: false,
       httpOnly: false,
     },
@@ -90,11 +119,11 @@ export default defineNuxtConfig({
     /**
      * Prefix for all the imported component
      */
-    prefix: "",
+    prefix: '',
     /**
      * Directory that the component lives in.
      * @default "./components/ui"
      */
-    componentDir: "./components/ui",
+    componentDir: './components/ui',
   },
-});
+})

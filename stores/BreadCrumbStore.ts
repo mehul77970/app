@@ -17,9 +17,7 @@ export const useBreadcrumbStore = defineStore('crumbs', {
       this.page = crumb
     },
   },
-  persist: {
-    storage: localStorage,
-  },
+  persist: false,
 })
 
 export interface Crumb {

@@ -1,14 +1,16 @@
 <script setup lang="ts">
-const serverStore = useServerStore();
+const serverStore = useServerStore()
 
-const info = computed(() => serverStore.info);
+const info = computed(() => serverStore.info)
 
-await serverStore.testServerURL(serverStore.url);
+await serverStore.testServerURL(serverStore.url)
 </script>
 
 <template>
   <div class="grid gap-6">
-    <h2 class="text-2xl font-semibold">General</h2>
+    <h2 class="text-2xl font-semibold">
+      General
+    </h2>
 
     <SettingsAdminOnlyOverlay>
       <Card>
@@ -58,21 +60,6 @@ await serverStore.testServerURL(serverStore.url);
             class="details inline-flex flex-wrap justify-start w-full gap-4 basis-1/4"
           >
             <span class="text-secondary-foreground/50">Coming Soon</span>
-            <!-- <Card class="flex-grow" v-for="(_, index) in [, , , , , ,]" v-bind:key="index">
-                        <CardHeader>
-                            <CardTitle class="inline-flex gap-3 items-center flex-wrap text-lg">
-                                <img height="64" width="64" src="/placeholder.svg" class="rounded-lg">
-                                <div class="inline-flex flex-col text-secondary-foreground/50">
-                                    <span>Firefox</span>
-                                    <span>Jellyfin Web</span>
-                                </div>
-                            </CardTitle>
-                        </CardHeader>
-
-                        <CardContent>
-                            <div class="bg-secondary max-w-full w-full aspect-video rounded-lg"></div>
-                        </CardContent>
-                    </Card> -->
           </div>
         </CardContent>
       </Card>

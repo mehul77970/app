@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function formatTime(time: number) {
+export function formatTime(time: number) {
   return moment.duration({ millisecond: time }).humanize()
 }
 
@@ -163,4 +163,26 @@ export function hexToHSL(hex: string): { h: number, s: number, l: number } {
   h = Math.round(360 * h)
 
   return { h, s, l }
+}
+
+
+export function fuzzysearch (needle: string, haystack: string) {
+	const hlen = haystack.length;
+	const nlen = needle.length;
+	if (nlen > hlen) {
+		return false;
+	}
+	if (nlen === hlen) {
+		return needle === haystack;
+	}
+	outer: for (var i = 0, j = 0; i < nlen; i++) {
+		var nch = needle.charCodeAt(i);
+		while (j < hlen) {
+			if (haystack.charCodeAt(j++) === nch) {
+				continue outer;
+			}
+		}
+		return false;
+	}
+	return true;
 }

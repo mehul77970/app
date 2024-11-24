@@ -111,98 +111,113 @@ breadcrumbStore.setPage({
         >
       </Motion>
     </Presence>
-    <div class="inline-flex justify-around mt-[72px]">
+    <div class="inline-flex justify-around">
       <div class="inline-flex flex-wrap w-full justify-center mt-8">
         <div
           class="elements grid md:grid-cols-2 gap-4 p-8 max-w-full w-full flex-wrap lg:justify-start justify-center"
         >
-          <Motion
-            :initial="{ opacity: 0 }"
-            :animate="{ opacity: [0, 1], x: [-20, 0] }"
-            :transition="{ delay: 0.02, duration: 0.2 }"
-          >
-            <img
-              :src="useServerImage(movie, { type: 'Primary', size: 600, quality: 85 })"
-              class="w-auto h-fit max-h-[80vh] rounded-lg z-[2] stagger"
+          <Presence>
+            <Motion
+              :initial="{ opacity: 0 }"
+              :animate="{ opacity: [0, 1], x: [-20, 0] }"
+              :transition="{ delay: 0.02, duration: 0.2 }"
             >
-          </Motion>
+              <img
+                :src="useServerImage(movie, { type: 'Primary', size: 600, quality: 85 })"
+                class="w-auto h-fit max-h-[80vh] rounded-lg z-[2] stagger"
+              >
+            </Motion>
+          </Presence>
           <div
             id="content"
             class="content mt-[30px] inline-flex flex-col z-[2] h-fit"
           >
-            <Motion
-              :initial="{ opacity: 0 }"
-              :animate="{ opacity: [0, 1], x: [-20, 0] }"
-              :transition="{ delay: 0.04, duration: 0.2 }"
-            >
-              <LazyBrowseLogo
-                :item="movie"
-                class="w-[500px] mb-24"
-              />
-            </Motion>
+            <Presence>
+              <Motion
+                :initial="{ opacity: 0 }"
+                :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                :transition="{ delay: 0.04, duration: 0.2 }"
+              >
+                <BrowseLogo
+                  :item="movie"
+                  class="w-[500px] mb-24"
+                />
+              </Motion>
+            </Presence>
             <div class="title inline-flex flex-col gap-1">
-              <Motion
-                :initial="{ opacity: 0 }"
-                :animate="{ opacity: [0, 1], x: [-20, 0] }"
-                :transition="{ delay: 0.06, duration: 0.2 }"
-              >
-                <span
-                  v-if="movie.Name"
-                  class="text-4xl font-bold name-transition"
+              <Presence>
+                <Motion
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                  :transition="{ delay: 0.06, duration: 0.2 }"
                 >
-                  {{ movie.Name }}
-                </span>
-              </Motion>
-              <Motion
-                :initial="{ opacity: 0 }"
-                :animate="{ opacity: [0, 1], x: [-20, 0] }"
-                :transition="{ delay: 0.08, duration: 0.2 }"
-              >
-                <h2 class="text-2xl text-white/85">
-                  {{ movie.OriginalTitle }}
-                </h2>
-              </Motion>
-
+                  <span
+                    v-if="movie.Name"
+                    class="text-4xl font-bold name-transition"
+                  >
+                    {{ movie.Name }}
+                  </span>
+                </Motion>
+              </Presence>
+              <Presence>
+                <Motion
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                  :transition="{ delay: 0.08, duration: 0.2 }"
+                >
+                  <h2 class="text-2xl text-white/85">
+                    {{ movie.OriginalTitle }}
+                  </h2>
+                </Motion>
+              </Presence>
               <div class="short-list-details inline-flex gap-3">
-                <Motion
-                  :initial="{ opacity: 0 }"
-                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
-                  :transition="{ delay: 0.10, duration: 0.2 }"
-                >
-                  <span>
-                    {{ movie.ProductionYear }}
-                  </span>
-                </Motion>
-                <Motion
-                  :initial="{ opacity: 0 }"
-                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
-                  :transition="{ delay: 0.12, duration: 0.2 }"
-                >
-                  <span>
-                    {{ ms(movie?.RunTimeTicks || 0 / 10000) }}
-                  </span>
-                </Motion>
-                <Motion
-                  :initial="{ opacity: 0 }"
-                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
-                  :transition="{ delay: 0.14, duration: 0.2 }"
-                >
-                  <div class="stars inline-flex items-center justify-center gap-2">
-                    <PhStar
-                      :size="18"
-                      weight="fill"
-                      class="text-orange-400"
-                    />
-                    <span>{{ movie.CommunityRating?.toFixed(1) }}</span>
-                  </div>
-                </Motion>
-                <Motion
-                  :initial="{ opacity: 0 }"
-                  :animate="{ opacity: [0, 1], x: [-20, 0] }"
-                  :transition="{ delay: 0.16, duration: 0.2 }"
-                >
-                  <span> Ends at {{ getEndsAtTime() }} </span>
-                </Motion>
+                <Presence>
+                  <Motion
+                    :initial="{ opacity: 0 }"
+                    :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                    :transition="{ delay: 0.10, duration: 0.2 }"
+                  >
+                    <span>
+                      {{ movie.ProductionYear }}
+                    </span>
+                  </Motion>
+                </Presence>
+                <Presence>
+                  <Motion
+                    :initial="{ opacity: 0 }"
+                    :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                    :transition="{ delay: 0.12, duration: 0.2 }"
+                  >
+                    <span>
+                      {{ ms(movie?.RunTimeTicks || 0 / 10000) }}
+                    </span>
+                  </Motion>
+                </Presence>
+                <Presence>
+                  <Motion
+                    :initial="{ opacity: 0 }"
+                    :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                    :transition="{ delay: 0.14, duration: 0.2 }"
+                  >
+                    <div class="stars inline-flex items-center justify-center gap-2">
+                      <PhStar
+                        :size="18"
+                        weight="fill"
+                        class="text-orange-400"
+                      />
+                      <span>{{ movie.CommunityRating?.toFixed(1) }}</span>
+                    </div>
+                  </Motion>
+                </Presence>
+                <Presence>
+                  <Motion
+                    :initial="{ opacity: 0 }"
+                    :animate="{ opacity: [0, 1], x: [-20, 0] }"
+                    :transition="{ delay: 0.16, duration: 0.2 }"
+                  >
+                    <span> Ends at {{ getEndsAtTime() }} </span>
+                  </Motion>
+                </Presence>
               </div>
               <div class="inline-flex flex-col w-fit lg:max-w-[1200px] max-w-[600px] gap-4 mt-8">
                 <div class="flex flex-col gap-2">

@@ -72,13 +72,8 @@ const debug = computed(() => playerStore.debug.enabled)
 
 <template>
   <div
-    id="player-wrapper"
-    class="w-full h-[100vh] max-w-full inline-flex flex-col justify-center items-center relative select-none overflow-hidden bg-black"
+    class="relative w-fit"
   >
-    <div v-if="!playerType">
-      <h1>No compatiable player found.</h1>
-    </div>
-
     <!-- HLS Player -->
     <LazyWatchHLSPlayer
       v-if="playerType === 'hls'"
@@ -87,14 +82,26 @@ const debug = computed(() => playerStore.debug.enabled)
       :audio-index="Number(audioIndex)"
       :subtitle-index="Number(subtitleIndex)"
       :start-position="startAt"
-      class="flex-gro"
+      class="h-full max-h-[100vh]"
     />
+  </div>
+
+  <div
+    class="absolute w-full h-full max-w-full inline-flex flex-col justify-center items-center select-none overflow-hidden"
+  >
+    <div v-if="!playerType">
+      <h1>No compatiable player found.</h1>
+    </div>
 
     <!-- Debug window -->
     <WatchDebug v-if="debug" />
 
     <!-- HTTP player -->
-    <LazyWatchHTTPPlayer v-if="playerType === 'http'" />
+    <LazyWatchHTTPPlayer
+      v-if="playerType === 'http'"
+      :id
+      :start-position="startAt"
+    />
 
     <!-- Native player, only avaliable for desktop! -->
     <LazyWatchNativePlayer

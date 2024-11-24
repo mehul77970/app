@@ -1,27 +1,27 @@
 <script lang="ts" setup>
-import type { BaseItemDto } from "@jellyfin/sdk/lib/generated-client";
-import { PhClosedCaptioning } from "@phosphor-icons/vue";
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
+import { PhClosedCaptioning } from '@phosphor-icons/vue'
 import {
   DropdownMenuCheckboxItem,
   DropdownMenuPortal,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@/components/ui/dropdown-menu";
-import { getSubtitleStreams } from "~/lib/player";
+} from '@/components/ui/dropdown-menu'
+import { getSubtitleStreams } from '~/lib/player'
 
 const { item } = defineProps<{
-  item: BaseItemDto;
-}>();
+  item: BaseItemDto
+}>()
 
-const subtitleSources = getSubtitleStreams(item);
+const subtitleSources = getSubtitleStreams(item)
 
-const playerStore = usePlayerStore();
+const playerStore = usePlayerStore()
 
-const selectedSubtitle = computed(() => playerStore.subtitle);
+const selectedSubtitle = computed(() => playerStore.subtitle)
 
 function changeSubtitle(subtitle: SubtitleSource) {
-  playerStore.subtitle = subtitle;
+  playerStore.subtitle = subtitle
 }
 </script>
 
@@ -29,7 +29,10 @@ function changeSubtitle(subtitle: SubtitleSource) {
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
       <div class="inline-flex gap-2 justify-center items-center">
-        <PhClosedCaptioning :size="24" weight="fill" />
+        <PhClosedCaptioning
+          :size="24"
+          weight="fill"
+        />
         <span>Subtitles</span>
       </div>
     </DropdownMenuSubTrigger>

@@ -64,8 +64,8 @@ function goBack() {
 </script>
 
 <template>
-  <LazyWatchSubtitles v-if="info" />
-  <WatchControlsPlayerPause
+  <LazyWatchSubtitles v-if="info && playerType !== 'native'" />
+  <LazyWatchControlsPlayerPause
     v-if="info"
     :info="info"
   />
@@ -92,7 +92,7 @@ function goBack() {
           />
         </Button>
 
-        <WatchControlsDebug />
+        <LazyWatchControlsDebug />
         <div
           class="inline-flex flex-col justify-end w-full mt-auto gap-2 p-6 overflow-hidden fade-bg"
         >
@@ -136,17 +136,17 @@ function goBack() {
               class="inline-flex justify-end"
               @click.stop
             >
-              <WatchControlsVolume />
-              <WatchControlsSettings
+              <LazyWatchControlsVolume />
+              <LazyWatchControlsSettings
                 v-if="info && playerType !== 'direct'"
                 :item="info"
               />
-              <WatchControlsPictureInPicture />
-              <WatchControlsFullscreen />
+              <LazyWatchControlsPictureInPicture />
+              <LazyWatchControlsFullscreen />
             </div>
           </div>
 
-          <WatchControlsTimeline
+          <LazyWatchControlsTimeline
             v-if="info"
             :info="info"
           />

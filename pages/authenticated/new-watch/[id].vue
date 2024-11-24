@@ -20,7 +20,7 @@ onUnmounted(() => {
 <template>
   <div
     id="player-wrapper"
-    class="absolute flex !h-[100vh] !w-full justify-center bg-black"
+    class="absolute flex !h-[100vh] !w-full items-center justify-center bg-black"
   >
     <WatchPlayerProvider
       :id="videoID"

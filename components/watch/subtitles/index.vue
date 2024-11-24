@@ -27,7 +27,7 @@ onErrorCaptured((err) => {
 })
 
 watch(subtitle, (newSub) => {
-  if (!newSub?.source) return
+  if (newSub?.title === 'None' || !newSub?.source) return
 
   playerStore.subtitleLoading = `Fetching ${newSub?.title} Subtitle Data..`
 })

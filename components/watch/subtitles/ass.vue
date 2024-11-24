@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import ASS from 'assjs'
 import { getSubtitleStream } from '@/lib/player'
-import ASS from '@/lib/subtitles/ass'
 
 const serverStore = useServerStore()
 const playerStore = usePlayerStore()
@@ -17,9 +17,7 @@ let assPlayer: undefined | ASS
 onMounted(async () => {
   if (!document) return
 
-  const videoElement = (document.getElementById(
-    'video',
-  ) as HTMLVideoElement) || { currentTime: 0 }
+  const videoElement = document.getElementById('video') as HTMLVideoElement
 
   if (playerStore.settings.native.enabled && deviceStore.nativeEnviroment) {
     playerStore.subtitleSyncCallback = (time: number) => {
@@ -32,7 +30,6 @@ onMounted(async () => {
   assPlayer = new ASS(assStreamText, videoElement, {
     container: document.getElementById('ass-container') || undefined,
     resampling: 'video_height',
-    native: playerStore.settings.native.enabled,
   })
 
   playerStore.subtitleLoading = null

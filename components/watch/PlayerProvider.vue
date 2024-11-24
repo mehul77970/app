@@ -72,7 +72,7 @@ const debug = computed(() => playerStore.debug.enabled)
 
 <template>
   <div
-    class="relative w-fit"
+    class="relative w-full"
   >
     <!-- HLS Player -->
     <LazyWatchHLSPlayer
@@ -82,7 +82,7 @@ const debug = computed(() => playerStore.debug.enabled)
       :audio-index="Number(audioIndex)"
       :subtitle-index="Number(subtitleIndex)"
       :start-position="startAt"
-      class="h-full max-h-[100vh]"
+      class=""
     />
   </div>
 

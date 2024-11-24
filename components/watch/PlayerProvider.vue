@@ -72,7 +72,7 @@ const debug = computed(() => playerStore.debug.enabled)
 
 <template>
   <div
-    class="relative w-full"
+    class="relative max-w-full h-[100vh]"
   >
     <!-- HLS Player -->
     <LazyWatchHLSPlayer

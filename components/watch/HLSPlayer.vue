@@ -405,12 +405,12 @@ function loadSource(url: string) {
   <video
     id="video"
     ref="video"
-    class="w-full h-full max-h-[100vh]"
+    class="h-full max-h-[100vh]"
     :autoplay="true"
   />
   <div
     id="ass-container"
-    class="absolute top-0 left-0"
+    class="absolute h-full top-0 left-0"
   />
   <Transition name="fade-short-slide">
     <div

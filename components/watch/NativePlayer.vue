@@ -16,6 +16,7 @@ import {
   setURL,
   start,
 } from '~/native/player/Player'
+import { getAudioStreams, getSubtitleStreams } from '~/lib/player';
 
 const { startPosition = 0 } = defineProps<{ startPosition: number }>()
 const playerStore = usePlayerStore()
@@ -27,6 +28,11 @@ const paused = computed(() => playerStore.paused)
 const position = computed(() => playerStore.positionTimeline)
 const audioSource = computed(() => playerStore.audio)
 const subtitleSource = computed(() => playerStore.subtitle)
+
+const audioStreams = getAudioStreams(item.value!)
+const subtitleStreams = getSubtitleStreams(item.value!, false)
+
+let nativePlayerLoaded = ref(false)
 
 const root = document.documentElement
 
@@ -81,6 +87,8 @@ onMounted(async () => {
     playerStore.seeking.value = false
     playerStore.loading = false
   })
+
+  nativePlayerLoaded.value = true
 })
 
 watch(paused, async () => {
@@ -94,14 +102,24 @@ watch(position, async () => {
 watch(audioSource, async (audioSource) => {
   playerStore.loading = true 
 
-  await setPlayerAudioTrack(audioSource?.source.Index || -1)
+  const audioIndex = audioStreams.findIndex((a) => a.source?.Index === audioSource?.source.Index)
+
+  waitUntil(nativePlayerLoaded, async () => {
+    await setPlayerAudioTrack(audioIndex+1 || -1)
+  })
+
   playerStore.loading = false 
 })
 
 watch(subtitleSource, async (subtitleSource) => {
   playerStore.loading = true 
-  
-  await setPlayerSubtitleTrack(subtitleSource?.source?.Index || -1)
+
+  const subtitleIndex = subtitleStreams.findIndex((s) => s.source?.Index === subtitleSource?.source?.Index)
+
+  waitUntil(nativePlayerLoaded, async () => {
+    await setPlayerSubtitleTrack(subtitleIndex+1 || -1)
+  })
+
   playerStore.loading = false
 })
 

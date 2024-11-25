@@ -68,10 +68,7 @@ onMounted(async () => {
 
   let lastCurrentTime = 0
   onPlayerPosition((position_sec) => {
-    if (playerStore.subtitleSyncCallback)
-      playerStore.subtitleSyncCallback(position_sec)
     if (Math.round(position_sec) === lastCurrentTime || !item.value?.Id) return
-
     // Round our position_sec to reduce unnecessary component updates
     lastCurrentTime = Math.round(position_sec)
     // Save this progress on the server
@@ -121,7 +118,6 @@ watch(subtitleSource, async (subtitleSource) => {
   })
 
   playerStore.loading = false
-  playerStore.subtitleLoading = null
 })
 
 onUnmounted(async () => {

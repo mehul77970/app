@@ -1,4 +1,4 @@
-import terser from '@rollup/plugin-terser'
+// import terser from '@rollup/plugin-terser'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
@@ -78,22 +78,22 @@ export default defineNuxtConfig({
       },
       rollupOptions: {
         treeshake: true,
-        plugins: [terser({
-          compress: {
-            defaults: false,
-            drop_console: true,
-          },
-          mangle: {
-            eval: true,
-            module: true,
-            toplevel: true,
-            safari10: true,
-            properties: false,
-          },
-          output: {
-            comments: false,
-          },
-        })],
+        // plugins: [terser({
+        //   compress: {
+        //     defaults: false,
+        //     drop_console: true,
+        //   },
+        //   mangle: {
+        //     eval: true,
+        //     module: true,
+        //     toplevel: true,
+        //     safari10: true,
+        //     properties: false,
+        //   },
+        //   output: {
+        //     comments: false,
+        //   },
+        // })],
       },
     },
     optimizeDeps: {

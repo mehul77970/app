@@ -121,6 +121,7 @@ watch(subtitleSource, async (subtitleSource) => {
   })
 
   playerStore.loading = false
+  playerStore.subtitleLoading = null
 })
 
 onUnmounted(async () => {

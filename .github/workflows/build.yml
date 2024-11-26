@@ -10,6 +10,7 @@ jobs:
     permissions:
         contents: read
         packages: write
+        id-token: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -61,7 +62,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages publish "./output/public" --project-name=shadfin-standalone --branch=main
+          command: pages deploy "./output/public" --project-name=shadfin-standalone --branch=main
     
     
         

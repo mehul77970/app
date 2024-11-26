@@ -12,10 +12,9 @@ export default defineNuxtConfig({
     '@nuxt/image',
   ],
   plugins: ['~/plugins/toast.ts'],
-  ssr: true,
+  ssr: (process.env.SSR === 'true'),
   devtools: {
     enabled: false,
-
     timeline: {
       enabled: false,
     },
@@ -54,6 +53,7 @@ export default defineNuxtConfig({
     internalServerUrl: undefined,
     public: {
       serverUrl: undefined,
+      ssr: process.env.SSR,
     },
   },
   // alias: {

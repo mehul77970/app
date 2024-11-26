@@ -7,9 +7,9 @@
   ],
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "SSR=true nuxt build",
     "analyze": "nuxt analyze",
-    "dev": "nuxt dev",
+    "dev": "SSR=true nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",

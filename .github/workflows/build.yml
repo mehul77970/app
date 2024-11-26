@@ -62,7 +62,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy "./output/public" --project-name=shadfin-standalone --branch=main
+          command: pages deploy "./.output/public" --project-name=shadfin-standalone --branch=main
     
     
         

@@ -49,7 +49,7 @@ jobs:
       - name: Zip site
         run: zip build.zip ./.output/public/* -r
       - name: Upload static site artifact 
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
             name: static-shadfin
             path: build.zip

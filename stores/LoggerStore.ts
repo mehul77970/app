@@ -67,13 +67,22 @@ export const useLoggerStore = defineStore('logger', {
     $log(log: Log): void {
       const logFormatted = this.$formatConsoleLog(log)
 
-      if (this.logToConsole) {
+      if (!this.logToConsole) return
+
+      if (import.meta.dev) {
         console.trace(
           `%c[${log.location}]:%c %c${log.message}%c`,
           ...logFormatted,
           ...(log.optionalParams || ''),
         )
+        return
       }
+
+      console.log(
+        `%c[${log.location}]:%c %c${log.message}%c`,
+        ...logFormatted,
+        ...(log.optionalParams || ''),
+      )
     },
   },
 })

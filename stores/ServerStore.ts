@@ -27,6 +27,14 @@ export const useServerStore = defineStore('server', {
 
       return this._url!
     },
+
+    public_url(): string {
+      const config = useRuntimeConfig()
+
+      if (config.public.serverUrl) return config.public.serverUrl
+
+      return this._url!
+    },
   },
   actions: {
     async testServerURL(url: string) {

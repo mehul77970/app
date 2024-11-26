@@ -23,24 +23,23 @@ export const useUserStore = defineStore('user', {
 
       const server = useServerStore()
 
-      const { data, error } = await useFetch<UserDto>(
-        `${server.url}/Users/${this.user!.Id!}`,
-        {
-          headers: {
-            Authorization: authentication.header,
+      try {
+        const data = await useApiFetch<UserDto>(
+          `${server.url}/Users/${this.user!.Id!}`,
+          {
+            headers: {
+              Authorization: authentication.header,
+            },
           },
-        },
-      )
+        )
 
-      if (error.value) {
-        notify({ title: 'Invalid Authentication', type: 'danger' })
-        return error.value
+        this.user = data
+        return data
       }
-
-      const user = data.value!
-      this.user = user
-
-      return user
+      catch (e: unknown) {
+        notify({ title: 'Invalid Authentication', type: 'danger' })
+        return e
+      }
     },
 
     getUserImage(size: number = 512) {

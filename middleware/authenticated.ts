@@ -1,53 +1,53 @@
-import type { UserDto } from "@jellyfin/sdk/lib/generated-client";
+import type { UserDto } from '@jellyfin/sdk/lib/generated-client'
 
 export default defineNuxtRouteMiddleware(async () => {
-  const serverStore = useServerStore();
-  const server = useCookie("server");
+  const serverStore = useServerStore()
+  const server = useCookie('server')
 
   if (window?.wails) {
-    await useNativeStorage();
+    await useNativeStorage()
   }
 
-  if (!server.value && !serverStore.url) return setup();
+  if (!server.value && !serverStore.url) return setup()
 
-  const authentication = useCookie("authentication");
-  const user = useCookie("user");
-  const authStore = useAuthenticationStore();
-  const userStore = useUserStore();
-  const l = useLoggerStore();
+  const authentication = useCookie('authentication')
+  const user = useCookie('user')
+  const authStore = useAuthenticationStore()
+  const userStore = useUserStore()
+  const l = useLoggerStore()
 
   const auth = authentication.value as unknown as {
     _header: {
-      client: string;
-      device: string;
-      deviceID: string;
-      version: string;
-      authorization: string;
-    };
-    loggedIn: boolean;
-  };
+      client: string
+      device: string
+      deviceID: string
+      version: string
+      authorization: string
+    }
+    loggedIn: boolean
+  }
 
-  if (!auth) return login();
+  if (!auth) return login()
 
-  authStore._header = auth._header;
-  authStore.loggedIn = auth.loggedIn;
+  authStore._header = auth._header
+  authStore.loggedIn = auth.loggedIn
 
-  const userVal = user.value as unknown as { user: UserDto };
-  if (!userVal) return;
+  const userVal = user.value as unknown as { user: UserDto }
+  if (!userVal) return
 
-  userStore.user = userVal.user;
+  userStore.user = userVal.user
 
   l.$log({
-    type: "info",
-    location: "Middleware",
+    type: 'info',
+    location: 'Middleware',
     message: `You're authenticated! Welcome back ${userStore.user.Name} :)`,
-  });
-});
+  })
+})
 
 function login() {
-  return "/login";
+  return '/login'
 }
 
 function setup() {
-  return "/setup";
+  return '/setup'
 }

@@ -13,7 +13,7 @@ export function useServerImage(
   item: BaseItemDto,
   { type = 'Primary', fallback = 'Primary', size = 1920, quality = 85 }: ImageOptions = {},
 ) {
-  const serverAPI = useServerStore()._url
+  const serverAPI = useServerStore().public_url
   const defaultImageTag = item?.ImageTags?.[type]
   const fallbackImageTag = item?.ImageTags?.[fallback]
   const isMovie = item?.Type === 'Movie'

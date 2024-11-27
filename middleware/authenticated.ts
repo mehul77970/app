@@ -1,47 +1,47 @@
 import type { UserDto } from '@jellyfin/sdk/lib/generated-client'
 
-export default defineNuxtRouteMiddleware(async () => {
-  const serverStore = useServerStore()
-  const server = useCookie('server')
+export default defineNuxtRouteMiddleware(() => {
+  callOnce(async () => {
+    const serverStore = useServerStore()
+    const server = useCookie('server')
 
-  if (window?.wails) {
-    await useNativeStorage()
-  }
-
-  if (!server.value && !serverStore.url) return setup()
-
-  const authentication = useCookie('authentication')
-  const user = useCookie('user')
-  const authStore = useAuthenticationStore()
-  const userStore = useUserStore()
-  const l = useLoggerStore()
-
-  const auth = authentication.value as unknown as {
-    _header: {
-      client: string
-      device: string
-      deviceID: string
-      version: string
-      authorization: string
+    if (window?.wails) {
+      await useNativeStorage()
     }
-    loggedIn: boolean
-  }
 
-  if (!auth) return login()
+    if (!server.value && !serverStore.url) return setup()
 
-  authStore._header = auth._header
-  authStore.loggedIn = auth.loggedIn
+    const authentication = useCookie('authentication')
+    const user = useCookie('user')
+    const authStore = useAuthenticationStore()
+    const userStore = useUserStore()
+    const l = useLoggerStore()
 
-  const userVal = user.value as unknown as { user: UserDto }
-  if (!userVal) return
+    const auth = authentication.value as unknown as {
+      _header: {
+        client: string
+        device: string
+        deviceID: string
+        version: string
+        authorization: string
+      }
+      loggedIn: boolean
+    }
 
-  userStore.user = userVal.user
+    if (!auth) return login()
 
-  callOnce(() => {
+    authStore._header = auth._header
+    authStore.loggedIn = auth.loggedIn
+
+    const userVal = user.value as unknown as { user: UserDto }
+    if (!userVal) return
+
+    userStore.user = userVal.user
+
     l.$log({
       type: 'info',
       location: 'Middleware',
-      message: `You're authenticated! Welcome back ${userStore?.user?.Name} :)`,
+      message: `You're authenticated! Welcome back ${userStore.user.Name} :)`,
     })
   })
 })

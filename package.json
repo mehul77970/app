@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "build": "SSR=true nuxt build",
+    "build-static": "SSR=false nuxt build --spa",
     "analyze": "nuxt analyze",
     "dev": "SSR=true nuxt dev",
     "dev-desktop": "SSR=false nuxt dev",

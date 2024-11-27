@@ -21,11 +21,9 @@ export const useUserStore = defineStore('user', {
         return
       }
 
-      const server = useServerStore()
-
       try {
         const data = await useApiFetch<UserDto>(
-          `${server.url}/Users/${this.user!.Id!}`,
+          `Users/${this.user!.Id!}`,
           {
             headers: {
               Authorization: authentication.header,

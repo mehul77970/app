@@ -71,7 +71,7 @@ export const useLoggerStore = defineStore('logger', {
 
       if (import.meta.dev) {
         console.trace(
-          `%c[${log.location}]:%c %c${log.message}%c`,
+          `%c[${log.location ?? 'Location Unspecified'}]:%c %c${log.message ?? 'No Message'}%c`,
           ...logFormatted,
           ...(log.optionalParams || ''),
         )
@@ -79,7 +79,7 @@ export const useLoggerStore = defineStore('logger', {
       }
 
       console.log(
-        `%c[${log.location}]:%c %c${log.message}%c`,
+        `%c[${log.location ?? 'Location Unspecified'}]:%c %c${log.message ?? 'No Message'}%c`,
         ...logFormatted,
         ...(log.optionalParams || ''),
       )

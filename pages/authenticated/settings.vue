@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const deviceStore = useDeviceStore()
 
-const nativeEnviroment = computed(() => deviceStore.nativeEnviroment)
+const nativeEnvironment = computed(() => deviceStore.nativeEnvironment)
 </script>
 
 <template>
@@ -30,7 +30,7 @@ const nativeEnviroment = computed(() => deviceStore.nativeEnviroment)
             Player
           </SettingsLink>
           <SettingsLink
-            v-if="nativeEnviroment"
+            v-if="nativeEnvironment"
             :to="{ name: 'authenticated-settings-desktop' }"
           >
             Desktop

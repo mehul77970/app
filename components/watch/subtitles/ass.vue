@@ -19,7 +19,7 @@ onMounted(async () => {
 
   const videoElement = document.getElementById('video') as HTMLVideoElement
 
-  if (playerStore.settings.native.enabled && deviceStore.nativeEnviroment) {
+  if (playerStore.settings.native.enabled && deviceStore.nativeEnvironment) {
     playerStore.subtitleSyncCallback = (time: number) => {
       videoElement.currentTime = time
     }

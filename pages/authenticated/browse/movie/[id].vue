@@ -107,6 +107,7 @@ breadcrumbStore.setPage({
           class="w-full h-full  object-cover"
           height="100%"
           width="100%"
+          :alt="`${movie.Name} Backdrop Art`"
           :src="mediaBrowser.generateImageURL(movie.Id!!, 'Backdrop/0')"
         >
       </Motion>
@@ -124,7 +125,8 @@ breadcrumbStore.setPage({
             >
               <img
                 :src="useServerImage(movie, { type: 'Primary', size: 600, quality: 85 })"
-                class="w-auto h-fit max-h-[80vh] rounded-lg z-[2] stagger"
+                :alt="`${movie.Name} Primary Art`"
+                class="w-auto h-fit max-h-[80vh] rounded-lg z-[2]"
               >
             </Motion>
           </Presence>

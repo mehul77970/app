@@ -7,7 +7,7 @@ export const useDeviceStore = defineStore('device', {
     profile: null as null | DeviceProfile,
     bitrate: 100000000,
     acknowledgedEarlyAccess: false,
-    nativeEnviroment: false,
+    nativeEnvironment: false,
   }),
 
   actions: {
@@ -331,9 +331,7 @@ export const useDeviceStore = defineStore('device', {
       }
 
       let maxBitrate = 0
-      for (let i = 0; i < bitrate.length; i++) {
-        const bitrateTest = bitrate[i]
-
+      for (const bitrateTest of bitrate) {
         maxBitrate += await getBitrate(bitrateTest)
       }
 

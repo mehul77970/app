@@ -1,43 +1,43 @@
 import type { UserDto } from '@jellyfin/sdk/lib/generated-client'
 
-export default defineNuxtRouteMiddleware(() => {
-  callOnce(async () => {
-    const serverStore = useServerStore()
-    const server = useCookie('server')
+export default defineNuxtRouteMiddleware(async () => {
+  const serverStore = useServerStore()
+  const server = useCookie('server')
 
-    if (window?.wails) {
-      await useNativeStorage()
+  if (window?.wails) {
+    await useNativeStorage()
+  }
+
+  if (!server.value && !serverStore.url) return setup()
+
+  const authentication = useCookie('authentication')
+  const user = useCookie('user')
+  const authStore = useAuthenticationStore()
+  const userStore = useUserStore()
+  const l = useLoggerStore()
+
+  const auth = authentication.value as unknown as {
+    _header: {
+      client: string
+      device: string
+      deviceID: string
+      version: string
+      authorization: string
     }
+    loggedIn: boolean
+  }
 
-    if (!server.value && !serverStore.url) return setup()
+  if (!auth) return login()
 
-    const authentication = useCookie('authentication')
-    const user = useCookie('user')
-    const authStore = useAuthenticationStore()
-    const userStore = useUserStore()
-    const l = useLoggerStore()
+  authStore._header = auth._header
+  authStore.loggedIn = auth.loggedIn
 
-    const auth = authentication.value as unknown as {
-      _header: {
-        client: string
-        device: string
-        deviceID: string
-        version: string
-        authorization: string
-      }
-      loggedIn: boolean
-    }
+  const userVal = user.value as unknown as { user: UserDto }
+  if (!userVal) return
 
-    if (!auth) return login()
+  userStore.user = userVal.user
 
-    authStore._header = auth._header
-    authStore.loggedIn = auth.loggedIn
-
-    const userVal = user.value as unknown as { user: UserDto }
-    if (!userVal) return
-
-    userStore.user = userVal.user
-
+  callOnce(() => {
     l.$log({
       type: 'info',
       location: 'Middleware',

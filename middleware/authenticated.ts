@@ -41,7 +41,7 @@ export default defineNuxtRouteMiddleware(async () => {
     l.$log({
       type: 'info',
       location: 'Middleware',
-      message: `You're authenticated! Welcome back ${userStore.user.Name} :)`,
+      message: `You're authenticated! Welcome back ${userStore?.user?.Name} :)`,
     })
   })
 })

@@ -45,6 +45,7 @@ const load = ref({
 //     }
 //   ]
 // };
+if (!serverStore._url) router.replace({ path: '/setup' })
 
 onMounted(() => {
   animate([

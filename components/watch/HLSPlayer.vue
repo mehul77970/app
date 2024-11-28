@@ -415,7 +415,7 @@ function loadSource(url: string) {
   <Transition name="fade-short-slide">
     <div
       v-if="!(loaderAnimationFinished && finishLoader)"
-      class="absolute z-[1] h-full w-full"
+      class="absolute top-0 left-0 z-[1] h-full w-full"
     >
       <WatchLoad
         v-model="loaderAnimationFinished"

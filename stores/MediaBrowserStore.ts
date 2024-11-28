@@ -31,7 +31,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
       const authentication = useAuthenticationStore()
 
       const data = await useApiFetch<BaseItemDtoQueryResult>(
-        `UserItems/Resume?limit=99&fields=ParentId&enableImageTypes=Primary,Art,Logo,Screenshot,Banner,Backdrop`,
+        `UserItems/Resume?limit=15&fields=ParentId&enableImageTypes=Primary,Art,Logo,Screenshot,Banner,Backdrop`,
         {
           method: 'GET',
           headers: {

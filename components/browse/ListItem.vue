@@ -34,6 +34,8 @@ const {
 }>()
 
 const router = useRouter()
+const userStore = useUserStore()
+const admin = computed(() => userStore.isAdmin)
 
 const image = useServerImage(item, { type: 'Primary', size: 128, quality: 85 })
 
@@ -182,6 +184,7 @@ function goTo() {
       </ContextMenuItem>
       <ContextMenuItem
         class="gap-2"
+        :disabled="!admin"
         @click="openMetadataEditor"
       >
         <PhTreeStructure
@@ -192,6 +195,7 @@ function goTo() {
       </ContextMenuItem>
       <ContextMenuItem
         class="gap-2"
+        :disabled="!admin"
         @click="openRefreshDialog"
       >
         <PhArrowsCounterClockwise

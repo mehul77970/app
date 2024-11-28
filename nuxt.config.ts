@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   },
   app: {
     // TODO: Unstable AF
-    pageTransition: { name: 'fade-short-slide', mode: 'out-in' },
+    pageTransition: { name: 'page', mode: 'out-in' },
 
     head: {
       meta: [

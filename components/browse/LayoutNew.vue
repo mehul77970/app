@@ -46,7 +46,7 @@ const state = ref({
 const bgImageLoaded = (ev: Event) => {
   const imageElement = ev.currentTarget as HTMLElement | null
   if (!imageElement) return
-  animate(imageElement, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, delay: 0.04 }).play()
+  animate(imageElement, { opacity: [0, 1], y: [20, 0], filter: ['blur(8px)', 'blur(4px)'] }, { duration: 0.5, delay: 0.04 }).play()
 }
 
 const toggleLike = async () => {
@@ -86,7 +86,7 @@ const play = () => {
       <img
         id="bg-image-layout"
         :src="background"
-        class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-cover top-0 left-0 fade-gradient -z-1"
+        class="absolute h-full w-full overflow-hidden blur-[8px] fade-bg object-cover top-0 left-0 fade-gradient -z-1"
         alt="hello"
         @load="bgImageLoaded"
       >

@@ -97,11 +97,11 @@ breadcrumbStore.setPage({
   <div class="hide-scroll">
     <Presence>
       <Motion
-        :initial="{ opacity: 0 }"
-        :animate="{ opacity: [0, 1], y: [20, 0] }"
+        :initial="{ opacity: 0, filter: 'blur(4px)' }"
+        :animate="{ opacity: [0, 1], y: [20, 0], filter: ['blur(8px)', 'blur(4px)'] }"
         :transition="{ delay: 0.04, duration: 0.5 }"
         :exit="{ opacity: 0, y: [0, -20] }"
-        class="absolute h-full w-full overflow-hidden blur-sm fade-bg object-top top-0 left-0 fade-gradient"
+        class="absolute h-full w-full overflow-hidden fade-bg object-top top-0 left-0 fade-gradient"
       >
         <img
           class="w-full h-full  object-cover"

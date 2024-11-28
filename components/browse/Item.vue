@@ -29,8 +29,10 @@ const {
   basis?: number
 }>()
 
-const image = useServerImage(item, { type: 'Primary', size: 480, quality: 75 })
+const userStore = useUserStore()
+const admin = computed(() => userStore.isAdmin)
 
+const image = useServerImage(item, { type: 'Primary', size: 480, quality: 75 })
 const metadataDialogOpen = ref(false)
 const aboutDialogOpen = ref(false)
 const refreshDialogOpen = ref(false)
@@ -132,6 +134,7 @@ function openRefreshDialog() {
       </ContextMenuItem>
       <ContextMenuItem
         class="gap-2"
+        :disabled="!admin"
         @click="openMetadataEditor"
       >
         <PhTreeStructure
@@ -142,6 +145,7 @@ function openRefreshDialog() {
       </ContextMenuItem>
       <ContextMenuItem
         class="gap-2"
+        :disabled="!admin"
         @click="openRefreshDialog"
       >
         <PhArrowsCounterClockwise

@@ -5,56 +5,68 @@ import {
   getLocalTimeZone,
   parseDate,
   today,
-} from "@internationalized/date";
-import { type Ref, ref } from "vue";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@internationalized/date'
+import { type Ref, ref } from 'vue'
+import { Calendar } from '@/components/ui/calendar'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   NumberField,
   NumberFieldContent,
   NumberFieldDecrement,
   NumberFieldIncrement,
   NumberFieldInput,
-} from "@/components/ui/number-field";
+} from '@/components/ui/number-field'
 
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from '@/components/ui/textarea'
 
-const title = defineModel<string | undefined>("title", { default: "" });
-const sortTitle = defineModel<string | undefined>("sortTitle", { default: "" });
+const title = defineModel<string | undefined>('title', { default: '' })
+const sortTitle = defineModel<string | undefined>('sortTitle', { default: '' })
 
-const dateCreated = defineModel<string | undefined | null>("dateCreated");
+const dateCreated = defineModel<string | undefined | null>('dateCreated')
 const dateCreatedValue = ref(
   parseDate(
     dateCreated.value
-      ? dateCreated.value.split("T")[0]
+      ? dateCreated.value.split('T')[0]
       : today(getLocalTimeZone()).toString(),
   ),
-) as Ref<DateValue>;
+) as Ref<DateValue>
 
-const communityRating = defineModel<number | undefined>("communityRating", {
+const communityRating = defineModel<number | undefined>('communityRating', {
   default: undefined,
-});
+})
 
-const year = defineModel<number | undefined>("year", { default: undefined });
+const year = defineModel<number | undefined>('year', { default: undefined })
 
-const description = defineModel<string | undefined>("description", {
-  default: "",
-});
+const description = defineModel<string | undefined>('description', {
+  default: '',
+})
 </script>
 
 <template>
   <div class="metadata inline-flex flex-col gap-2">
-    <h2 class="font-semibold">Metadata</h2>
+    <h2 class="font-semibold">
+      Metadata
+    </h2>
     <div class="h-[2px] w-full dark:bg-white/5 light:bg-black/25 rounded-lg" />
 
     <div class="grid grid-cols-4 items-center gap-4">
-      <Label for="title" class="text-left"> Title </Label>
-      <Input id="title" v-model="title" class="col-span-3" />
+      <Label
+        for="title"
+        class="text-left"
+      > Title </Label>
+      <Input
+        id="title"
+        v-model="title"
+        class="col-span-3"
+      />
     </div>
 
     <div class="grid grid-cols-4 items-center gap-4">
-      <Label for="sortTitle" class="text-left"> Sort Title </Label>
+      <Label
+        for="sortTitle"
+        class="text-left"
+      > Sort Title </Label>
       <Input
         id="sortTitle"
         v-model="sortTitle"
@@ -64,7 +76,10 @@ const description = defineModel<string | undefined>("description", {
     </div>
 
     <div class="grid grid-cols-4 items-center gap-4">
-      <Label for="dateAdded" class="text-left"> Date Added </Label>
+      <Label
+        for="dateAdded"
+        class="text-left"
+      > Date Added </Label>
       <Popover>
         <PopoverTrigger as-child>
           <div
@@ -88,7 +103,10 @@ const description = defineModel<string | undefined>("description", {
       class="grid grid-cols-4 items-center gap-1"
       style="grid-template-columns: 1fr 3fr"
     >
-      <Label for="communityRating" class="text-left"> Community Rating </Label>
+      <Label
+        for="communityRating"
+        class="text-left"
+      > Community Rating </Label>
 
       <div class="inline-flex grow">
         <NumberField
@@ -111,7 +129,10 @@ const description = defineModel<string | undefined>("description", {
       class="grid grid-cols-4 items-center gap-1"
       style="grid-template-columns: 1fr 3fr"
     >
-      <Label for="year" class="text-left"> Year </Label>
+      <Label
+        for="year"
+        class="text-left"
+      > Year </Label>
 
       <div class="inline-flex grow">
         <NumberField
@@ -136,12 +157,15 @@ const description = defineModel<string | undefined>("description", {
       class="grid grid-cols-4 items-start gap-2 mt-3"
       style="grid-template-columns: 1fr 3fr"
     >
-      <Label for="overview" class="text-left"> Description </Label>
+      <Label
+        for="overview"
+        class="text-left"
+      > Description </Label>
 
       <Textarea
         v-model="description"
         placeholder="Type your description here..."
-        rows="1"
+        class="resize-y"
       />
     </div>
   </div>

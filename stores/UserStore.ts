@@ -7,6 +7,11 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as UserDto | null,
   }),
+  getters: {
+    isAdmin(): boolean {
+      return this.user?.Policy?.IsAdministrator === true
+    },
+  },
 
   actions: {
     async getUser() {

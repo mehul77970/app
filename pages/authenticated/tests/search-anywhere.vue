@@ -55,8 +55,9 @@ const inputKeyDown = (ev: KeyboardEvent) => {
   if (ev.key === 'Backspace' && currentInput.value === '') {
     searchFilters.value.pop()
   }
-  if (ev.key !== 'Enter') return
+  if (ev.key !== 'Enter' && ev.key !== 'Tab') return
 
+  ev.preventDefault()
   if (searchFilters.value[searchFilters.value.length - 1] && !inputContainsModifier.value) {
     searchFilters.value[searchFilters.value.length - 1].value = currentInput.value
     currentInput.value = ''
@@ -76,11 +77,12 @@ const displayPicker = ref(false)
 
 <template>
   <div class="overlay flex w-full justify-center items-center">
-    <div class="flex flex-col gap-4 p-4 mt-[72px]">
+    <div class="flex flex-col gap-4 p-4">
       <h1>Search Jellyfin</h1>
 
       <div class="modifier-menu">
         Tags
+        {{ searchFilters }}
         {{ inputContainsModifier }}
       </div>
       <Popover :open="inputContainsModifier || displayPicker">

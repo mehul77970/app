@@ -96,6 +96,7 @@ function goTo() {
           <img
             :src="image"
             class="size-16 min-w-[4rem] object-cover rounded-md"
+            loading="lazy"
           >
         </TableCell>
         <TableCell class="text-sm md:text-lg text-primary p-2">

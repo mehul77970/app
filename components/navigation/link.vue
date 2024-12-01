@@ -15,7 +15,7 @@ const currentRoute = computed(() => router.currentRoute.value)
     :class="
       cn(
         /* @ts-ignore  */
-        currentRoute.path === router.resolve(to).path ? 'text-primary/50' : '',
+        currentRoute.fullPath === router.resolve(to).fullPath ? 'text-primary/50' : '',
       )
     "
   >

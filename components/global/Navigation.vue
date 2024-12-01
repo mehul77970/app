@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { PhHouse, PhList, PhMagnifyingGlass } from "@phosphor-icons/vue";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { PhHouse, PhList, PhMagnifyingGlass } from '@phosphor-icons/vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 
-const userStore = useUserStore();
-const mediaStore = useMediaBrowserStore();
-const router = useRouter();
+const userStore = useUserStore()
+const mediaStore = useMediaBrowserStore()
+const router = useRouter()
 
-const user = computed(() => userStore.user);
+const user = computed(() => userStore.user)
 
-const views = computed(() => mediaStore.views);
+const views = computed(() => mediaStore.views)
 
-const currentRoute = computed(() => router.currentRoute);
+const currentRoute = computed(() => router.currentRoute)
 
-mediaStore.getUserViews();
+mediaStore.getUserViews()
 
-userStore.getUser();
+userStore.getUser()
 </script>
 
 <template>
@@ -28,7 +28,10 @@ userStore.getUser();
       :to="{ name: 'authenticated' }"
       class="md:inline-flex justify-center items-center group hidden"
     >
-      <Button variant="ghost" size="icon">
+      <Button
+        variant="ghost"
+        size="icon"
+      >
         <PhHouse
           :size="24"
           :weight="
@@ -81,8 +84,8 @@ userStore.getUser();
 
                     <div
                       v-if="
-                        currentRoute.value.name === `authenticated-browse-id` &&
-                        currentRoute.value.params.id === view.Id
+                        currentRoute.value.name === `authenticated-browse-id`
+                          && currentRoute.value.params.id === view.Id
                       "
                       class="bg-white/25 h-[3px] w-full rounded-lg"
                     />
@@ -110,8 +113,8 @@ userStore.getUser();
 
             <div
               v-if="
-                currentRoute.value.name === `authenticated-browse-id` &&
-                currentRoute.value.params.id === view.Id
+                currentRoute.value.name === `authenticated-browse-id`
+                  && currentRoute.value.params.id === view.Id
               "
               class="bg-white/25 h-[3px] w-full rounded-lg"
             />
@@ -122,8 +125,14 @@ userStore.getUser();
 
     <div class="inline-flex gap-8 items-center ml-auto">
       <!-- Global Search -->
-      <div v-if="false" class="search">
-        <PhMagnifyingGlass :size="24" weight="fill" />
+      <div
+        v-if="false"
+        class="search"
+      >
+        <PhMagnifyingGlass
+          :size="24"
+          weight="fill"
+        />
       </div>
 
       <ClientOnly>

@@ -61,11 +61,11 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
     },
 
     // TODO: Add sort asc/desc
-    async getItemsOfView(view: string, limit: number = 20) {
+    async getItemsOfView(view: string, limit: number = 20, startIndex: number = 0) {
       const authentication = useAuthenticationStore()
 
       const data = await useApiFetch<BaseItemDtoQueryResult>(
-        `Items?parentId=${view}&limit=${limit}&fields=DateCreated,Overview,SortName,Studios,Taglines,Genres,Tags,Path,ItemCounts,MediaSources,MediaSourceCount,ProviderIds,ParentId&enableImageTypes=Primary,Art,Logo,Screenshot,Banner,Backdrop`,
+        `Items?parentId=${view}&limit=${limit}&startIndex=${startIndex}&fields=DateCreated,Overview,SortName,Studios,Taglines,Genres,Tags,Path,ItemCounts,MediaSources,MediaSourceCount,ProviderIds,ParentId&enableImageTypes=Primary,Art,Logo,Screenshot,Banner,Backdrop`,
         {
           headers: {
             Authorization: authentication.header,
@@ -73,7 +73,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
         },
       )
 
-      return data.Items
+      return data
     },
 
     async getEpisodesOfSeason(

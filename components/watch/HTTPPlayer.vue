@@ -61,6 +61,7 @@ onMounted(() => {
 
   addComponentEventListener(video, 'loadeddata', () => {
     playerStore.loading = false
+    playerStore.duration = video.duration * 1000
   })
 
   addComponentEventListener(video, 'playing', () => {

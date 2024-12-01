@@ -108,6 +108,7 @@ function openRefreshDialog() {
           <img
             :src="image"
             class="h-full w-full object-cover rounded-md aspect-portrait transition-all duration-250 ease-in-out group-hover:scale-[102%] group-focus-visible:scale-[102%] browse-card-transition selectable"
+            loading="lazy"
           >
 
           <div

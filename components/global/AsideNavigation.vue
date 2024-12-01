@@ -290,7 +290,7 @@ const logout = () => {
     <SidebarInset class="overflow-hidden">
       <header
         v-if="sidebarVisible"
-        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] z-[5] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
+        class="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] z-[5] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
       >
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
@@ -333,8 +333,12 @@ const logout = () => {
           </Breadcrumb>
         </div>
         <div
+          id="pagination"
+          class="p-3"
+        />
+        <div
           id="page-component"
-          class="ml-auto p-3"
+          class="p-3"
         />
       </header>
       <div class="flex flex-1 flex-row gap-4 w-full pt-0 overflow-hidden">

@@ -21,8 +21,8 @@ export default defineNuxtConfig({
   },
   app: {
     // TODO: Unstable AF
-    pageTransition: { name: 'page', mode: 'out-in' },
-
+    pageTransition: false,
+    layoutTransition: false,
     head: {
       meta: [
         {
@@ -68,15 +68,12 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     preset: 'bun',
   },
-
   vite: {
     // Force optimize deps on these routes to prevent super laggy first time navigation in dev server.
     // This eagerly scans all routes and components and optimizes their dependencies first, rather than later.
     // If you want a faster start-up comment out the "optimizeDeps"
     build: {
-      terserOptions: {
-
-      },
+      sourcemap: true,
       rollupOptions: {
         treeshake: true,
         // plugins: [terser({

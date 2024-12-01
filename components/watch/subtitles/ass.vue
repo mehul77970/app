@@ -29,7 +29,7 @@ onMounted(async () => {
 
   assPlayer = new ASS(assStreamText, videoElement, {
     container: document.getElementById('ass-container') || undefined,
-    resampling: 'video_height',
+    resampling: 'video_width',
   })
 
   playerStore.subtitleLoading = null

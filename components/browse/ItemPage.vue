@@ -7,6 +7,7 @@ import {
   PhSortAscending,
   PhSortDescending,
 } from '@phosphor-icons/vue'
+import Navigation from '../global/Navigation.vue'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +16,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '@/components/ui/pagination'
 import { Table, TableBody } from '@/components/ui/table'
 
 definePageMeta({ layout: 'authenticated' })
-
 const route = useRoute()
+const router = useRouter()
+
+const currentPageNum = ref(parseInt((route.query['page'] as string | undefined) ?? '0'))
+const itemsPerPage = 20
+const startIndex = computed(() => {
+  if (currentPageNum.value == 1 || currentPageNum.value == 0) return 0
+  return currentPageNum.value * itemsPerPage
+})
+
 const mediaBrowser = useMediaBrowserStore()
 const settingsStore = useSettingsStore()
 const breadcrumbStore = useBreadcrumbStore()
@@ -27,7 +46,7 @@ const breadcrumbStore = useBreadcrumbStore()
 const { browse } = storeToRefs(settingsStore)
 
 const items = ref(
-  await mediaBrowser.getItemsOfView(route.params.id as string, 50),
+  await mediaBrowser.getItemsOfView(route.params.id as string, itemsPerPage, startIndex.value),
 )
 
 async function fetchItems() {
@@ -54,14 +73,66 @@ breadcrumbStore.setBreadcrumbs([
 breadcrumbStore.setPage({
   name: 'View',
 })
+
+const setPage = (page: number) => {
+  console.log('Setting page to', page)
+  router.push({ name: 'authenticated-browse-id', params: { id: route.params.id }, query: { page: page } })
+}
 </script>
 
 <template>
   <div
     class="flex flex-col w-full min-h-full justify-start items-center gap-12 lg:px-4 p-4"
   >
+    <Teleport to="#pagination">
+      <Pagination
+        v-model:page="currentPageNum"
+        :total="items.TotalRecordCount || 1"
+        :sibling-count="0"
+        :show-edges="false"
+        :default-page="1"
+        :items-per-page="itemsPerPage"
+        class=""
+        @update:page="setPage"
+      >
+        <PaginationList
+          v-slot="{ items }"
+          class="flex items-center gap-1"
+        >
+          <PaginationFirst />
+          <PaginationPrev />
+
+          <template
+            v-for="(item, index) in items"
+            :key="index"
+          >
+            <PaginationListItem
+              v-if="item.type === 'page'"
+              :value="item.value"
+              as-child
+            >
+              <Button
+                class="w-10 h-10 p-0 link"
+                variant="ghost"
+                :disabled="currentPageNum === item.value"
+              >
+                {{ item.value }}
+              </Button>
+            </PaginationListItem>
+
+            <PaginationEllipsis
+              v-else
+              :key="item.type"
+              :index="index"
+            />
+          </template>
+          <PaginationNext />
+          <PaginationLast />
+        </PaginationList>
+      </Pagination>
+    </Teleport>
     <Teleport to="#page-component">
-      <div class="inline-flex flex-wrap options rounded-md">
+      <div class="inline-flex flex-wrap w-full options rounded-md">
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button
@@ -169,7 +240,7 @@ breadcrumbStore.setPage({
         class="inline-flex max-auto flex-wrap max-w-full justify-center items-stretch overflow-y-auto overflow-x-hidden"
       >
         <LazyBrowseItem
-          v-for="(item, index) in items"
+          v-for="(item, index) in items.Items"
           :id="item.Id!!"
           :key="index"
           :name="item.Name!!"
@@ -185,7 +256,7 @@ breadcrumbStore.setPage({
       <Table v-if="browse.layout === 'list'">
         <TableBody>
           <LazyBrowseListItem
-            v-for="(item, index) in items"
+            v-for="(item, index) in items.Items"
             :id="item.Id!!"
             :key="index"
             :name="item.Name!!"

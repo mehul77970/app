@@ -14,4 +14,4 @@
 
 * Better parsing of Server URL for /setup (testServerURL)
 
-![0.1.9-DEV](https://github.com/Shadfin/app/blob/master/.github/assets/changelog/0.1.9-DEV/swipe.mp4)
+![0.1.9-DEV](https://github.com/Shadfin/app/blob/master/.github/assets/changelog/0.1.9-DEV/swipe.mp4?raw=true)

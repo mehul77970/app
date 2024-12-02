@@ -38,8 +38,10 @@ export const useServerStore = defineStore('server', {
   },
   actions: {
     async testServerURL(url: string) {
+      const uri = new URL(url).href.replace(/\/+$/, '')
+
       const { data, error } = await useFetch<PublicSystemInfo>(
-        `${url}/System/Info/Public`,
+        `${uri}/System/Info/Public`,
         { timeout: 5000 },
       )
 
@@ -53,6 +55,7 @@ export const useServerStore = defineStore('server', {
         throw new Error('Unexpected Response')
       }
 
+      this._url = uri
       this.info = info
     },
 

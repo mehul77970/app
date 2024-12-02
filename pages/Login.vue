@@ -142,16 +142,13 @@ await serverStore.getServerConfig()
             Enter your username and password below to login to your account
           </p>
         </div>
-        <div
-          class="grid gap-4"
-        >
+        <div class="grid gap-4">
           <div class="grid gap-2 stagger-up">
             <Label for="name">Name</Label>
             <Input
               id="name"
               ref="nameInput"
               v-model="loginCreds.username"
-
               type="text"
               placeholder="username"
               required
@@ -194,18 +191,24 @@ await serverStore.getServerConfig()
         </div>
       </div>
     </div>
-    <LazyLoginCarosuel />
+    <LazyLoginCarosuel v-if="!config?.SplashscreenEnabled" />
+    <div
+      class="h-full w-full bg-cover image-grad scroll"
+      :style="`background-image: url(${serverStore.url}/Branding/Splashscreen)`"
+    />
   </div>
 </template>
 
 <style>
-#test-image-grad {
+.image-grad {
   mask-image: linear-gradient(
-    10deg,
+    90deg,
     rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 45%,
     rgba(0, 0, 0, 0.4) 100%
   );
   object-fit: cover;
+  background-repeat: repeat-x;
 }
 
 .stagger-up,

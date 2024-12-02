@@ -7,7 +7,7 @@ import {
   PhSortAscending,
   PhSortDescending,
 } from '@phosphor-icons/vue'
-import Navigation from '../global/Navigation.vue'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +33,7 @@ const route = useRoute()
 const router = useRouter()
 
 const currentPageNum = ref(parseInt((route.query['page'] as string | undefined) ?? '0'))
+const swipeContainer = ref()
 const itemsPerPage = 20
 const startIndex = computed(() => {
   if (currentPageNum.value == 1 || currentPageNum.value == 0) return 0
@@ -46,7 +47,11 @@ const breadcrumbStore = useBreadcrumbStore()
 const { browse } = storeToRefs(settingsStore)
 
 const items = ref(
-  await mediaBrowser.getItemsOfView(route.params.id as string, itemsPerPage, startIndex.value),
+  await mediaBrowser.getItemsOfView(
+    route.params.id as string,
+    itemsPerPage,
+    startIndex.value,
+  ),
 )
 
 async function fetchItems() {
@@ -76,19 +81,31 @@ breadcrumbStore.setPage({
 
 const setPage = (page: number) => {
   console.log('Setting page to', page)
-  router.push({ name: 'authenticated-browse-id', params: { id: route.params.id }, query: { page: page } })
+  router.push({
+    name: 'authenticated-browse-id',
+    params: { id: route.params.id },
+    query: { page: page },
+  })
 }
 </script>
 
 <template>
   <div
-    class="flex flex-col w-full min-h-full justify-start items-center gap-12 lg:px-4 p-4"
+    ref="swipeContainer"
+    class="flex flex-col w-full min-h-full justify-start items-center lg:px-4 p-4"
   >
+    <ClientOnly>
+      <BrowseSwipeNavigation
+        :current-page-num
+        :swipe-container
+        :set-page
+      />
+    </ClientOnly>
     <Teleport to="#pagination">
       <Pagination
         v-model:page="currentPageNum"
         :total="items.TotalRecordCount || 1"
-        :sibling-count="0"
+        :sibling-count="1"
         :show-edges="false"
         :default-page="1"
         :items-per-page="itemsPerPage"
@@ -97,7 +114,7 @@ const setPage = (page: number) => {
       >
         <PaginationList
           v-slot="{ items }"
-          class="flex items-center gap-1"
+          class="fixed bg-background/25 rounded-lg backdrop-blur-lg p-2 bottom-4 right-4 flex items-center gap-1 md:static md:bg-none md:rounded-none "
         >
           <PaginationFirst />
           <PaginationPrev />

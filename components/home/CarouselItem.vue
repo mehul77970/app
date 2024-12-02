@@ -10,7 +10,7 @@ const imagePreviewsOfView = ref([] as string[])
 
 const currentItem = ref(0)
 
-const items = await mediaBrowserStore.getItemsOfView(id)
+const items = (await mediaBrowserStore.getItemsOfView(id)).Items
 
 for (let itm = 0; items.length > itm; itm++) {
   const item = items[itm]
@@ -37,28 +37,18 @@ onMounted(() => {
     :to="{ name: 'authenticated-browse-id', params: { id } }"
     class="group"
   >
-    <div
-      class="p-1 flex flex-row gap-4 h-[200px] w-[130px] lg:h-[350px] lg:w-[230px]"
-    >
+    <div class="p-1 flex flex-row gap-4 h-[200px] w-[130px] lg:h-[350px] lg:w-[230px]">
       <div
         class="flex flex-col flex-grow-1 justify-start items-center w-full h-full relative rounded-md"
       >
         <TransitionGroup name="fade-long">
           <template
-            v-for="(item, index) in imagePreviewsOfView"
+            v-for="(item, index) in items"
             :key="index"
           >
             <img
               v-if="currentItem === index"
-              :src="
-                mediaBrowserStore.generateImageURL(
-                  item,
-                  undefined,
-                  130,
-                  200,
-                  50,
-                )
-              "
+              :src="useServerImage(item, { size: 200 })"
               class="absolute object-cover w-full h-full rounded-md"
             >
           </template>

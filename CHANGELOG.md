@@ -1,3 +1,9 @@
+# 0.1.10-DEV 
+
+### Bugfixes
+
+* Use hash-based routing for static generation, this fixes the null errors created on desktop for new users
+
 # 0.1.9-DEV
 
 ### Release Highlights

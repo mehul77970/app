@@ -188,7 +188,6 @@ function updateTrickplayTooltip(milliseconds: number) {
         <div class="h-6 w-[5px] absolute bg-white/25 rounded-lg ml-[20%]" />
 
         <div class="w-full h-2 absolute" />
-
         <TooltipProvider>
           <Tooltip
             :delay-duration="0"

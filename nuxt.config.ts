@@ -45,6 +45,11 @@ export default defineNuxtConfig({
 
     compilerOptions: {},
   },
+  router: {
+    options: {
+      hashMode: (process.env.SSR !== 'true'),
+    },
+  },
   colorMode: {
     classSuffix: '',
   },
@@ -96,6 +101,12 @@ export default defineNuxtConfig({
     },
     optimizeDeps: {
       entries: ['./components/**', './pages/**'],
+    },
+  },
+  hooks: {
+    'prerender:routes'({ routes }) {
+      if (process.env.SSR === 'true') return
+      routes.clear() // Do not generate any routes (except the defaults)
     },
   },
   eslint: {

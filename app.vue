@@ -3,9 +3,12 @@ import { ClickScrollPlugin, OverlayScrollbars } from 'overlayscrollbars'
 import { setBackground } from './native/app/App'
 import { onAppResize } from './native/app/events'
 import 'overlayscrollbars/overlayscrollbars.css'
+import { PhCircleHalf, PhCircleNotch } from '@phosphor-icons/vue'
+import pkg from '~/package.json'
 
 const deviceStore = useDeviceStore()
 const l = useLoggerStore()
+const loading = ref(true)
 
 let carouselRotate: NodeJS.Timeout | undefined
 
@@ -74,10 +77,31 @@ onUnmounted(() => {
 })
 
 deviceStore.testSetDeviceProfile()
+
+useNuxtApp().hook('page:finish', () => {
+  loading.value = false
+})
 </script>
 
 <template>
   <div id="shadfin-ui">
+    <Transition name="fade-short-slide">
+      <div
+        v-if="loading"
+        class="loading-screen flex justify-center overflow-none items-center flex-col gap-2 fixed w-full h-[100dvh] bg-background z-[999] select-none"
+      >
+        <img
+          src="~/public/shadfin_concept_vertical.svg"
+          alt="Sharkfin with text below Shadfin"
+          class="max-w-[100%] w-[500px] select-none"
+        >
+        <span class="select none">{{ pkg.version }}</span>
+        <PhCircleNotch
+          size="32px"
+          class="text-primary animate-spin"
+        />
+      </div>
+    </Transition>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

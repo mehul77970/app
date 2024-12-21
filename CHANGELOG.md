@@ -1,3 +1,13 @@
+# 0.1.11-DEV 
+
+### Release Highlights
+
+* New Layout for browsing shows
+
+### Features
+
+* Dynamic coloring based on Material You
+
 # 0.1.10-DEV 
 
 ### Bugfixes
@@ -21,3 +31,4 @@
 * Better parsing of Server URL for /setup (testServerURL)
 
 ![0.1.9-DEV](https://github.com/Shadfin/app/blob/master/.github/assets/changelog/0.1.9-DEV/swipe.mp4?raw=true)
+

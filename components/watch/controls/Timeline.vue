@@ -159,6 +159,21 @@ function updateTrickplayTooltip(milliseconds: number) {
     trickplay.value.image = `${serverStore.url}/Videos/${info.Id!}/Trickplay/${trickplayInfo.Width}/${index}.jpg?api_key=${auth._header.authorization}`
   }
 }
+
+function shouldShowChapter(position: number) {
+  const chapters = info.Chapters
+
+  if (!chapters) return
+
+  for (let i = 0; i < chapters.length; i++) {
+    const currentChapter = chapters[i]
+    const nextChapter = chapters[i + 1]
+
+    if ((ticksToSeconds(currentChapter?.StartPositionTicks ?? 0)) >= (position / 1000) && (ticksToSeconds(nextChapter?.StartPositionTicks ?? 0)) < (position / 1000)) {
+      return currentChapter
+    }
+  }
+}
 </script>
 
 <template>
@@ -185,7 +200,12 @@ function updateTrickplayTooltip(milliseconds: number) {
           <div class="w-full h-2 bg-white/25 rounded-lg" />
         </div>
 
-        <div class="h-6 w-[5px] absolute bg-white/25 rounded-lg ml-[20%]" />
+        <div
+          v-for="(chapter, index) in info.Chapters"
+          :key="index"
+          class="h-5 w-[5px] left-0 absolute bg-zinc-800 rounded-lg"
+          :style="`left: ${((chapter.StartPositionTicks || 0) / (info.RunTimeTicks || 0)) * 100}%;`"
+        />
 
         <div class="w-full h-2 absolute" />
         <TooltipProvider>
@@ -226,7 +246,7 @@ function updateTrickplayTooltip(milliseconds: number) {
                 <div
                   class="absolute bottom-2 bg-popover/50 backdrop-blur-md rounded-lg px-3 py-2 font-semibold justify-center text-center"
                 >
-                  <span>{{ formatTimestamp(time) }}</span>
+                  <span>{{ formatTimestamp(time) }} {{ shouldShowChapter(currentTime.value) }}</span>
                 </div>
               </div>
 

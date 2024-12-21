@@ -5,7 +5,7 @@ import {
   LogOut,
   Settings2,
 } from 'lucide-vue-next'
-import { PhHouse, PhBooks, PhFilmReel, PhCassetteTape, PhTelevisionSimple, PhImageSquare } from '@phosphor-icons/vue'
+import { PhHouse, PhBooks, PhFilmReel, PhCassetteTape, PhTelevisionSimple, PhImageSquare, PhCarProfile, PhPencil, PhPencilSimple } from '@phosphor-icons/vue'
 import {
   Avatar,
   AvatarFallback,
@@ -185,6 +185,12 @@ const logout = () => {
                 <DropdownMenuLabel class="text-xs text-muted-foreground">
                   Quick Actions
                 </DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <div class="flex size-6 items-center justify-center rounded-sm border mr-2">
+                    <PhPencilSimple weight="fill" />
+                  </div>
+                  Change Avatar
+                </DropdownMenuItem>
                 <DropdownMenuItem @click="logout">
                   <div class="flex size-6 items-center justify-center rounded-sm border mr-2">
                     <LogOut />

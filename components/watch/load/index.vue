@@ -24,7 +24,7 @@ onMounted(() => {
       ],
       [
         '#message',
-        { opacity: 1, x: ['-30%', '0%'] },
+        { opacity: 1, x: ['-30%', '10%'] },
         { duration: 0.8, delay: -1.5, easing: 'ease-out' },
       ],
       ['#prompt', { opacity: 1, y: 50 }, { duration: 1.2, delay: 0 }],
@@ -51,7 +51,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="loading-screen flex flex-col w-full justify-center items-center h-full m-auto relative bg-background"
+    class="loading-screen flex flex-col w-full justify-center items-center h-full m-auto relative"
     style="backdrop-filter: blur(8px)"
   >
     <div

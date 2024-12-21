@@ -42,12 +42,13 @@ breadcrumbStore.setPage({ name: series.value.Name || 'No Name Provided' })
   >
     <template #sections>
       <section
-        class="inline-flex flex-col justify-start pb-4 items-start max-w-full gap-4 mt-[72px] w-full"
+        class="inline-flex flex-col justify-start pb-4 items-start max-w-full gap-4 w-full"
       >
-        <h1 class="text-gray-400 tracking-wider pl-6">
-          SEASONS
-        </h1>
-
+        <MaterialForeground color="tertiary">
+          <h1 class="tracking-wider pl-6 font-semibold text-2xl">
+            SEASONS
+          </h1>
+        </MaterialForeground>
         <Carousel
           class="relative flex w-[100%] max-w-[100%] justify-start z-[2]"
           :opts="{

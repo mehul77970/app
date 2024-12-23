@@ -2,6 +2,12 @@
 
 ### Bugfixes
 
+* Remove compressing public aspects 
+
+# 0.1.12-DEV 
+
+### Bugfixes
+
 * Fix HTTPPlayer not using correct stream URL
 * Fix no volume slider on hover
 * Fix file dialog not opening for changing user avatar

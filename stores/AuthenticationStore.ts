@@ -2,14 +2,15 @@ import type { AuthenticationResult } from '@jellyfin/sdk/lib/generated-client'
 import { defineStore } from 'pinia'
 import { useUserStore } from './UserStore'
 import { getBrowser } from '~/lib/utils'
+import pkg from '~/package.json'
 
 export const useAuthenticationStore = defineStore('authentication', {
   state: () => ({
     _header: {
-      client: 'Shaddy',
+      client: 'Shadfin',
       device: '?',
       deviceID: '?',
-      version: '0.0.1-DEV',
+      version: pkg.version,
       authorization: null as null | string,
     },
 

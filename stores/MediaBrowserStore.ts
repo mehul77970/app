@@ -13,6 +13,10 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
     resumed: [] as BaseItemDto[],
   }),
 
+  getters: {
+    _log: () => useLoggerStore(),
+  },
+
   actions: {
     async getUserViews() {
       const authentication = useAuthenticationStore()
@@ -24,6 +28,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
         },
       })
 
+      this._log.$log({ message: 'Get /UserViews', location: 'MediaBrowser' })
       this.views = data.Items || []
     },
 
@@ -40,6 +45,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
         },
       )
 
+      this._log.$log({ message: 'Get /UsersItems/Resume', location: 'MediaBrowser' })
       this.resumed = data.Items || []
     },
 
@@ -73,6 +79,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
         },
       )
 
+      this._log.$log({ message: 'Get /Items', location: 'MediaBrowser' })
       return data
     },
 
@@ -92,6 +99,7 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
         },
       )
 
+      this._log.$log({ message: `Get /Shows/${show}/Episodes`, location: 'MediaBrowser' })
       return data.Items! as BaseItemDto[]
     },
     async getItem(id: string) {
@@ -206,6 +214,14 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
       // @ts-expect-error Loose type check
       return `${server.url}/Items/${item?.Id || item}/Download?api_key=${authentication._header.authorization}`
     },
+
+    generateStreamURL(item: BaseItemDto | string) {
+      const authentication = useAuthenticationStore()
+      const server = useServerStore()
+
+      // @ts-expect-error Loose type check
+      return `${server.url}/Videos/${item?.Id || item}/stream.mp4?Static=true&deviceId=${authentication._header.deviceID}&api_key=${authentication._header.authorization}`
+    },
     generateImageURL(
       id: string,
       type: string = 'Primary',
@@ -231,4 +247,5 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
       return url.href
     },
   },
+  persist: false,
 })

@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   },
   app: {
     // TODO: Unstable AF
-    pageTransition: false,
+    pageTransition: { mode: 'out-in', name: 'fade-short-slide' },
     layoutTransition: false,
     head: {
       meta: [
@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     public: {
       serverUrl: undefined,
       ssr: process.env.SSR,
+      debug: false,
     },
   },
   // alias: {

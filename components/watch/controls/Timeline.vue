@@ -246,7 +246,7 @@ function shouldShowChapter(position: number) {
                 <div
                   class="absolute bottom-2 bg-popover/50 backdrop-blur-md rounded-lg px-3 py-2 font-semibold justify-center text-center"
                 >
-                  <span>{{ formatTimestamp(time) }} {{ shouldShowChapter(currentTime.value) }}</span>
+                  <span>{{ formatTimestamp(time) }}</span>
                 </div>
               </div>
 

@@ -1,4 +1,4 @@
-import type { PlaybackInfoResponse } from '@jellyfin/sdk/lib/generated-client'
+import type { BaseItemDto, PlaybackInfoResponse, PlaybackStartInfo } from '@jellyfin/sdk/lib/generated-client'
 import type HLS from 'hls.js'
 import { defineStore } from 'pinia'
 import { useApiFetch } from '#imports'
@@ -225,6 +225,30 @@ export const usePlaybackStore = defineStore('playback', {
       this._transcodingUrl = null
     },
 
+    async startPlaybackProgress(item: BaseItemDto, seconds: number) {
+      if (!this.info?.PlaySessionId) return
+
+      const auth = useAuthenticationStore()
+
+      const secondsToTicks = (seconds * 10000000)
+
+      await useApiFetch(`Sessions/Playing`, {
+        headers: {
+          Authorization: auth.header,
+        },
+        method: 'POST',
+        body: {
+          CanSeek: true,
+          Item: this.info,
+          PositionTicks: secondsToTicks,
+          ItemId: item.Id,
+          PlayMethod: 'Transcode',
+          PlaybackOrder: 'Default',
+          IsPaused: false,
+          IsMuted: false,
+        } as PlaybackStartInfo,
+      })
+    },
     async savePlaybackProgress(item: string, seconds: number) {
       if (!this.info?.PlaySessionId) return
 

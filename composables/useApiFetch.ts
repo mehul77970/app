@@ -14,7 +14,7 @@ export async function useApiFetch<T>(
     const { data, error } = await useFetch<T>(url, options as any);
 
     if (error.value) {
-      throw new Error(error.value.message)
+      throw createError({ fatal: false, statusCode: error.value?.statusCode ?? 500, statusMessage: `A request couldn't complete`, data: error.value.message, stack: error.value.stack })
     }
 
     return data.value! as T

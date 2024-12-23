@@ -204,7 +204,10 @@ function openRefreshDialog() {
           >{{
             name
           }}</span>
-          <span class="text-sm">2 Seasons</span>
+          <span
+            v-if="false"
+            class="text-sm"
+          >2 Seasons</span>
           <span class="text-sm text-primary/50">{{ item.ProductionYear }}</span>
         </div>
       </NuxtLink>

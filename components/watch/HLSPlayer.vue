@@ -197,6 +197,9 @@ function capturePageEvents(video: HTMLVideoElement) {
 
   addComponentEventListener(video, 'canplay', () => {
     finishLoader.value = true
+
+    if (!playerStore.item) return
+    playbackStore.startPlaybackProgress(playerStore.item, video.currentTime)
   })
 
   addComponentEventListener(video, 'playing', () => {
@@ -236,10 +239,8 @@ onUnmounted(() => {
     playbackStore.clearPlayer()
   }
 
-  if (!video.value) return
-
   player.destroy()
-  playbackStore.stopPlaybackProgress(id, video.value.currentTime)
+  playbackStore.stopPlaybackProgress(id, playerStore.positionTimeline)
 
   if (!info?.PlaySessionId) {
     return console.error(

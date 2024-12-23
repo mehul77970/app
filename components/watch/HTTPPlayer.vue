@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const {
   id,
+  startPosition = 0,
 } = defineProps<{
   id: string
   startPosition?: number
@@ -17,6 +18,7 @@ const volume = computed(() => playerStore.volume)
 const muted = computed(() => playerStore.muted)
 const pictureInPicture = computed(() => playerStore.pictureInPicture)
 const timelinePosition = computed(() => playerStore.positionTimeline)
+const playbackStore = usePlaybackStore()
 
 playerStore.type = 'direct'
 
@@ -62,6 +64,11 @@ onMounted(() => {
   addComponentEventListener(video, 'loadeddata', () => {
     playerStore.loading = false
     playerStore.duration = video.duration * 1000
+
+    video.currentTime = ticksToSeconds(startPosition)
+    if (!playerStore.item) return
+
+    playbackStore.startPlaybackProgress(playerStore.item, video.currentTime)
   })
 
   addComponentEventListener(video, 'playing', () => {
@@ -92,6 +99,12 @@ onMounted(() => {
 
     // setRouteQuery({ startPosition: lastCurrentTime * 10000000 });
   })
+
+  addComponentSetInterval(() => {
+    if (Math.round(video.currentTime) === lastCurrentTime) return
+
+    playbackStore.savePlaybackProgress(id, video.currentTime)
+  }, 1000)
 })
 
 function getVideoPositionPercent(video: HTMLVideoElement) {
@@ -159,6 +172,10 @@ watch(timelinePosition, (pos, _) => {
   if (!videoRef.value) return
   videoRef.value.currentTime = pos
 })
+
+onUnmounted(() => {
+  playbackStore.stopPlaybackProgress(id, playerStore.positionTimeline)
+})
 </script>
 
 <template>
@@ -166,7 +183,7 @@ watch(timelinePosition, (pos, _) => {
     id="video"
     ref="videoRef"
     class="z-0 p-0 m-0 h-full w-fit absolute"
-    :src="mediaBrowserStore.generateDownloadURL(id)"
+    :src="mediaBrowserStore.generateStreamURL(id)"
     :autoplay="true"
   />
 </template>

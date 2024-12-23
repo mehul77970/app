@@ -82,6 +82,11 @@
 .use-material-bg {
   background-color: var(--material-bg);
 }
+
+.use-material-border {
+  border: var(--material-border) 3px solid;
+}
+
 .font-onest {
   font-family: "Onest";
 }

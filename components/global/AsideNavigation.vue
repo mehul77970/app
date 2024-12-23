@@ -64,6 +64,7 @@ const views = computed(() => mediaStore.views)
 const crumbs = computed(() => crumbStore.crumbs)
 const pageCrumb = computed(() => crumbStore.page)
 
+const userImage = ref(userStore.getUserImage(64))
 const sidebarVisible = computed(() => !settingsStore.hideSidebar)
 const data = {
   navMain: [
@@ -130,6 +131,26 @@ userStore.getUser()
 const logout = () => {
   router.push({ path: '/authenticated/logout' })
 }
+
+const selectAvatar = () => {
+  const input = document.createElement('input')
+
+  input.type = 'file'
+  input.accept = 'image/png, image/jpeg, image/gif, image/apng, image/webp'
+  input.multiple = false
+
+  input.click()
+
+  input.oninput = async () => {
+    const file = input?.files?.[0]
+
+    if (!file) return
+
+    await userStore.setUserImage(file)
+
+    userImage.value = userStore.getUserImage(64) + `&d=${Date.now()}`
+  }
+}
 </script>
 
 <template>
@@ -158,7 +179,7 @@ const logout = () => {
                   <Avatar class="h-8 w-8 rounded-lg">
                     <AvatarImage
                       v-if="user && user.PrimaryImageTag"
-                      :src="userStore.getUserImage(64)!!"
+                      :src="userImage!"
                       alt="user-avatar"
                     />
                     <AvatarFallback class="rounded-lg" />
@@ -185,8 +206,11 @@ const logout = () => {
                 <DropdownMenuLabel class="text-xs text-muted-foreground">
                   Quick Actions
                 </DropdownMenuLabel>
-                <DropdownMenuItem>
-                  <div class="flex size-6 items-center justify-center rounded-sm border mr-2">
+                <DropdownMenuItem @click="selectAvatar">
+                  <div
+                    class="flex size-6 items-center justify-center rounded-sm border mr-2"
+                    @click="selectAvatar"
+                  >
                     <PhPencilSimple weight="fill" />
                   </div>
                   Change Avatar

@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia'
+import type { ILogObj, Logger } from 'tslog'
 
+let ssrLogger: Logger<ILogObj> | undefined
 type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 
+if (import.meta.server && !ssrLogger) {
+  import('tslog').then((mod) => {
+    ssrLogger = new mod.Logger({ hideLogPositionForProduction: true })
+  })
+}
 export interface Log {
   type?: LogLevel
   location?: string
@@ -11,6 +18,8 @@ export interface Log {
 
 export const useLoggerStore = defineStore('logger', {
   state: () => ({
+    DEBUG: useNuxtApp().$config.public.debug,
+
     logToConsole: true, // TODO: make user option
     logs: [],
   }),
@@ -65,6 +74,26 @@ export const useLoggerStore = defineStore('logger', {
     },
 
     $log(log: Log): void {
+      if (import.meta.server && ssrLogger && this.DEBUG) {
+        const message = `${log.location ?? 'No Location'} -> ${log.message ?? 'No Message'}`
+
+        switch (log.type) {
+          case 'debug':
+            ssrLogger.debug(message, log.optionalParams ?? '')
+            break
+          case 'info':
+            ssrLogger.info(message, log.optionalParams ?? '')
+            break
+          case 'warn':
+            ssrLogger.warn(message, log.optionalParams ?? '')
+            break
+          case 'error':
+            ssrLogger.error(message, log.optionalParams ?? '')
+            break
+        }
+
+        return
+      }
       const logFormatted = this.$formatConsoleLog(log)
 
       if (!this.logToConsole) return

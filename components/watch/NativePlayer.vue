@@ -16,7 +16,7 @@ import {
   setURL,
   start,
 } from '~/native/player/Player'
-import { getAudioStreams, getSubtitleStreams } from '~/lib/player';
+import { getAudioStreams, getSubtitleStreams } from '~/lib/player'
 
 const { startPosition = 0 } = defineProps<{ startPosition: number }>()
 const playerStore = usePlayerStore()
@@ -32,7 +32,7 @@ const subtitleSource = computed(() => playerStore.subtitle)
 const audioStreams = getAudioStreams(item.value!)
 const subtitleStreams = getSubtitleStreams(item.value!, false)
 
-let nativePlayerLoaded = ref(false)
+const nativePlayerLoaded = ref(false)
 
 const root = document.documentElement
 
@@ -51,6 +51,7 @@ onMounted(async () => {
 
   onPlayerLoaded(async (duration_sec) => {
     await setPlayerPosition(ticksToSeconds(startPosition))
+    if (item.value) playbackStore.startPlaybackProgress(item.value, ticksToSeconds(startPosition))
 
     playerStore.loading = false
     playerStore.loaded = true
@@ -97,24 +98,24 @@ watch(position, async () => {
 })
 
 watch(audioSource, async (audioSource) => {
-  playerStore.loading = true 
+  playerStore.loading = true
 
-  const audioIndex = audioStreams.findIndex((a) => a.source?.Index === audioSource?.source.Index)
+  const audioIndex = audioStreams.findIndex(a => a.source?.Index === audioSource?.source.Index)
 
   waitUntil(nativePlayerLoaded, async () => {
-    await setPlayerAudioTrack(audioIndex+1 || -1)
+    await setPlayerAudioTrack(audioIndex + 1 || -1)
   })
 
-  playerStore.loading = false 
+  playerStore.loading = false
 })
 
 watch(subtitleSource, async (subtitleSource) => {
-  playerStore.loading = true 
+  playerStore.loading = true
 
-  const subtitleIndex = subtitleStreams.findIndex((s) => s.source?.Index === subtitleSource?.source?.Index)
+  const subtitleIndex = subtitleStreams.findIndex(s => s.source?.Index === subtitleSource?.source?.Index)
 
   waitUntil(nativePlayerLoaded, async () => {
-    await setPlayerSubtitleTrack(subtitleIndex+1 || -1)
+    await setPlayerSubtitleTrack(subtitleIndex + 1 || -1)
   })
 
   playerStore.loading = false

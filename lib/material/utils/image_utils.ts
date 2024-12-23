@@ -60,12 +60,12 @@ export async function sourceColorFromImage(image: HTMLImageElement) {
   let ranked: number[]
 
   if (window.Worker) {
-    const worker = new Worker(new URL('./image_utils_worker.ts', import.meta.url), { type: 'module' })
+    const worker = window.MATERIAL_YOU_DYNAMIC_COLOR_WORKER ?? new Worker(new URL('./image_utils_worker.ts', import.meta.url), { type: 'module' })
     worker.postMessage(imageBytes)
 
+    window.MATERIAL_YOU_DYNAMIC_COLOR_WORKER = worker
     ranked = await new Promise((resolve) => {
       worker.onmessage = (event) => {
-        console.log('Got message from worker', event)
         const ranked = event.data
         resolve(ranked)
       }

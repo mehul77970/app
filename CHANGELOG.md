@@ -1,3 +1,13 @@
+# 0.1.12-DEV 
+
+### Bugfixes
+
+* Fix HTTPPlayer not using correct stream URL
+* Fix no volume slider on hover
+* Fix file dialog not opening for changing user avatar
+* Fix episode/movie not starting where it should
+* Fix playback progress reporting 
+
 # 0.1.11-DEV 
 
 ### Release Highlights

@@ -2,6 +2,7 @@ import type { UserDto } from '@jellyfin/sdk/lib/generated-client'
 import { notify } from 'notiwind'
 import { defineStore } from 'pinia'
 import { useAuthenticationStore } from './AuthenticationStore'
+import { fileToBase64 } from '~/lib/utils'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -51,6 +52,20 @@ export const useUserStore = defineStore('user', {
       const server = useServerStore()
 
       return `${server.url}/UserImage?userId=${this.user.Id!}&maxHeight=${size}`
+    },
+
+    async setUserImage(file: File) {
+      const authentication = useAuthenticationStore()
+      const fileBase64 = await fileToBase64(file)
+
+      await useApiFetch(`Users/${this.user?.Id}/Images/Primary`, {
+        method: 'POST',
+        headers: {
+          'Authorization': authentication.header,
+          'Content-Type': file.type,
+        },
+        body: fileBase64,
+      })
     },
   },
   persist: {

@@ -14,6 +14,16 @@ function padTo2Digits(num: number) {
   return num.toString().padStart(2, '0')
 }
 
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    // @ts-expect-error Loose type checking
+    reader.onload = () => resolve(reader?.result?.substr(reader.result.indexOf(',') + 1))
+    reader.onerror = reject
+  })
+}
+
 export function formatTimestamp(milliseconds: number) {
   let seconds = Math.floor(milliseconds / 1000)
   let minutes = Math.floor(seconds / 60)
@@ -165,24 +175,23 @@ export function hexToHSL(hex: string): { h: number, s: number, l: number } {
   return { h, s, l }
 }
 
-
-export function fuzzysearch (needle: string, haystack: string) {
-	const hlen = haystack.length;
-	const nlen = needle.length;
-	if (nlen > hlen) {
-		return false;
-	}
-	if (nlen === hlen) {
-		return needle === haystack;
-	}
-	outer: for (var i = 0, j = 0; i < nlen; i++) {
-		var nch = needle.charCodeAt(i);
-		while (j < hlen) {
-			if (haystack.charCodeAt(j++) === nch) {
-				continue outer;
-			}
-		}
-		return false;
-	}
-	return true;
+export function fuzzysearch(needle: string, haystack: string) {
+  const hlen = haystack.length
+  const nlen = needle.length
+  if (nlen > hlen) {
+    return false
+  }
+  if (nlen === hlen) {
+    return needle === haystack
+  }
+  outer: for (let i = 0, j = 0; i < nlen; i++) {
+    const nch = needle.charCodeAt(i)
+    while (j < hlen) {
+      if (haystack.charCodeAt(j++) === nch) {
+        continue outer
+      }
+    }
+    return false
+  }
+  return true
 }

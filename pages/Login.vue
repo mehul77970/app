@@ -186,7 +186,7 @@ await serverStore.getServerConfig()
           </Button>
 
           <div class="server-message mt-8 text-center stagger-down">
-            <span>{{ config?.LoginDisclaimer }}</span>
+            <p v-html="config?.LoginDisclaimer" />
           </div>
         </div>
       </div>

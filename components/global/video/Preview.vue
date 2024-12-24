@@ -60,7 +60,6 @@ function onPreviewVideo() {
     const HLS = (await import('hls.js')).default
     // TODO: Allow HLS configuration
     player = new HLS({ debug: false })
-
     try {
       const info = await playbackStore.getPlaybackInfo(item.Id!)
 
@@ -136,7 +135,7 @@ function onPreviewVideo() {
 
     // Seek Video
     video.value.currentTime = calculateStartPosition()
-  }, 2000)
+  }, 1200)
 }
 
 function onStopPreviewVideo() {
@@ -151,6 +150,7 @@ function onStopPreviewVideo() {
 
   if (!player || !video.value) return
 
+  if (playbackStore.info?.PlaySessionId) playbackStore.stopPlaybackTranscode(playbackStore.info?.PlaySessionId)
   player.destroy()
   video.value.pause()
 

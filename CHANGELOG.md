@@ -1,4 +1,10 @@
-# 0.1.12-DEV 
+# 0.1.14-DEV 
+
+### Features
+
+* Allow login disclaimer to contain HTML
+
+# 0.1.13-DEV 
 
 ### Bugfixes
 

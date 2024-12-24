@@ -185,9 +185,10 @@ await serverStore.getServerConfig()
             Login
           </Button>
 
-          <div class="server-message mt-8 text-center stagger-down">
-            <p v-html="config?.LoginDisclaimer" />
-          </div>
+          <div
+            class="server-message mt-8 text-center stagger-down"
+            v-html="config?.LoginDisclaimer"
+          />
         </div>
       </div>
     </div>

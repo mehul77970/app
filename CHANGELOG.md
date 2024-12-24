@@ -1,3 +1,9 @@
+# 0.1.15-DEV 
+
+### Features
+
+* Fix HTML based login disclaimer not properly rendering inside p element
+
 # 0.1.14-DEV 
 
 ### Features

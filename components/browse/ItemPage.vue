@@ -8,6 +8,7 @@ import {
   PhSortDescending,
 } from '@phosphor-icons/vue'
 
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +35,7 @@ const router = useRouter()
 
 const currentPageNum = ref(parseInt((route.query['page'] as string | undefined) ?? '0'))
 const swipeContainer = ref()
-const itemsPerPage = 20
+const itemsPerPage = 35
 const startIndex = computed(() => {
   if (currentPageNum.value == 1 || currentPageNum.value == 0) return 0
   return currentPageNum.value * itemsPerPage
@@ -267,6 +268,7 @@ const setPage = (page: number) => {
           :data-index="index"
           :type="item.Type"
           :count="item.UserData?.UnplayedItemCount || 0"
+          @mouseover="onItemMouseOver(item)"
         />
       </div>
 

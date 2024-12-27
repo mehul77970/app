@@ -3,6 +3,7 @@ import type {
   BaseItemDto,
   BaseItemDtoQueryResult,
 } from '@jellyfin/sdk/lib/generated-client'
+import { notify } from 'notiwind'
 import { useApiFetch } from '@/composables/useApiFetch'
 
 export type RefreshType = 'ValidationOnly' | 'Default' | 'FullRefresh'
@@ -20,6 +21,12 @@ export const useMediaBrowserStore = defineStore('mediaBrowser', {
   actions: {
     async getUserViews() {
       const authentication = useAuthenticationStore()
+
+      if (!authentication.loggedIn) {
+        notify({ title: 'Invalid Authentication', type: 'danger' })
+        await navigateTo('/login')
+        return
+      }
 
       const data = await useApiFetch<BaseItemDtoQueryResult>(`UserViews`, {
         method: 'GET',

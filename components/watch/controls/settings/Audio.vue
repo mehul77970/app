@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 
-import { PhSpeakerHifi } from '@phosphor-icons/vue'
+import { PhSpeakerHifi, PhSpeakerHigh } from '@phosphor-icons/vue'
 import {
   DropdownMenuCheckboxItem,
   DropdownMenuPortal,
@@ -31,11 +31,12 @@ function changeAudio(audio: AudioSource) {
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
       <div
-        class="inline-flex gap-2 justify-center items-center selectable"
+        class="inline-flex gap-2 justify-start items-center selectable"
       >
-        <PhSpeakerHifi
-          :size="24"
+        <PhSpeakerHigh
+          :size="18"
           weight="fill"
+          class="mr-auto"
         />
         <span>Audio</span>
       </div>

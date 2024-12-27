@@ -28,9 +28,9 @@ function changeSubtitle(subtitle: SubtitleSource) {
 <template>
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
-      <div class="inline-flex gap-2 justify-center items-center">
+      <div class="inline-flex gap-2 justify-start w-full items-center">
         <PhClosedCaptioning
-          :size="24"
+          :size="18"
           weight="fill"
         />
         <span>Subtitles</span>

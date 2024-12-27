@@ -1,3 +1,15 @@
+# 0.1.17-DEV 
+
+### Features
+
+* You now have the ability to select a video resolution when transcoding media.
+
+![Quality Picker in Video Settings](https://github.com/Shadfin/app/blob/master/.github/assets/changelog/0.1.17-DEV/quality_picker.png?raw=true)
+
+### Bugfixes
+
+* Add robots.txt to avoid annoying Not Found in SSR
+
 # 0.1.16-DEV 
 
 ### Bugfixes

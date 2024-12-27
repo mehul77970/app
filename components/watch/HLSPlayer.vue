@@ -5,6 +5,7 @@ import { addComponentEventListener } from '@/composables/addComponentEventListen
 
 import { addComponentSetInterval } from '@/composables/addComponentSetInterval'
 import { ticksToSeconds } from '@/composables/ticksToSeconds'
+import { getResolutionFromResolutionString } from '~/lib/player'
 
 const {
   info = usePlaybackStore().info,
@@ -49,6 +50,7 @@ const volume = computed(() => playerStore.volume)
 const muted = computed(() => playerStore.muted)
 const pictureInPicture = computed(() => playerStore.pictureInPicture)
 const timelinePosition = computed(() => playerStore.positionTimeline)
+const videoSettings = computed(() => playerStore.settings.video_new)
 
 const videoSource = computed(() => playerStore.video)
 const audioSource = computed(() => playerStore.audio)
@@ -395,11 +397,26 @@ function loadSource(url: string) {
   player.loadSource(url)
 }
 
-// const setRouteQuery = (query: Record<string, string>) => {
-//   const current = router.currentRoute.value
+watch(videoSettings, async (settings) => {
+  if (!video.value) return
 
-//   router.replace({ path: current.fullPath, query: { ...current.query, ...query } })
-// }
+  const lastTime = video.value.currentTime
+
+  await playbackStore.stopPlaybackTranscode()
+
+  await playbackStore.getPlaybackInfo(id, { audioIndex: audioSource.value?.source.Index, last: playbackStore.lastPlaybackInfo, maxStreamingBitrate: settings.bitrate.value })
+
+  const { width, height } = getResolutionFromResolutionString(settings.resolution)
+
+  playbackStore.setPlaybackVideoBitrate(settings.bitrate.value * 8000000)
+  playbackStore.setPlaybackHeightAndWidth(width, height)
+
+  loadSource(playbackStore.transcodingUrl)
+
+  playerStore.loading = true
+
+  video.value.currentTime = lastTime
+})
 </script>
 
 <template>

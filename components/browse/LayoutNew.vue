@@ -120,7 +120,7 @@ const play = () => {
             <div class="inline-flex flex-col justify-between flex-wrap">
               <MaterialForeground color="primary">
                 <h1
-                  class="rounded-lg md:text-[72px] text-4xl font-bold inline-flex p-0 md:mb-4 align-top max-w-full"
+                  class="rounded-lg md:text-[72px] md:leading-[72px] text-4xl font-bold inline-flex p-0 md:mb-4 align-top max-w-full"
                 >
                   {{ item.Name }}
                 </h1>

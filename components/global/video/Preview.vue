@@ -351,12 +351,15 @@ function NaNAsUndefined(num?: number) {
               </div>
 
               <div class="name inline-flex gap-2 justify-between items-center">
-                <span
+                <p
                   v-if="!episode"
                   class="font-semibold"
-                >{{
-                  item.Name
-                }}</span>
+                >
+                  <span v-if="item.IndexNumber">{{ item.IndexNumber }}.</span>
+                  {{
+                    item.Name
+                  }}
+                </p>
 
                 <span
                   v-if="showProgress"

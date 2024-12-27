@@ -9,7 +9,16 @@ import {
   createAudioSource,
   createSubtitleSource,
   createVideoSource,
+  getVideoResolutionFromVideoSource,
+  VideoBitrate,
+  VideoResolution,
 } from '~/lib/player'
+
+export enum VideoQualityPreset {
+  ADAPTIVE,
+  DISPLAY,
+  SOURCE,
+}
 
 export interface VideoSource {
   source: MediaStream
@@ -118,6 +127,14 @@ export const usePlayerStore = defineStore('player', {
         global: 'video_width',
       },
 
+      video_new: {
+        preset: VideoQualityPreset.ADAPTIVE,
+        resolution: VideoResolution.ULTRA_HD,
+        bitrate: {
+          value: 0,
+          type: VideoBitrate.MEDIUM,
+        },
+      },
       video: {
         global: {
           height: 480,
@@ -132,7 +149,6 @@ export const usePlayerStore = defineStore('player', {
       audio: {},
     },
   }),
-
   actions: {
     getDefaultMediaStreams(playback: PlaybackInfoResponse | BaseItemDto) {
       if (!playback.MediaSources || !playback.MediaSources[0])
@@ -190,6 +206,22 @@ export const usePlayerStore = defineStore('player', {
 
     createLogger() {
       return new HLSLogAdapter(this.debug.data.logs)
+    },
+
+    isResolutionSupported(resolution: VideoResolution) {
+      if (!this.video) return false
+      return getVideoResolutionFromVideoSource(this.video.source) >= resolution
+    },
+
+    setVideoQuality(type: { resolution: VideoResolution, bitrate: VideoBitrate }, bitrate: number) {
+      this.settings.video_new = {
+        preset: VideoQualityPreset.SOURCE,
+        resolution: type.resolution,
+        bitrate: {
+          type: type.bitrate,
+          value: bitrate,
+        },
+      }
     },
   },
 

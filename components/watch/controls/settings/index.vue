@@ -40,10 +40,11 @@ function updateContextMenuOpenState(open: boolean) {
     </DropdownMenuTrigger>
 
     <DropdownMenuContent side="top">
+      <WatchControlsSettingsVideo :item />
+      <WatchControlsSettingsAudio :item />
       <!-- Subtitle Settings -->
       <WatchControlsSettingsSubtitles :item />
       <!-- Audio Settings -->
-      <WatchControlsSettingsAudio :item />
       <!-- Video Settings -->
     </DropdownMenuContent>
   </DropdownMenu>

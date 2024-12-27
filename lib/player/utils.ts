@@ -25,6 +25,60 @@ export interface SubtitleSource {
   title: string
 }
 
+export enum VideoResolution {
+  SD,
+  HD,
+  FULL_HD,
+  QUAD_HD,
+  ULTRA_HD,
+}
+
+export enum VideoBitrate {
+  LOW,
+  MEDIUM,
+  HIGH,
+}
+
+export function getVideoResolutionFromVideoSource(source: MediaStream): VideoResolution {
+  const height = source.Height ?? 0
+  // 4k
+  if (height >= 2160) {
+    return VideoResolution.ULTRA_HD
+  }
+
+  // 1440p
+  if (height >= 1440) {
+    return VideoResolution.QUAD_HD
+  }
+
+  // 1080p
+  if (height >= 1080) {
+    return VideoResolution.FULL_HD
+  }
+
+  // 720p
+  if (height >= 720) {
+    return VideoResolution.HD
+  }
+
+  return VideoResolution.SD
+}
+
+export function getResolutionFromResolutionString(res: VideoResolution) {
+  switch (res) {
+    case VideoResolution.ULTRA_HD:
+      return { width: 3840, height: 2160 }
+    case VideoResolution.QUAD_HD:
+      return { width: 2560, height: 1440 }
+    case VideoResolution.FULL_HD:
+      return { width: 1920, height: 1080 }
+    case VideoResolution.HD:
+      return { width: 1280, height: 720 }
+    case VideoResolution.SD:
+      return { width: 960, height: 480 }
+  }
+}
+
 export function createVideoSource(source?: MediaStream): VideoSource | null {
   if (!source) return null
 

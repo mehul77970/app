@@ -1,3 +1,10 @@
+# 0.1.16-DEV 
+
+### Bugfixes
+
+* Fix crash when logging out and heading back to home [#32](https://github.com/Shadfin/app/issues/32)
+* Fix crash of null user on production [Thanks Bad](https://github.com/Shadfin/app/pull/31)
+
 # 0.1.15-DEV 
 
 ### Features

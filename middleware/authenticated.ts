@@ -34,7 +34,7 @@ export default defineNuxtRouteMiddleware(() => {
     authStore.loggedIn = auth.loggedIn
 
     const userVal = user.value as unknown as { user: UserDto }
-    if (!userVal) return
+    if (!userVal?.user) return login()
 
     userStore.user = userVal.user
 

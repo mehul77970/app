@@ -136,6 +136,8 @@ function calculateTooltipPosition(offsetX: number) {
   offset.value = offsetX - width / 2
 }
 
+// Code copied from jellyfin-web part of Jellyfin Media Server
+// https://github.com/jellyfin/jellyfin-web/blob/6630dceedccfd2d37399043e9142e4f6b5a745f3/src/controllers/playback/video/index.js#L1513-L1535
 function updateTrickplayTooltip(milliseconds: number) {
   const trickplayRaw = trickplay.value
   if (trickplayRaw.enabled) {

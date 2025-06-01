@@ -1,7 +1,7 @@
 # Shadfin -> App
 
 # This project is not dead!
-Hi all, things have gotten a little more busy lately, but rest assured I have not given up. In my free time I'm working on a compose multiplatform app for shadfin. This change while lenghthy, will provide a better UI, Android & iOS apps, and a better more cohesive experience on ALL platforms. Thank you for putting your trust in me, and as always have a good day. 
+Hi all, things have gotten a little more busy lately, but rest assured I have not given up. In my free time I'm working on a compose multiplatform app for shadfin. This change while lengthy, will provide a better UI, Android & iOS apps, and a better more cohesive experience on ALL platforms. Thank you for putting your trust in me, and as always have a good day. 
 
 ## Disclaimer
 This contains the source code for the web app. 

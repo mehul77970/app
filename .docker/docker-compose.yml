@@ -5,8 +5,8 @@ services:
 #  networks:
 #    - my_network
   environment:
-    NUXT_INTERNAL_SERVER_URL: http://my_network:8096 # Set to the server URL the ssr server/nuxt will use. For example http://localhost:8096
-    NUXT_PUBLIC_SERVER_URL: https://my-url.app # Set to the URL the client/browser will use. If you want to host this on a domain it needs to be another publically accessible address, otherwise make it your LAN address.
+    NUXT_INTERNAL_SERVER_URL: http://localhost:8096 # Set to the server URL the ssr server/nuxt will use. For example http://localhost:8096
+    NUXT_PUBLIC_SERVER_URL: https://jellyfin.vflix.life # Set to the URL the client/browser will use. If you want to host this on a domain it needs to be another publically accessible address, otherwise make it your LAN address.
   ports:
    - 4498:3000/tcp
   restart: unless-stopped
